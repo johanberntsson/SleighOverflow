@@ -10,7 +10,15 @@ are every string game.c draws, rendered offline: see tools/labels.py.
 **Each file is taken from the first assets directory that has it.** The
 Makefile passes assets/ and then MegaStranded's, so Stranded's art stands in
 for whatever has not been drawn yet. A new picture replaces the old one by
-having its name, and must share the palette of everything else.
+having its name.
+
+**There is one palette**, the VIC-IV's, and it is assets/palette.gif's: a
+palette image whose pixels do not matter. Every GIF in the first assets
+directory must be drawn in exactly that palette. A placeholder from any
+later directory that was drawn in another is remapped to it, each colour to
+the nearest, so the game keeps building while the art is replaced. Without
+a palette.gif, the first GIF read sets the palette and every other must
+share it, which is how the game built before it had colours of its own.
 
 **Every bitmap is cropped, and nothing is scaled.** The art is fundamentally
 320x200: the twelve 320x240 interiors are 200 rows of picture between two
@@ -53,6 +61,7 @@ TRANSPARENT = 255
 SCREEN_H = 200
 YCROP = 20        # rows of the original's 240 above the MEGA65's screen
 ATTIC_GFX = 0x8000000
+PALETTE_GIF = "palette.gif"
 
 # The order of stranded.c's enum bitmap_t, and each one's file stem. A stem
 # with %04d is an animation; its cels run from 0001 until a file is missing.
@@ -167,9 +176,43 @@ def find(assets, name):
     return None
 
 
-def load_cels(assets, stem):
-    """The decoded cels of one bitmap, and the palette they were drawn in.
-    An animation's cels all come from one directory: the first with cel 1."""
+def gif_palette(im):
+    """A palette image's 256 colours, r, g, b interleaved, 8 bits a channel."""
+    pal = im.getpalette()[:768]
+    return pal + [0] * (768 - len(pal))
+
+
+def game_palette(assets):
+    """assets/palette.gif's palette, or None if the game has none yet."""
+    path = os.path.join(assets[0], PALETTE_GIF)
+    if not os.path.exists(path):
+        return None
+    im = Image.open(path)
+    if im.mode != "P":
+        sys.exit(f"{PALETTE_GIF} is not a palette image")
+    # A GIF's colour table can be shorter, and a tool that saves only the
+    # colours the pixels use will make it so.
+    if len(im.getpalette()) < 768:
+        sys.exit(f"{PALETTE_GIF} has fewer than 256 colours")
+    return gif_palette(im)
+
+
+def remap(px, pal, palette):
+    """Pixels drawn in pal, in the nearest colours of palette. Transparent
+    stays transparent, and nothing else becomes it."""
+    src = np.array(pal, int).reshape(256, 3)
+    dst = np.array(palette, int).reshape(256, 3)[:TRANSPARENT]
+    d = src[:, None, :] - dst[None, :, :]
+    # Squared distance weighted for the eye, which sees green best.
+    lut = (d * d * [2, 4, 3]).sum(axis=2).argmin(axis=1).astype(np.uint8)
+    lut[TRANSPARENT] = TRANSPARENT
+    return lut[px]
+
+
+def load_cels(assets, stem, palette):
+    """The decoded cels of one bitmap, in palette, and palette: the first
+    cel's if palette is None. An animation's cels all come from one
+    directory, the first with cel 1."""
     if "%04d" not in stem:
         paths = [find(assets, stem + ".gif")]
         if not paths[0]:
@@ -183,35 +226,39 @@ def load_cels(assets, stem):
         while os.path.exists(os.path.join(d, stem % (len(paths) + 1)
                                           + ".gif")):
             paths.append(os.path.join(d, stem % (len(paths) + 1) + ".gif"))
-    cels, palette = [], None
+    own = os.path.normpath(os.path.dirname(paths[0])) == \
+        os.path.normpath(assets[0])
+    cels, remapped = [], False
     for path in paths:
         n = os.path.basename(path)[:-4]
         im = Image.open(path)
         if im.mode != "P":
             sys.exit(f"{n}.gif is not a palette image")
-        pal = im.getpalette()[:768]
+        pal = gif_palette(im)
+        px = np.array(im)
         if palette is None:
             palette = pal
         elif pal != palette:
-            sys.exit(f"{n}.gif has a palette of its own")
-        cels.append(np.array(im))
+            if own:
+                sys.exit(f"{n}.gif has a palette of its own: draw it in "
+                         f"{PALETTE_GIF}'s")
+            px = remap(px, pal, palette)
+            remapped = True
+        cels.append(px)
     if len({c.shape for c in cels}) != 1:
         sys.exit(f"{stem}: cels differ in size")
+    if remapped:
+        print(f"{stem}: placeholder, remapped to the game's palette")
     return cels, palette
 
 
-def scene(assets, ident):
+def scene(assets, ident, palette):
     """Composite one of SCENES onto an opaque canvas of the original's 240
     rows, as the sprite table would draw it."""
     width, layers = SCENES[ident]
     canvas = np.full((240, width), TRANSPARENT, np.uint8)
-    palette = None
     for stem, x, y in layers:
-        (img,), pal = load_cels(assets, stem)
-        if palette is None:
-            palette = pal
-        elif pal != palette:
-            sys.exit(f"{stem}.gif has a palette of its own")
+        (img,), palette = load_cels(assets, stem, palette)
         h, w = img.shape
         x0, y0 = max(x, 0), max(y, 0)
         x1, y1 = min(x + w, width), min(y + h, 240)
@@ -263,7 +310,7 @@ def main():
         sys.exit("GROUPS and BITMAPS disagree")
 
     table, files = {}, []
-    palette = None
+    palette = game_palette(assets)
     addr = ATTIC_GFX
     raw_total = disk_total = 0
     for n, group in enumerate(groups):
@@ -277,13 +324,10 @@ def main():
                 blob += np.ascontiguousarray(px.T).tobytes()
                 continue
             if ident in SCENES:
-                cels, pal = scene(assets, ident)
+                cels, palette = scene(assets, ident, palette)
             else:
-                cels, pal = load_cels(assets, dict(BITMAPS)[ident])
-            if palette is None:
-                palette = pal
-            elif pal != palette:
-                sys.exit(f"{ident} has a palette of its own")
+                cels, palette = load_cels(assets, dict(BITMAPS)[ident],
+                                          palette)
             cels, x, y = crop(cels)
             h, w = cels[0].shape
             if h > 255:

@@ -13,13 +13,20 @@ a 64-entry sprite table, a dialogue interpreter driven by `#SetFlag` /
 `#ClearFlag`, labels rendered offline, a SID tune from a MIDI. **The art, the
 setting, the story and the music are to be new.**
 
+**`VISION.md` is the owner's description of the game** (Santa, three
+dropped presents, two houses and a penguin, a BASIC-screen splash).
 **`TODO.md` is the plan and the running log — read it first.**
 
 Where it is (27 Oct 2026): the engine was copied from MegaStranded v1.0
 (`31edcd5`) without its history. `make` builds a disk that is still
 byte-for-byte Stranded, because `src/game.c` is still Stranded's game and
-every asset is borrowed from MegaStranded as a placeholder (below). The work
-from here is replacing those, one file at a time.
+every asset is borrowed from MegaStranded as a placeholder (below). The plan
+for the new game is written (`TODO.md` steps 1-3), and the palette remap is
+in `convgfx.py`; the owner is drawing the first art. The work from here is
+replacing the placeholders, one file at a time.
+
+**The owner does all `git add` and `git commit` by hand.** Leave changes in
+the working tree and say what changed.
 
 ## Placeholders: Stranded's assets, borrowed, never copied
 
@@ -35,8 +42,11 @@ having Mattias' art in this game's history is why it is a new repository.
 `make PLACEHOLDERS=` builds without them, which is how to see what is still
 missing; when that succeeds, the Makefile's placeholder lines can go.
 
-Mixing old and new art has one catch: **every bitmap must share one
-256-colour palette** (`convgfx.py` refuses a GIF with its own). See `TODO.md`.
+Mixing old and new art has one catch: **there is one 256-colour palette**,
+`assets/palette.gif`'s. Every GIF in `assets/` must be drawn in exactly it
+(`convgfx.py` refuses one with its own); a placeholder drawn in another is
+remapped to it by nearest colour and looks off until replaced. Without a
+`palette.gif`, Stranded's palette is the game's and nothing is remapped.
 
 ## Layout
 
@@ -159,7 +169,7 @@ belong in the backdrop.
 
 ## The art the pipeline expects
 
-- GIFs, palette mode, **one 256-colour palette shared by every file**.
+- GIFs, palette mode, **in `assets/palette.gif`'s 256 colours exactly**.
   Colour 255 is transparent; 254 is the labels' outline.
 - The screen is 320x200. Files may be 320x240 like Stranded's, in which case
   rows 20..219 are shown (`YCROP`); anything taller than 200 is cropped to
