@@ -4,7 +4,7 @@ You see a ball high up in the trees (and "ball" text appears).
 Try to click and it says that you can't reach. Jump and it falls
 down, and then you can pick it up.
 
-Penguin changed to sealion. You say you want the present, the sealion
+You say you want the present, the sea lion
 says that it's keeping it to cheer it up since he lost his ball. Give
 him the ball and he goes away, balancing the ball, and you get the present.
 
@@ -25,9 +25,9 @@ and go home. Perhaps a fox?
 
 I'm making a point and click graphical adventure (small) as a christmas demo. It's just a
 long scrolling picture with snow on the ground and a forest in the background. As you walk by 
-there are two houses, and finally a penguin by the beach. The story is that you (santa - a 
+there are two houses, and finally a sea lion by the beach. The story is that you (santa - a 
 walking animated large sprite) have dropped three christmas presents from the sleigh as you 
-flew by, and you need to interact with the penguin and the people in the two houses to get 
+flew by, and you need to interact with the sea lion and the people in the two houses to get 
 them back for the children who are waiting (solving some mini problems in the process). 
 This is like a christmas demo/suprise for the MEGA65 retro computing community.
 
@@ -67,8 +67,8 @@ Who has what:
 
 | Present | Who has it | What they want |
 |---|---|---|
-| the RED one | the bear | his remote back (the fox has it) |
-| the GREEN one | the fox | something to eat (the bear's cookies) |
+| the GREEN one | the bear | his remote back (the fox has it) |
+| the GOLD one (the cylinder) | the fox | something to eat (the bear's cookies) |
 | the BLUE one | the sea lion | his ball (up in a tree) |
 
 ## The start, by the sack
@@ -86,9 +86,9 @@ After the splash and the picture of Santa dropping the sack:
 First look:
 
     SANTA: ?3 PRESENTS MISSING ERROR
-    SANTA: The RED one, the GREEN one and the BLUE one!
+    SANTA: The GREEN one, the GOLD one and the BLUE one!
     SANTA: They must have fallen out somewhere around here.
-    [looked_in_sack]
+    [looked_at_sack]
 
 Later, by how many are still missing:
 
@@ -120,7 +120,7 @@ Picking it up:
     SANTA: A beach ball. Someone here has big summer plans.
     [has_ball]
 
-## The bear's house (RED)
+## The bear's house (GREEN)
 
 First visit. The cookies are taken here, so the table has no
 interaction of its own:
@@ -131,7 +131,7 @@ interaction of its own:
     BEAR: Same log since April '92.
     SANTA: Have you tried another channel?
     BEAR: With *what*? My remote is gone.
-    SANTA: Is that my RED present by your chair?
+    SANTA: Is that my GREEN present by your chair?
     BEAR: Fell down the chimney. Best thing on all day.
     BEAR: It stays until I can change the channel.
     SANTA: Are those cookies?
@@ -150,13 +150,13 @@ With the remote:
     BEAR: My remote! Channel two... channel three...
     BEAR: It's the Yule Log channel. From a different angle.
     BEAR: Bliss. Take your present, I'm busy.
-    [has_red]
+    [has_green]
 
 After:
 
     BEAR: Shh. The log is at the good part.
 
-## The fox's house (GREEN)
+## The fox's house (GOLD)
 
 First visit, or any visit without the cookies:
 
@@ -166,7 +166,7 @@ First visit, or any visit without the cookies:
     FOX: I point it at the window. Same snow every day.
     SANTA: That's a window.
     FOX: Very low resolution.
-    SANTA: And that's my GREEN present.
+    SANTA: And that's my GOLD present.
     FOX: Finders keepers. Can't think when I'm this hungry.
     SANTA: Let me check my list. Twice.
     SANTA: Fox. Line 10: NAUGHTY. Line 20: GOTO 10.
@@ -183,7 +183,7 @@ With the cookies:
     FOX: *munch* I didn't see a thing.
     [fox_eating]   (leaving takes the remote and the present)
     [has_remote]
-    [has_green]
+    [has_cylinder]
 
 After:
 
@@ -268,8 +268,8 @@ If Santa stands still for a while, one of these, in turn:
 
 Read out when one is picked up, after the line above:
 
-- RED: "To: a very patient kid in Gothenburg. Nice."
-- GREEN: "To: someone who never borrows remotes. Nice."
+- GREEN: "To: a very patient kid in Gothenburg. Nice."
+- GOLD: "To: someone who never borrows remotes. Nice."
 - BLUE: "To: the MEGA65 community. Nice. Mostly."
 
 ## Commodore in-jokes, all in one place
@@ -290,7 +290,7 @@ Read out when one is picked up, after the line above:
 Other ideas:
 
  Dialogue draft
-  - A table of who has which present (bear: RED, fox: GREEN, sea lion: BLUE) and what each one wants in return.
+  - A table of who has which present (bear: GREEN, fox: GOLD, sea lion: BLUE) and what each one wants in return.
   - For each scene, the lines for each state: the first visit, coming back without the item they want, handing
     it over, and visiting afterwards. Scenes are the start, the sack, the tree, the two houses, the sea lion and
     the ending.

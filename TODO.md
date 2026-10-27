@@ -58,13 +58,14 @@ of it becomes one of this game's:
 | `SANTA_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
 | `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
 | `SACK_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
-| `HUT_TV`/`HUT_TV_NODISH`, `HUT_BOOK`/`HUT_BOOK_NOBULB` | the two house interiors, with and without their present |
+| `HUT_BEAR`/`HUT_BEAR_NOGREEN`, `HUT_FOX`/`HUT_FOX_NOCYLINDER` | the two house interiors, with and without their present |
 | `SEALION`, `GIFT_BLUE`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
 | `BOAT` easing in, the palette fade | the sleigh on its way (step 3) |
 
-The flags carry over one for one: `has_dish`, `has_bulb` and `has_battery`
-become one per present, `looked_at_sack` having looked in the sack,
+The flags carry over one for one: `has_green`, `has_cylinder` and
+`has_blue` (Stranded's dish, bulb and battery) are one per present,
+`looked_at_sack` having looked in the sack,
 `rescued` all three delivered. `dlg_sack_*` become the sack's "still
 missing" lines.
 
@@ -72,7 +73,10 @@ missing" lines.
 the paper and by size. Being small and alike, they are cheap: three small
 bitmaps, drawn in the sack's close-up, in the houses, and with the sea lion.
 The dialogue names them by colour ("the RED one"), as Stranded's names its
-parts in capitals.
+parts in capitals. Who has which is settled by the art and the code: the
+bear has `GIFT_GREEN`, the fox `GIFT_CYLINDER`, the sea lion `GIFT_BLUE`.
+`VISION.md`'s dialogue calls them GREEN, GOLD (the cylinder, gold with a
+red ribbon) and BLUE, and its flags are the game's names.
 
 **Still to decide: the puzzles.** `VISION.md` says "some mini problems".
 Stranded's are what the code already does: each hut's owner is talked round and the part is taken on leaving,

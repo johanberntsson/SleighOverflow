@@ -83,7 +83,8 @@ CEL_ORIGIN = {
 # with %04d is an animation; its cels run from 0001 until a file is missing.
 #
 # Not quite that enum: see SCENES for the bitmaps that were folded into WORLD
-# and TITLE.
+# and TITLE. GIFT_CYLINDER, GIFT_GREEN and the balls are this game's own, not
+# yet drawn by game.c.
 BITMAPS = [
     ("WORLD", None),
     ("TITLE", None),
@@ -95,19 +96,23 @@ BITMAPS = [
     ("SANTA_JUMP", "santa_jump_%04d"),
     ("SANTA_LEFT", "santa_walk_left_%04d"),
     ("SANTA_RIGHT", "santa_walk_right_%04d"),
-    ("HUT_BOOK", "hut_book"),
-    ("HUT_BOOK_NOBULB", "hut_book_nobulb"),
-    ("HUT_TV", "hut_tv"),
-    ("HUT_TV_NODISH", "hut_tv_nodish"),
+    ("HUT_FOX", "hut_fox"),
+    ("HUT_FOX_NOCYLINDER", "hut_fox_nocylinder"),
+    ("HUT_BEAR", "hut_bear"),
+    ("HUT_BEAR_NOGREEN", "hut_bear_nogreen"),
     ("SEALION", "sealion"),
     ("GIFT_BLUE", "gift_blue"),
+    ("GIFT_CYLINDER", "gift_cylinder"),
+    ("GIFT_GREEN", "gift_green"),
+    ("BALL_IN_TREE", "ball_in_tree"),
+    ("BALL_ON_SNOW", "ball_on_snow"),
     ("SEALION_WALK", "sealion_walk_%04d"),
-    ("SACK_BATTERY", "sack_battery"),
-    ("SACK_BATTERY_DISH", "sack_battery_dish"),
-    ("SACK_BULB", "sack_bulb"),
-    ("SACK_BULB_BATTERY", "sack_bulb_battery"),
-    ("SACK_BULB_DISH", "sack_bulb_dish"),
-    ("SACK_DISH", "sack_dish"),
+    ("SACK_BLUE", "sack_blue"),
+    ("SACK_BLUE_GREEN", "sack_blue_green"),
+    ("SACK_CYLINDER", "sack_cylinder"),
+    ("SACK_CYLINDER_BLUE", "sack_cylinder_blue"),
+    ("SACK_CYLINDER_GREEN", "sack_cylinder_green"),
+    ("SACK_GREEN", "sack_green"),
     ("SACK_FULL", "sack_full"),
     ("SACK_NONE", "sack_none"),
 ]
@@ -132,8 +137,8 @@ BITMAPS = [
 # the layers in the order the sprite table draws them.
 SCENES = {
     "WORLD": (1480, [("background", 0, 0), ("treeline", 0, 0),
-                     ("sack_spr", 240, 40), ("hut1", 540, 40),
-                     ("hut2", 850, 50), ("tree2", 180, 0),
+                     ("sack_spr", 240, 40), ("house_bear", 540, 40),
+                     ("house_fox", 850, 50), ("tree2", 180, 0),
                      ("palmtree", 120, 20), ("chair", 65, 55)]),
     "TITLE": (320, [("background", -1050, 0), ("treeline", -1050, 0)]),
 }
@@ -145,11 +150,12 @@ GROUPS = [
     ["WORLD"],
     ["TITLE", "FACE", "LOGO", "BOAT"],
     ["SANTA_CHAIR", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
-     "SEALION", "GIFT_BLUE", "SEALION_WALK"],
-    ["HUT_BOOK", "HUT_BOOK_NOBULB"],
-    ["HUT_TV", "HUT_TV_NODISH"],
-    ["SACK_NONE", "SACK_BULB", "SACK_DISH", "SACK_BATTERY",
-     "SACK_BULB_DISH", "SACK_BULB_BATTERY", "SACK_BATTERY_DISH",
+     "SEALION", "GIFT_BLUE", "SEALION_WALK", "GIFT_CYLINDER", "GIFT_GREEN",
+     "BALL_IN_TREE", "BALL_ON_SNOW"],
+    ["HUT_FOX", "HUT_FOX_NOCYLINDER"],
+    ["HUT_BEAR", "HUT_BEAR_NOGREEN"],
+    ["SACK_NONE", "SACK_CYLINDER", "SACK_GREEN", "SACK_BLUE",
+     "SACK_CYLINDER_GREEN", "SACK_CYLINDER_BLUE", "SACK_BLUE_GREEN",
      "SACK_FULL"],
 ]
 

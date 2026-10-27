@@ -28,9 +28,9 @@
 // measures distances from them, and draw nothing.
 #define BACKGROUND WORLD
 #define TREELINE   INVALID
-#define SACK_SPR  INVALID
-#define HUT1       INVALID
-#define HUT2       INVALID
+#define SACK_SPR   INVALID
+#define HOUSE_BEAR INVALID
+#define HOUSE_FOX  INVALID
 #define TREE2      INVALID
 #define PALMTREE   INVALID
 #define CHAIR      INVALID
@@ -219,32 +219,32 @@ struct dialog_t dlg_sack_none[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_bulb[] = {
+struct dialog_t dlg_sack_cylinder[] = {
     { "player_sack", "It is missing the ANTENNA and the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_dish[] = {
+struct dialog_t dlg_sack_green[] = {
     { "player_sack", "It is missing the BULB and the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_battery[] = {
+struct dialog_t dlg_sack_blue[] = {
     { "player_sack", "It is missing the ANTENNA and the BULB." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_bulb_dish[] = {
+struct dialog_t dlg_sack_cylinder_green[] = {
     { "player_sack", "It is missing the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_battery_dish[] = {
+struct dialog_t dlg_sack_blue_green[] = {
     { "player_sack", "It is missing the BULB." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_bulb_battery[] = {
+struct dialog_t dlg_sack_cylinder_blue[] = {
     { "player_sack", "It is missing the ANTENNA." },
     { NULL, NULL }
 };
@@ -256,35 +256,35 @@ struct dialog_t dlg_sack_all[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_tv[] = {
+struct dialog_t dlg_hut_bear[] = {
     { "player_hut", "Hey, that's my antenna!" },
-    { "tv_guy", "Huh, what? No, it's my antenna now. I found it." },
-    { "tv_guy", "I need it for my TV. To watch my shows." },
+    { "bear", "Huh, what? No, it's my antenna now. I found it." },
+    { "bear", "I need it for my TV. To watch my shows." },
     { "player_hut", "But *I* need it for my radio. So I can call for help and get home." },
-    { "tv_guy", "Uh... I *am* very tired, I need to sleep. But I can't stop watching." },
+    { "bear", "Uh... I *am* very tired, I need to sleep. But I can't stop watching." },
     { "player_hut", "You can have the antenna back later, I only need it to make the transmission." },
-    { "tv_guy", "Ok, go ahead then." },
-    { "#ClearFlag", "at_hut_tv" },
+    { "bear", "Ok, go ahead then." },
+    { "#ClearFlag", "at_hut_bear" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_tv_sleep[] = {
+struct dialog_t dlg_hut_bear_sleep[] = {
     { "player_hut", "Looks like he's sleeping. I better not disturb him." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_book[] = {
+struct dialog_t dlg_hut_fox[] = {
     { "player_hut", "That's my bulb! For my radio." },
-    { "book_guy", "Oh, yes yes, quite. I need it so I can read my books." },
+    { "fox", "Oh, yes yes, quite. I need it so I can read my books." },
     { "player_hut", "But *I* need it for my radio. So I can call for help and get home." },
-    { "book_guy", "I see, I see. Well I am really rather sleepy. But I can not put this book down. Quite the page-turner it is." },
+    { "fox", "I see, I see. Well I am really rather sleepy. But I can not put this book down. Quite the page-turner it is." },
     { "player_hut", "You can have the bulb back later, I only need it to make the transmission." },
-    { "book_guy", "Ah, very well, very well." },
-    { "#ClearFlag", "at_hut_bulb" },
+    { "fox", "Ah, very well, very well." },
+    { "#ClearFlag", "at_hut_fox" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_book_sleep[] = {
+struct dialog_t dlg_hut_fox_sleep[] = {
     { "player_hut", "Looks like he's sleeping. I better not disturb him." },
     { NULL, NULL }
 };
@@ -308,7 +308,7 @@ struct dialog_t dlg_sealion[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_grab_battery[] = {
+struct dialog_t dlg_grab_blue[] = {
     { "player", "I'm having this!" },
     { NULL, NULL }
 };
@@ -430,8 +430,8 @@ static const struct {
     { "player", 20, 60, COLOR_GREEN, 220 }, 
     { "player_hut", 100, 60, COLOR_GREEN, 220 }, 
     { "player_sack", 50, 20, COLOR_GREEN, 220 }, 
-    { "tv_guy", 20, 20, COLOR_YELLOW, 220 }, 
-    { "book_guy", 20, 20, COLOR_CYAN, 220 }, 
+    { "bear", 20, 20, COLOR_YELLOW, 220 }, 
+    { "fox", 20, 20, COLOR_CYAN, 220 }, 
     { "sealion", 185, 75, COLOR_ORANGE, 120 }, 
 };
 
@@ -532,8 +532,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     int background = sprite( spr_index++, -65, 0, BACKGROUND );
     int treeline = sprite( spr_index++, -65, 0, TREELINE );
     int sack = sprite( spr_index++, 240, 10 + o, SACK_SPR ); objects[ objects_count++ ] = sack;
-    int hut1 = sprite( spr_index++, 540, 10 + o, HUT1 ); objects[ objects_count++ ] = hut1;
-	int hut2 = sprite( spr_index++, 850, 20 + o, HUT2 ); objects[ objects_count++ ] = hut2;
+    int house_bear = sprite( spr_index++, 540, 10 + o, HOUSE_BEAR ); objects[ objects_count++ ] = house_bear;
+	int house_fox = sprite( spr_index++, 850, 20 + o, HOUSE_FOX ); objects[ objects_count++ ] = house_fox;
 	objects[ objects_count++ ] =  sprite( spr_index++, 180, -30 + o, TREE2 );
 	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, PALMTREE );
 	int chair = sprite( spr_index++, 65, 25 + o, CHAIR ); objects[ objects_count++ ] = chair;
@@ -551,11 +551,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     int sack_pic = sprite( spr_index++, 0, 0, SACK_FULL );
     sprite_hide( sack_pic );
 
-	int hut_tv_pic = sprite( spr_index++, 0, 0, HUT_TV );
-    sprite_hide( hut_tv_pic );
+	int hut_bear_pic = sprite( spr_index++, 0, 0, HUT_BEAR );
+    sprite_hide( hut_bear_pic );
 
-	int hut_bulb = sprite( spr_index++, 0, 0, HUT_BOOK );
-    sprite_hide( hut_bulb );
+	int hut_fox_pic = sprite( spr_index++, 0, 0, HUT_FOX );
+    sprite_hide( hut_fox_pic );
         	
     int santa_inside = sprite( spr_index++, 0, 0 + o, SANTA_IDLE );
     sprite_hide( santa_inside );
@@ -575,11 +575,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int sitting = 1;
 	int sealion_gone = 0;
 	int at_sack = 0;
-	int at_hut_tv = 0;
-	int at_hut_bulb = 0;
-	int has_dish = 0;
-	int has_bulb = 0;
-	int has_battery = 0;	  
+	int at_hut_bear = 0;
+	int at_hut_fox = 0;
+	int has_green = 0;
+	int has_cylinder = 0;
+	int has_blue = 0;	  
   int shown_intro = 0;
   int boat_delay = 0;
   int boat_move = 0;
@@ -663,19 +663,19 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				}
 				if( strcmp( event, "#ClearFlag" ) == 0 ) {
 					char const* flag = dialogline();
-					if( strcmp( flag, "at_hut_tv" ) == 0 ) {
-						sprite_hide( hut_tv_pic );
+					if( strcmp( flag, "at_hut_bear" ) == 0 ) {
+						sprite_hide( hut_bear_pic );
 						sprite_hide( santa_inside );
-						sprite_bitmap( hut_tv_pic, HUT_TV_NODISH );
-						has_dish = 1;
-						at_hut_tv = 0;
+						sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
+						has_green = 1;
+						at_hut_bear = 0;
 					}
-					if( strcmp( flag, "at_hut_bulb" ) == 0 ) {
-						sprite_hide( hut_bulb );
+					if( strcmp( flag, "at_hut_fox" ) == 0 ) {
+						sprite_hide( hut_fox_pic );
 						sprite_hide( santa_inside );
-						sprite_bitmap( hut_bulb, HUT_BOOK_NOBULB );
-						has_bulb = 1;
-						at_hut_bulb = 0;
+						sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
+						has_cylinder = 1;
+						at_hut_fox = 0;
 					}
 				}
  				execdialog();
@@ -701,12 +701,12 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 		}
 		   
         label_text( interact, "" ); 
-		if( !sitting && !at_sack && !at_hut_tv && !at_hut_bulb && !rescued ) {
-			if( is_near( sack, xpos ) ) set_interact( sack, "Sack", interact, 0 );
-			if( is_near( hut1, xpos ) ) set_interact( hut1, "Hut", interact, 0 );
-			if( is_near( hut2, xpos ) ) set_interact( hut2, "Hut", interact, 0 );
-			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion", interact, 60 );
-			if( !has_battery && sealion_gone && is_near( gift_blue, xpos ) ) set_interact( gift_blue, "Present", interact, 0 );
+		if( !sitting && !at_sack && !at_hut_bear && !at_hut_fox && !rescued ) {
+			if( is_near( sack, xpos ) ) set_interact( sack, "Sack (lighter than it should be)", interact, 0 );
+			if( is_near( house_bear, xpos ) ) set_interact( house_bear, "Bear's den", interact, 0 );
+			if( is_near( house_fox, xpos ) ) set_interact( house_fox, "Fox's den", interact, 0 );
+			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion (busy)", interact, 60 );
+			if( !has_blue && sealion_gone && is_near( gift_blue, xpos ) ) set_interact( gift_blue, "Present", interact, 0 );
 				
 			if( keystate( KEY_LEFT ) )  {
 				xpos -= 2;
@@ -723,27 +723,27 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( *readkeys() == KEY_SPACE ) {
 				if( is_near( sack, xpos ) ) {
 					sprite_show( sack_pic );
-					if( has_dish && has_bulb && has_battery ) {
+					if( has_green && has_cylinder && has_blue ) {
                         sprite_bitmap( sack_pic, SACK_FULL );
 						startdialog( dlg_sack_all );
-					} else if( has_dish && has_bulb ) {
-                        sprite_bitmap( sack_pic, SACK_BULB_DISH );
-						startdialog( dlg_sack_bulb_dish );
-					} else if( has_battery && has_bulb ) {
-                        sprite_bitmap( sack_pic, SACK_BULB_BATTERY );
-						startdialog( dlg_sack_bulb_battery );
-					} else if( has_dish && has_battery ) {
-                        sprite_bitmap( sack_pic, SACK_BATTERY_DISH );
-						startdialog( dlg_sack_battery_dish );
-					} else if( has_dish ) {
-                        sprite_bitmap( sack_pic, SACK_DISH );
-						startdialog( dlg_sack_dish );
-					} else if( has_battery ) {
-                        sprite_bitmap( sack_pic, SACK_BATTERY );
-						startdialog( dlg_sack_battery );
-					} else if( has_bulb ) {
-                        sprite_bitmap( sack_pic, SACK_BULB );
-						startdialog( dlg_sack_bulb );
+					} else if( has_green && has_cylinder ) {
+                        sprite_bitmap( sack_pic, SACK_CYLINDER_GREEN );
+						startdialog( dlg_sack_cylinder_green );
+					} else if( has_blue && has_cylinder ) {
+                        sprite_bitmap( sack_pic, SACK_CYLINDER_BLUE );
+						startdialog( dlg_sack_cylinder_blue );
+					} else if( has_green && has_blue ) {
+                        sprite_bitmap( sack_pic, SACK_BLUE_GREEN );
+						startdialog( dlg_sack_blue_green );
+					} else if( has_green ) {
+                        sprite_bitmap( sack_pic, SACK_GREEN );
+						startdialog( dlg_sack_green );
+					} else if( has_blue ) {
+                        sprite_bitmap( sack_pic, SACK_BLUE );
+						startdialog( dlg_sack_blue );
+					} else if( has_cylinder ) {
+                        sprite_bitmap( sack_pic, SACK_CYLINDER );
+						startdialog( dlg_sack_cylinder );
 					} else {
                         sprite_bitmap( sack_pic, SACK_NONE );
 						if( !looked_at_sack )
@@ -756,26 +756,26 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					at_sack = 1;
 				}
 				
-                if( is_near( hut1, xpos ) ) {
-					sprite_show( hut_tv_pic );
+                if( is_near( house_bear, xpos ) ) {
+					sprite_show( hut_bear_pic );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
-					if( !has_dish )
-						startdialog( dlg_hut_tv );
+					if( !has_green )
+						startdialog( dlg_hut_bear );
 					else
-						startdialog( dlg_hut_tv_sleep );
-					at_hut_tv = 1;
+						startdialog( dlg_hut_bear_sleep );
+					at_hut_bear = 1;
 				}
 
-				if( is_near( hut2, xpos ) ) {
-					sprite_show( hut_bulb );
+				if( is_near( house_fox, xpos ) ) {
+					sprite_show( hut_fox_pic );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
-					if( !has_bulb )
-						startdialog( dlg_hut_book );
+					if( !has_cylinder )
+						startdialog( dlg_hut_fox );
 					else
-						startdialog( dlg_hut_book_sleep );
-					at_hut_bulb = 1;
+						startdialog( dlg_hut_fox_sleep );
+					at_hut_fox = 1;
 				}
 
 				if( !sealion_gone && is_near( sealion, xpos ) ) {
@@ -785,12 +785,12 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                     sprite_bitmap( santa, SANTA_IDLE );
 				}
 
-				if( !has_battery && sealion_gone && is_near( gift_blue, xpos ) ) {
+				if( !has_blue && sealion_gone && is_near( gift_blue, xpos ) ) {
 					label_text( interact, "" );
 					sprite_hide( sealion );
-					startdialog( dlg_grab_battery );
+					startdialog( dlg_grab_blue );
 					sprite_hide( gift_blue );
-					has_battery = 1;
+					has_blue = 1;
 				}
 
                 if( is_near( chair, xpos ) ) {
@@ -824,21 +824,21 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					fadeout = 1; 
 				}
 			}
-		} else if( at_hut_tv ) {
+		} else if( at_hut_bear ) {
 			if( *readkeys() == KEY_SPACE ) {
-			    sprite_hide( hut_tv_pic );
+			    sprite_hide( hut_bear_pic );
 			    sprite_hide( santa_inside );
-				sprite_bitmap( hut_tv_pic, HUT_TV_NODISH );
-				has_dish = 1;
-				at_hut_tv = 0;
+				sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
+				has_green = 1;
+				at_hut_bear = 0;
 			}
-		} else if( at_hut_bulb ) {
+		} else if( at_hut_fox ) {
 			if( *readkeys() == KEY_SPACE ) {
-				sprite_hide( hut_bulb );
+				sprite_hide( hut_fox_pic );
 				sprite_hide( santa_inside );
-				sprite_bitmap( hut_bulb, HUT_BOOK_NOBULB );
-				has_bulb = 1;
-				at_hut_bulb = 0;
+				sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
+				has_cylinder = 1;
+				at_hut_fox = 0;
             }
         }
 
