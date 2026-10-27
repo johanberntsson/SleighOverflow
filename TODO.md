@@ -21,13 +21,46 @@ the splash. `convgfx.py` now takes the game's palette from
 `assets/palette.gif` and remaps the placeholders to it (step 2); with no
 `palette.gif` yet, the disk is still byte-for-byte Stranded.
 
-**Next: the owner is drawing.** When the first art arrives in `assets/`,
-the likely work is a `palette.gif` (any GIF of all 256 colours will do:
-its pixels are ignored, so a copy of the first finished picture is
-enough), checking that the build accepts the new files and what the
-remapped placeholders look like next to them, and moving `SCENES`,
-`BITMAPS` and `game.c`'s coordinates to fit the new art (step 4). The
-puzzles in step 1 are still open.
+**28 Oct 2026: the game plays.** All the art is the owner's (`assets/`),
+and the names in `convgfx.py`, `game.c` and the asset files are the new
+game's: Santa, the sack, the bear's and fox's houses (`HUT_*` inside,
+`house_*` outside), the sea lion, and the gifts by colour (`GIFT_GREEN` the
+bear's, `GIFT_CYLINDER` the fox's, called GOLD in the dialogue,
+`GIFT_BLUE` the sea lion's). `game.c` plays `VISION.md`'s dialogue and
+puzzles from the opening to the sack's "READY.":
+
+- **The ball**: in `tree2`, the taller tree left of the sack. SPACE there
+  plays Santa's lines, his cheer shakes the tree (`TREE2`, a bitmap as well
+  as part of `WORLD`, drawn over its own place only while it shakes) and
+  the ball bounces down (`ease_ball_y`); SPACE again picks it up.
+- **The bear** gives the cookies on the first visit, and the green present
+  for the remote. **The fox** eats the cookies, and leaving then takes the
+  remote and the gold present. A conversation no longer ends the visit:
+  SPACE leaves, as at the sack.
+- **The sea lion** sulks with the blue present behind him, and trades it
+  for the ball; his walk off already has it on his nose.
+- **The sack** says how many are missing, from `?3 PRESENTS MISSING ERROR`
+  down to `READY.`
+
+The `AUTOPLAY` walkthrough is this game's, 88 steps from the title to the
+end, and was checked headless at every scene.
+
+**Next**: step 3, the splash, Santa dropping the sack, and the ending;
+then the font and the tune, the last two placeholders (steps 5 and 6).
+Also open:
+
+- **On the machine**: the tree's shake (13.6 KB a frame from attic RAM
+  for 36 frames, worth a look with `TIMING=1`) and how it looks: it shows
+  the backdrop's copy two pixels out at its edges, and is drawn over the
+  edge of the smaller tree in front of it.
+- **The bear's cookies** stay on his floor after Santa has them, until the
+  remote comes back: there is no picture of the test-pattern TV without
+  them.
+- **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
+  "BLUE present" label (the game says "Present"), "(cable TV)" on the
+  houses' labels.
+- **Santa starts sitting** (`SANTA_CHAIR`, Stranded's chair at 65, the
+  `player_sitting` speech) and stands up on SPACE.
 
 What the engine already does, all measured on the machine in MegaStranded
 (its `TODO.md` has the numbers and the dead ends):
@@ -78,17 +111,14 @@ bear has `GIFT_GREEN`, the fox `GIFT_CYLINDER`, the sea lion `GIFT_BLUE`.
 `VISION.md`'s dialogue calls them GREEN, GOLD (the cylinder, gold with a
 red ribbon) and BLUE, and its flags are the game's names.
 
-**Still to decide: the puzzles.** `VISION.md` says "some mini problems".
-Stranded's are what the code already does: each hut's owner is talked round and the part is taken on leaving,
-and the sea lion walks off and leaves it behind. Anything more, such as an
-item from one house wanted in the other, is a little new logic in `game.c`
-and a new bitmap for every item shown held or given — the cost is in the
-drawing. Write the puzzles and the dialogue down here before the first
-picture: the art depends on what each scene must show.
+**The puzzles are `VISION.md`'s, and in.** The ball from the tree for the
+sea lion; the bear's cookies for the fox; the fox's remote back to the
+bear. Carried things are only flags (`has_ball`, `has_cookies`,
+`has_remote`), never drawn in Santa's hands.
 
-With the presents as separate bitmaps, the sack's close-up is one picture
-of the sack with the presents drawn on top as each comes back, instead of
-Stranded's 8 combinations: fewer bytes on the disk, the same cost a frame.
+The sack's close-up is still 8 pictures, one for each combination. One
+picture with the gifts drawn over it, as the houses do, would be fewer
+bytes on the disk at the same cost a frame.
 
 **Santa is the one big thing drawn every frame.** Stranded's guy is about
 40x92, 3.7 KB a cel, out of attic RAM at 17.6 cycles a byte. Santa twice
@@ -140,11 +170,9 @@ where this goes; the easing tables are `tools/convtables.py`'s.
 
 ### 4. Art, one placeholder at a time
 
-For each of `BITMAPS` and `SCENES` in `tools/convgfx.py`: draw the new file,
-give it the old name in `assets/`, build, look. Then rename it, in
-`convgfx.py` and in `game.c` together, once the new name is known. The
-positions in `SCENES` and the sprite coordinates in `game.c` are Stranded's
-and move with the art.
+**Done, 28 Oct**: every picture is the owner's and has its new name. The
+positions in `SCENES` and the sprite coordinates in `game.c` are still
+Stranded's, and the art was drawn to them.
 
 Budget, from MegaStranded's measurements: anything drawn every frame from
 attic RAM costs 17.6 cycles a byte, so a full-screen moving picture is 1.4
@@ -152,8 +180,8 @@ frames. Static props go into the backdrop.
 
 ### 5. Text and font
 
-The dialogue and prompts in `game.c`, rewritten for the new story; the title
-credits; `volter.fnt` replaced or kept (it is a free font, but it came with
+The dialogue and prompts in `game.c` are `VISION.md`'s (28 Oct). Left:
+the title credits; `volter.fnt` replaced or kept (it is a free font, but it came with
 dos-like — check its licence before keeping it). `tools/labels.py` reads the
 strings from `game.c` by pattern, so keep to the patterns it knows.
 
@@ -165,8 +193,9 @@ recording. Check that the MEGA65's SIDs are at the clock `SID_CLOCK` says.
 
 ### 7. The walkthrough
 
-`AUTOPLAY`'s script in `src/input.c` is Stranded's; rewrite it as the game
-takes shape, so that every scene can be screenshotted headless.
+**Done, 28 Oct**: `AUTOPLAY`'s script in `src/input.c` is this game's, 88
+steps. Keep it in step with the game, so that every scene can be
+screenshotted headless.
 
 ### 8. Cut the cord
 

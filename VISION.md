@@ -71,15 +71,16 @@ Who has what:
 | the GOLD one (the cylinder) | the fox | something to eat (the bear's cookies) |
 | the BLUE one | the sea lion | his ball (up in a tree) |
 
-## The start, by the sack
+## The start
 
-After the splash and the picture of Santa dropping the sack:
+After the splash and the picture of Santa dropping the sack. He lands
+some way from it:
 
     SANTA: Ho ho... ho?
     SANTA: That landing was rougher than usual.
     SANTA: Too many presents, not enough sleigh.
     SANTA: Classic overflow.
-    SANTA: And now the sack feels light. Too light.
+    SANTA: And now my sack's missing too.
 
 ## The sack
 

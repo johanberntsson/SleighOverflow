@@ -17,13 +17,12 @@ setting, the story and the music are to be new.**
 dropped presents, two houses and a sea lion, a BASIC-screen splash).
 **`TODO.md` is the plan and the running log — read it first.**
 
-Where it is (27 Oct 2026): the engine was copied from MegaStranded v1.0
-(`31edcd5`) without its history. `make` builds a disk that is still
-byte-for-byte Stranded, because `src/game.c` is still Stranded's game and
-every asset is borrowed from MegaStranded as a placeholder (below). The plan
-for the new game is written (`TODO.md` steps 1-3), and the palette remap is
-in `convgfx.py`; the owner is drawing the first art. The work from here is
-replacing the placeholders, one file at a time.
+Where it is (28 Oct 2026): the engine was copied from MegaStranded v1.0
+(`31edcd5`) without its history, and the game is now Sleigh Overflow's. All
+the art is the owner's, and `src/game.c` plays `VISION.md` start to finish:
+the opening, the ball in the tree, the sack, the bear, the fox and the sea
+lion, and the sack's "READY." Still Stranded's: the title screen, the boat
+and the fade at the end (`TODO.md` step 3), the font and the tune.
 
 **The owner does all `git add` and `git commit` by hand.** Leave changes in
 the working tree and say what changed.
@@ -33,9 +32,10 @@ the working tree and say what changed.
 `assets/` holds this game's own art, font and tune, and only those. The
 Makefile's `PLACEHOLDERS` (default `../MegaStranded/assets`) is searched after
 it: `tools/convgfx.py` takes every picture (`name.png`, else `name.gif`) and
-`volter.fnt` from the first directory that has it, and the tune is `assets/tune.mid` when there is one
-and `stranded.mid` from there until then. So a new picture replaces a
-placeholder by having its name, and the game keeps building in between.
+`volter.fnt` from the first directory that has it, and the tune is
+`assets/tune.mid` when there is one and `stranded.mid` from there until
+then. Every picture is now in `assets/`; the font and the tune are the two
+placeholders left, and `make PLACEHOLDERS=` stops at the tune.
 
 **Never copy a file from `../MegaStranded/assets` into this repository.** Not
 having Mattias' art in this game's history is why it is a new repository.
@@ -55,7 +55,7 @@ remapped to it by nearest colour and looks off until replaced. Without a
 | | |
 |---|---|
 | `assets/` | this game's own GIFs, font and `tune.mid` (see above) |
-| `src/game.c` | the game; still Stranded's `stranded.c` with MegaStranded's `PORT` changes |
+| `src/game.c` | the game: Stranded's `stranded.c` and MegaStranded's `PORT` changes, with Sleigh Overflow's scenes and dialogue |
 | `src/main.c` | loads everything, then runs the game for ever |
 | `src/dos.*` | the sixteen dos-like calls the game makes, by their dos-like names |
 | `src/input.*` | keyboard and joystick port 2, and `AUTOPLAY`'s scripted walkthrough |
@@ -101,7 +101,7 @@ All default to 0, which is the disk to hand out.
 
 | | |
 |---|---|
-| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (86 is the whole walkthrough) |
+| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (88 is the whole walkthrough) |
 | `TIMING=1` | the border shows each frame's draw time: white while drawing, red if it ran past a frame |
 | `STATS=1` | F1 prints a histogram of every frame's draw time on the ROM's screen |
 | `BENCH=1` | before the game, time the DMA every way the blitter could use it and print a table |
@@ -176,6 +176,17 @@ belong in the backdrop.
 - The screen is 320x200. Files may be 320x240 like Stranded's, in which case
   rows 20..219 are shown (`YCROP`); anything taller than 200 is cropped to
   that window, and every bitmap to its non-transparent box.
+- A PNG smaller than 320x200 is placed into a 320x200 frame at its
+  `CEL_ORIGIN` in `tools/convgfx.py` (Santa's and the sea lion's walks, the
+  ball). The owner draws most sprites as whole 320x200 frames instead,
+  painted where they belong on screen.
+- **Where a sprite lands.** Santa is drawn at the same place on screen
+  always (x 143-189); an object at sprite x X is at Santa when `xpos` is X,
+  which is what `is_near` and `set_interact` assume. A 320x200-frame
+  picture at sprite y `-10 + o` (20) appears as painted on screen when
+  Santa stands at it; an interior at (0, 0) is drawn as painted, so a
+  frame-painted prop over one, like the gifts in the houses, goes at
+  (0, `-10 + o`).
 - Bitmaps are listed in `BITMAPS` in `tools/convgfx.py` (the generated
   `enum bitmap_t`); a stem with `%04d` is an animation whose cels all share
   one box. `SCENES` composites layers into one opaque backdrop, `GROUPS` puts
@@ -190,9 +201,19 @@ belong in the backdrop.
 
 **Test with `make AUTOPLAY=n`**, which stops the game at step n of a
 scripted playthrough (`src/input.c`) so a headless screenshot catches it
-there. The script is Stranded's walkthrough and has to be rewritten along
-with the game. A step that holds an arrow walks 2 pixels a frame and must
-not start inside a `delay( 30 )`: wait 50 after a line of dialogue ends one.
+there. The script is this game's walkthrough, every step commented; a
+change to a dialogue's length or a new scene shifts every step after it,
+and the comments are numbered so that `AUTOPLAY=n` is the step on that
+line. A step that holds an arrow walks 2 pixels a frame and must not start
+inside a `delay( 30 )`: wait 50 after a line of dialogue ends one. A
+`#SetFlag` that plays an animation (`ball_fell`, `sealion_running`) blocks
+for its length, so the press after it waits longer (120, 200).
+
+Adding up the script's frames (`wait + hold` per step, 50 a second) plus
+about 30 seconds of loading is how long to let xemu run before its
+screenshot. Several can run at once, one disk each; write `P=$!` and the
+kill in the same shell function as the launch, or the `&` takes the
+variables with it.
 
 ## Changing the music
 

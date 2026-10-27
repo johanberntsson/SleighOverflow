@@ -49,63 +49,64 @@ struct step {
 
 static const struct step script[] = {
     {150, 1, IN_SPACE},             // 1: the title
-    {100, 1, IN_SPACE},             // 2-4: "maybe three and a half years..."
+    {100, 1, IN_SPACE},             // 2-6: "Ho ho... ho?"
+    SPACE(), SPACE(), SPACE(),
+    SPACE(),
+    SPACE(),                        // 7: stand up
+    {30, 58, IN_RIGHT},             // 8: to the tree, x 181
+    {10, 1, IN_SPACE},              // 9: "A ball, up in a tree."
     SPACE(), SPACE(),
-    SPACE(),                        // 5: stand up
-    {30, 58, IN_RIGHT},             // 6: to the tree, x 181
-    {10, 1, IN_SPACE},              // 7: "A ball, up in a tree."
-    SPACE(), SPACE(),
-    SPACE(),                        // 8-10: to "HO HO HO!"
-    SPACE(),                        // 11: the tree shakes, the ball falls
-    {120, 1, IN_SPACE},             // 12: "Works every time."
-    {60, 1, IN_SPACE},              // 13: pick the ball up
-    SPACE(),                        // 14: "A beach ball."
-    {50, 30, IN_RIGHT},             // 15: to the sack, x 241
-    {10, 1, IN_SPACE},              // 16: look at it
-    SPACE(), SPACE(), SPACE(),      // 17-19: three lines
-    SPACE(),                        // 20: back out
-    {20, 150, IN_RIGHT},            // 21: to the bear's house, x 541
-    {10, 1, IN_SPACE},              // 22: go in, "Shh! I'm watching."
+    SPACE(),                        // 10-12: to "HO HO HO!"
+    SPACE(),                        // 13: the tree shakes, the ball falls
+    {120, 1, IN_SPACE},             // 14: "Works every time."
+    {60, 1, IN_SPACE},              // 15: pick the ball up
+    SPACE(),                        // 16: "A beach ball."
+    {50, 30, IN_RIGHT},             // 17: to the sack, x 241
+    {10, 1, IN_SPACE},              // 18: look at it
+    SPACE(), SPACE(), SPACE(),      // 19-21: "?3 PRESENTS MISSING ERROR"
+    SPACE(),                        // 22: back out
+    {20, 150, IN_RIGHT},            // 23: to the bear's house, x 541
+    {10, 1, IN_SPACE},              // 24: go in, "Shh! I'm watching."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 23-34: to "These are for..."
-    SPACE(),                        // 35: done, has_cookies
-    SPACE(),                        // 36: come out
-    {50, 155, IN_RIGHT},            // 37: to the fox's house, x 851
-    {10, 1, IN_SPACE},              // 38: go in, "Hello, stranger."
+    SPACE(),                        // 25-36: to "These are for..."
+    SPACE(),                        // 37: done, has_cookies
+    SPACE(),                        // 38: come out
+    {50, 155, IN_RIGHT},            // 39: to the fox's house, x 851
+    {10, 1, IN_SPACE},              // 40: go in, "Hello, stranger."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
     SPACE(), SPACE(),
-    SPACE(),                        // 39-47: to "Line 20: GOTO 10."
-    SPACE(),                        // 48: done, met_fox
-    SPACE(),                        // 49: come out
-    SPACE(),                        // 50: go in again, with the cookies
-    SPACE(),                        // 51: "Cookies! Take whatever you like."
-    SPACE(),                        // 52: he eats, "*munch*"
-    SPACE(),                        // 53: done
-    SPACE(),                        // 54: come out with the remote and the present
-    {50, 60, IN_RIGHT},             // 55: to the sea lion, x 971
-    {10, 1, IN_SPACE},              // 56: "Arf. Go away. I'm sulking."
+    SPACE(),                        // 41-49: to "Line 20: GOTO 10."
+    SPACE(),                        // 50: done, met_fox
+    SPACE(),                        // 51: come out
+    SPACE(),                        // 52: go in again, with the cookies
+    SPACE(),                        // 53: "Cookies! Take whatever you like."
+    SPACE(),                        // 54: he eats, "*munch*"
+    SPACE(),                        // 55: done
+    SPACE(),                        // 56: come out with the remote and the present
+    {50, 60, IN_RIGHT},             // 57: to the sea lion, x 971
+    {10, 1, IN_SPACE},              // 58: "Arf. Go away. I'm sulking."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 57-63: to "Not until..."
-    SPACE(),                        // 64: done, met_sealion
-    {60, 1, IN_SPACE},              // 65: "Would you trade for a ball?"
+    SPACE(),                        // 59-65: to "Not until..."
+    SPACE(),                        // 66: done, met_sealion
+    {60, 1, IN_SPACE},              // 67: "Would you trade for a ball?"
     SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 66-69: to "Off to practise."
-    SPACE(),                        // 70: he waddles off with the ball
-    {200, 1, IN_SPACE},             // 71: "Ho ho. A nose for business."
-    {50, 31, IN_RIGHT},             // 72: to the blue gift, x 1033
-    {10, 1, IN_SPACE},              // 73: take it
-    SPACE(),                        // 74: "Slightly fishy."
-    {50, 246, IN_LEFT},             // 75: back to the bear's house, x 541
-    {10, 1, IN_SPACE},              // 76: go in, "One remote, slightly foxed."
+    SPACE(),                        // 68-71: to "Off to practise."
+    SPACE(),                        // 72: he waddles off with the ball
+    {200, 1, IN_SPACE},             // 73: "Ho ho. A nose for business."
+    {50, 31, IN_RIGHT},             // 74: to the blue gift, x 1033
+    {10, 1, IN_SPACE},              // 75: take it
+    SPACE(),                        // 76: "Slightly fishy."
+    {50, 246, IN_LEFT},             // 77: back to the bear's house, x 541
+    {10, 1, IN_SPACE},              // 78: go in, "One remote, slightly foxed."
     SPACE(), SPACE(),
-    SPACE(),                        // 77-79: to "Bliss."
-    SPACE(),                        // 80: done, has_green
-    SPACE(),                        // 81: come out
-    {50, 151, IN_LEFT},             // 82: back to the sack, x 239
-    {10, 1, IN_SPACE},              // 83: the sack, complete
-    SPACE(), SPACE(),               // 84-85: MAYDAY
-    SPACE(),                        // 86: back out, and the boat comes
+    SPACE(),                        // 79-81: to "Bliss."
+    SPACE(),                        // 82: done, has_green
+    SPACE(),                        // 83: come out
+    {50, 151, IN_LEFT},             // 84: back to the sack, x 239
+    {10, 1, IN_SPACE},              // 85: the sack, complete
+    SPACE(), SPACE(),               // 86-87: "READY."
+    SPACE(),                        // 88: back out, and the boat comes
 };
 #define STEPS (sizeof script / sizeof script[0])
 

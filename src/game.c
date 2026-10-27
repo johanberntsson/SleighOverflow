@@ -1,8 +1,8 @@
-// Stranded, by Mattias Gustavsson: src/stranded.c, ported to the MEGA65.
-//
-// Everything above the framework line is the original's, and kept as close to
-// it as the machine allows; every change is marked PORT. The framework is
-// src/dos.c. What changed, in short:
+// Sleigh Overflow. This started as Stranded, by Mattias Gustavsson
+// (src/stranded.c, ported to the MEGA65 in ../MegaStranded), and keeps its
+// sprite table, dialogue interpreter and main loop; the scenes, the flags and
+// the dialogue are this game's. The changes the port needed are marked PORT.
+// The framework is src/dos.c. What the port changed, in short:
 //
 //   - the bitmaps are in attic RAM before this starts (src/gfx.h), and the
 //     beach's background, treeline and props are one picture, WORLD, so their
@@ -197,60 +197,43 @@ struct dialog_t {
 };
 
 
-struct dialog_t dlg_lets_go_home[] = {
-    { "player_sitting", "Hmmm... maybe three and a half years on this island is enough..." },
-    { "player_sitting", "I've enjoyed being stranded here, but now I think I'd like to go home." },
-    { "player_sitting", "Last time I checked, the radio was working fine. I think I'll call for help now." },
+struct dialog_t dlg_start[] = {
+    { "player_sitting", "Ho ho... ho?" },
+    { "player_sitting", "That landing was rougher than usual." },
+    { "player_sitting", "Too many presents, not enough sleigh." },
+    { "player_sitting", "Classic overflow." },
+    { "player_sitting", "And now my sack's missing too." },
     { "#SetFlag","may_stand" },
     { NULL, NULL }
 };
 
 struct dialog_t dlg_sack_first[] = {
-    { "player_sack", "Oh no! There are parts missing!" },
-    { "player_sack", "Someone have grabbed the ANTENNA, the BATTERY, and the BULB." },
-    { "player_sack", "I *have* to find them!" },
+    { "player_sack", "?3 PRESENTS MISSING ERROR" },
+    { "player_sack", "The GREEN one, the GOLD one and the BLUE one!" },
+    { "player_sack", "They must have fallen out somewhere around here." },
     { "#SetFlag", "looked_at_sack" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_none[] = {
-    { "player_sack", "It is missing the ANTENNA, the BATTERY, and the BULB." },
+struct dialog_t dlg_sack_three[] = {
+    { "player_sack", "?3 PRESENTS MISSING ERROR" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_cylinder[] = {
-    { "player_sack", "It is missing the ANTENNA and the BATTERY." },
+struct dialog_t dlg_sack_two[] = {
+    { "player_sack", "?2 PRESENTS MISSING ERROR" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_sack_green[] = {
-    { "player_sack", "It is missing the BULB and the BATTERY." },
-    { NULL, NULL }
-};
-
-struct dialog_t dlg_sack_blue[] = {
-    { "player_sack", "It is missing the ANTENNA and the BULB." },
-    { NULL, NULL }
-};
-
-struct dialog_t dlg_sack_cylinder_green[] = {
-    { "player_sack", "It is missing the BATTERY." },
-    { NULL, NULL }
-};
-
-struct dialog_t dlg_sack_blue_green[] = {
-    { "player_sack", "It is missing the BULB." },
-    { NULL, NULL }
-};
-
-struct dialog_t dlg_sack_cylinder_blue[] = {
-    { "player_sack", "It is missing the ANTENNA." },
+struct dialog_t dlg_sack_one[] = {
+    { "player_sack", "?1 PRESENT MISSING ERROR" },
+    { "player_sack", "So close. Don't tell the reindeer." },
     { NULL, NULL }
 };
 
 struct dialog_t dlg_sack_all[] = {
-    { "player_sack", "The radio is complete! Now I can go home." },
-    { "player_sack", "MAYDAY! MAYDAY! I AM STRANDED ON AN ISLAND. SEND HELP!" },
+    { "player_sack", "READY." },
+    { "player_sack", "All present and correct. Ho ho!" },
     { "#SetFlag", "rescued" },
     { NULL, NULL }
 };
@@ -683,7 +666,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
         if( !shown_intro ) {
             delay( 60 );
-            startdialog( dlg_lets_go_home );
+            startdialog( dlg_start );
             shown_intro = 1;
         }
 
@@ -842,28 +825,28 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 						startdialog( dlg_sack_all );
 					} else if( has_green && has_cylinder ) {
                         sprite_bitmap( sack_pic, SACK_CYLINDER_GREEN );
-						startdialog( dlg_sack_cylinder_green );
+						startdialog( dlg_sack_one );
 					} else if( has_blue && has_cylinder ) {
                         sprite_bitmap( sack_pic, SACK_CYLINDER_BLUE );
-						startdialog( dlg_sack_cylinder_blue );
+						startdialog( dlg_sack_one );
 					} else if( has_green && has_blue ) {
                         sprite_bitmap( sack_pic, SACK_BLUE_GREEN );
-						startdialog( dlg_sack_blue_green );
+						startdialog( dlg_sack_one );
 					} else if( has_green ) {
                         sprite_bitmap( sack_pic, SACK_GREEN );
-						startdialog( dlg_sack_green );
+						startdialog( dlg_sack_two );
 					} else if( has_blue ) {
                         sprite_bitmap( sack_pic, SACK_BLUE );
-						startdialog( dlg_sack_blue );
+						startdialog( dlg_sack_two );
 					} else if( has_cylinder ) {
                         sprite_bitmap( sack_pic, SACK_CYLINDER );
-						startdialog( dlg_sack_cylinder );
+						startdialog( dlg_sack_two );
 					} else {
                         sprite_bitmap( sack_pic, SACK_NONE );
 						if( !looked_at_sack )
 							startdialog( dlg_sack_first );
 						else
-							startdialog( dlg_sack_none );
+							startdialog( dlg_sack_three );
 					}
 
 					sprite_show( sack_back );
