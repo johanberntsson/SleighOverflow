@@ -67,6 +67,16 @@ YCROP = 20        # rows of the original's 240 above the MEGA65's screen
 ATTIC_GFX = 0x8000000
 PALETTE_GIF = "palette.gif"
 
+# Animations whose PNG cels are drawn as dos-like's sources were: a small
+# frame, not the whole 320x200 screen, and this is where on the screen the
+# frame's top-left goes. Stranded's guy cels are 64x100 at (132, 60) of the
+# GIFs the game was built from. A cel already 320x200 is taken as it is.
+CEL_ORIGIN = {
+    "guy_jump_%04d": (132, 60),
+    "guy_walk_left_%04d": (132, 60),
+    "guy_walk_right_%04d": (132, 60),
+}
+
 # The order of stranded.c's enum bitmap_t, and each one's file stem. A stem
 # with %04d is an animation; its cels run from 0001 until a file is missing.
 #
@@ -271,7 +281,14 @@ def load_cels(assets, stem, palette):
     for path in paths:
         n = os.path.basename(path)
         if n.endswith(".png"):
-            cels.append(load_png(path, palette))
+            px = load_png(path, palette)
+            if stem in CEL_ORIGIN and px.shape != (SCREEN_H, 320):
+                x, y = CEL_ORIGIN[stem]
+                h, w = px.shape
+                screen = np.full((SCREEN_H, 320), TRANSPARENT, np.uint8)
+                screen[y:y + h, x:x + w] = px
+                px = screen
+            cels.append(px)
             continue
         im = Image.open(path)
         if im.mode != "P":
