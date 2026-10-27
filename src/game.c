@@ -541,7 +541,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int sealion = sprite( spr_index++, 970, -10 + o, SEALION ); objects[ objects_count++ ] = sealion;
 
 	int xpos = 65;
-	int guy = sprite( spr_index++, xpos, 25 + o, GUY_CHAIR );
+	int santa = sprite( spr_index++, xpos, 25 + o, SANTA_CHAIR );
     
 	int interact = label( spr_index++, 160, 70, "", COLOR_WHITE );
     
@@ -557,8 +557,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int hut_bulb = sprite( spr_index++, 0, 0, HUT_BOOK );
     sprite_hide( hut_bulb );
         	
-    int guy_inside = sprite( spr_index++, 0, 0 + o, GUY_IDLE );
-    sprite_hide( guy_inside );
+    int santa_inside = sprite( spr_index++, 0, 0 + o, SANTA_IDLE );
+    sprite_hide( santa_inside );
 
     int boat = sprite( spr_index++, -320, 30 + o, BOAT );
 
@@ -593,8 +593,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 		sprite_origin( interact, xpos, 0 );
 
-		sprite_origin( guy, xpos, 0 );
-		sprite_pos( guy, xpos, sprite_y( guy ) );
+		sprite_origin( santa, xpos, 0 );
+		sprite_pos( santa, xpos, sprite_y( santa ) );
 		sprite_pos( background, -xpos, sprite_y( background ) );
 		sprite_pos( treeline, -xpos, sprite_y( treeline ) );			
 
@@ -605,7 +605,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
         }
 
         anim3 = ( anim3 + 1 ) % ( 3 * 12 );  // PORT: every animation is 12 cels or 1
-        sprite_cel( guy, anim3 / 3 );
+        sprite_cel( santa, anim3 / 3 );
 
         waitvbl();
     
@@ -665,14 +665,14 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					char const* flag = dialogline();
 					if( strcmp( flag, "at_hut_tv" ) == 0 ) {
 						sprite_hide( hut_tv_pic );
-						sprite_hide( guy_inside );
+						sprite_hide( santa_inside );
 						sprite_bitmap( hut_tv_pic, HUT_TV_NODISH );
 						has_dish = 1;
 						at_hut_tv = 0;
 					}
 					if( strcmp( flag, "at_hut_bulb" ) == 0 ) {
 						sprite_hide( hut_bulb );
-						sprite_hide( guy_inside );
+						sprite_hide( santa_inside );
 						sprite_bitmap( hut_bulb, HUT_BOOK_NOBULB );
 						has_bulb = 1;
 						at_hut_bulb = 0;
@@ -680,7 +680,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				}
  				execdialog();
 			} else if( dialogstate() == DIALOG_STATE_DISPLAYING_SPEECH ) {
-                sprite_bitmap( guy, sitting ? GUY_CHAIR : GUY_IDLE );
+                sprite_bitmap( santa, sitting ? SANTA_CHAIR : SANTA_IDLE );
 				setup_speech( speech, dialogactor() );
 				label_text( speech, dialogline() );
 				if( speech_visible && *readkeys() == KEY_SPACE )  {					
@@ -711,13 +711,13 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( keystate( KEY_LEFT ) )  {
 				xpos -= 2;
 				if( xpos < 10 ) xpos = 10;
-                sprite( guy, sprite_x( guy ), sprite_y( guy ), GUY_LEFT );
+                sprite( santa, sprite_x( santa ), sprite_y( santa ), SANTA_LEFT );
 			} else if( keystate( KEY_RIGHT ) ) {
 				xpos += 2;
 				if( xpos > 1120 ) xpos = 1120;
-                sprite( guy, sprite_x( guy ), sprite_y( guy ), GUY_RIGHT );
+                sprite( santa, sprite_x( santa ), sprite_y( santa ), SANTA_RIGHT );
 			} else {
-                sprite( guy, sprite_x( guy ), sprite_y( guy ), GUY_IDLE );
+                sprite( santa, sprite_x( santa ), sprite_y( santa ), SANTA_IDLE );
 			}
 
 			if( *readkeys() == KEY_SPACE ) {
@@ -758,8 +758,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				
                 if( is_near( hut1, xpos ) ) {
 					sprite_show( hut_tv_pic );
-					sprite_show( guy_inside );
-                    sprite_pos( guy_inside, 100, 60 );
+					sprite_show( santa_inside );
+                    sprite_pos( santa_inside, 100, 60 );
 					if( !has_dish )
 						startdialog( dlg_hut_tv );
 					else
@@ -769,8 +769,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 				if( is_near( hut2, xpos ) ) {
 					sprite_show( hut_bulb );
-					sprite_show( guy_inside );
-                    sprite_pos( guy_inside, 100, 60 );
+					sprite_show( santa_inside );
+                    sprite_pos( santa_inside, 100, 60 );
 					if( !has_bulb )
 						startdialog( dlg_hut_book );
 					else
@@ -782,7 +782,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                     sprite_bitmap( sealion, SEALION );
 					startdialog( dlg_sealion );
 					label_text( interact, "" );
-                    sprite_bitmap( guy, GUY_IDLE );
+                    sprite_bitmap( santa, SANTA_IDLE );
 				}
 
 				if( !has_battery && sealion_gone && is_near( sealion_battery, xpos ) ) {
@@ -796,17 +796,17 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                 if( is_near( chair, xpos ) ) {
 					sitting = 1;
 					xpos = 65;
-					sprite_bitmap( guy, GUY_CHAIR );
-                    sprite_pos( guy, 0, 25+o );
-		            sprite_origin( guy, xpos, 0 );
-		            sprite_pos( guy, xpos, sprite_y( guy ) );
+					sprite_bitmap( santa, SANTA_CHAIR );
+                    sprite_pos( santa, 0, 25+o );
+		            sprite_origin( santa, xpos, 0 );
+		            sprite_pos( santa, xpos, sprite_y( santa ) );
 				}
 			}
 
 		} else if( sitting && may_stand ) {
 			if( *readkeys() == KEY_SPACE ) {
 				sitting = 0;
-                sprite( guy, 0, 30+o, GUY_IDLE ); 
+                sprite( santa, 0, 30+o, SANTA_IDLE ); 
 			}
 		} else if( at_radio ) {
 			if( *readkeys() == KEY_SPACE ) {
@@ -815,10 +815,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				at_radio = 0;
 
                 if( rescued ) {
-                    sprite_bitmap( guy, GUY_JUMP );
+                    sprite_bitmap( santa, SANTA_JUMP );
 					xpos = 20;
-		            sprite_origin( guy, xpos, 0 );
-		            sprite_pos( guy, xpos, sprite_y( guy ) );
+		            sprite_origin( santa, xpos, 0 );
+		            sprite_pos( santa, xpos, sprite_y( santa ) );
                     boat_delay = 90;
                     boat_move = 0;
 					fadeout = 1; 
@@ -827,7 +827,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 		} else if( at_hut_tv ) {
 			if( *readkeys() == KEY_SPACE ) {
 			    sprite_hide( hut_tv_pic );
-			    sprite_hide( guy_inside );
+			    sprite_hide( santa_inside );
 				sprite_bitmap( hut_tv_pic, HUT_TV_NODISH );
 				has_dish = 1;
 				at_hut_tv = 0;
@@ -835,7 +835,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 		} else if( at_hut_bulb ) {
 			if( *readkeys() == KEY_SPACE ) {
 				sprite_hide( hut_bulb );
-				sprite_hide( guy_inside );
+				sprite_hide( santa_inside );
 				sprite_bitmap( hut_bulb, HUT_BOOK_NOBULB );
 				has_bulb = 1;
 				at_hut_bulb = 0;
@@ -854,8 +854,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
             }
         }
 
-		sprite_origin( guy, xpos, 0 );
-		sprite_pos( guy, xpos, sprite_y( guy ) );
+		sprite_origin( santa, xpos, 0 );
+		sprite_pos( santa, xpos, sprite_y( santa ) );
         drawsprites();
         swapbuffers();
 	}

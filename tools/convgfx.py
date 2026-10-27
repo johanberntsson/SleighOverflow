@@ -69,13 +69,13 @@ PALETTE_GIF = "palette.gif"
 
 # Animations whose PNG cels are drawn as dos-like's sources were: a small
 # frame, not the whole 320x200 screen, and this is where on the screen the
-# frame's top-left goes. Stranded's guy cels are 64x100 at (132, 60) of the
-# GIFs the game was built from, the sea lion's (Stranded's penguin's) 64x100
-# at (132, 90). A cel already 320x200 is taken as it is.
+# frame's top-left goes. Santa's cels (Stranded's guy's) are 64x100 at
+# (132, 60) of the GIFs the game was built from, the sea lion's (Stranded's
+# penguin's) 64x100 at (132, 90). A cel already 320x200 is taken as it is.
 CEL_ORIGIN = {
-    "guy_jump_%04d": (132, 60),
-    "guy_walk_left_%04d": (132, 60),
-    "guy_walk_right_%04d": (132, 60),
+    "santa_jump_%04d": (132, 60),
+    "santa_walk_left_%04d": (132, 60),
+    "santa_walk_right_%04d": (132, 60),
     "sealion_walk_%04d": (132, 90),
 }
 
@@ -90,11 +90,11 @@ BITMAPS = [
     ("FACE", "face"),
     ("LOGO", "logo"),
     ("BOAT", "boat"),
-    ("GUY_CHAIR", "guychair"),
-    ("GUY_IDLE", "guy_idle"),
-    ("GUY_JUMP", "guy_jump_%04d"),
-    ("GUY_LEFT", "guy_walk_left_%04d"),
-    ("GUY_RIGHT", "guy_walk_right_%04d"),
+    ("SANTA_CHAIR", "santachair"),
+    ("SANTA_IDLE", "santa_idle"),
+    ("SANTA_JUMP", "santa_jump_%04d"),
+    ("SANTA_LEFT", "santa_walk_left_%04d"),
+    ("SANTA_RIGHT", "santa_walk_right_%04d"),
     ("HUT_BOOK", "hut_book"),
     ("HUT_BOOK_NOBULB", "hut_book_nobulb"),
     ("HUT_TV", "hut_tv"),
@@ -144,7 +144,7 @@ SCENES = {
 GROUPS = [
     ["WORLD"],
     ["TITLE", "FACE", "LOGO", "BOAT"],
-    ["GUY_CHAIR", "GUY_IDLE", "GUY_JUMP", "GUY_LEFT", "GUY_RIGHT",
+    ["SANTA_CHAIR", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
      "SEALION", "SEALION_BATTERY", "SEALION_WALK"],
     ["HUT_BOOK", "HUT_BOOK_NOBULB"],
     ["HUT_TV", "HUT_TV_NODISH"],

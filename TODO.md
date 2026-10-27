@@ -54,9 +54,9 @@ of it becomes one of this game's:
 | Stranded | Sleigh Overflow |
 |---|---|
 | `WORLD`: a 1480-wide beach, the radio, two huts, palms, the chair | a snowfield before a forest: the sack, two houses, the sea lion on the beach at the far end |
-| `GUY_IDLE`, `GUY_LEFT`, `GUY_RIGHT` | Santa standing and walking |
-| `GUY_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
-| `GUY_JUMP`, rescued | Santa's cheer when the third present is back |
+| `SANTA_IDLE`, `SANTA_LEFT`, `SANTA_RIGHT` | Santa standing and walking |
+| `SANTA_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
+| `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
 | `RADIO_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
 | `HUT_TV`/`HUT_TV_NODISH`, `HUT_BOOK`/`HUT_BOOK_NOBULB` | the two house interiors, with and without their present |
 | `SEALION`, `SEALION_BATTERY`, `SEALION_WALK` | the sea lion with the third present, walking off |

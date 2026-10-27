@@ -35,7 +35,7 @@ static uint8_t row(uint8_t select)
 // `hold` frames. A line of dialogue goes on at a SPACE and is gone for 30
 // frames first, so presses are 60 apart -- and so a walk that follows the
 // last line of a conversation waits 50, or its first frames go by inside
-// that delay and it stops short. The guy walks 2 pixels a frame from
+// that delay and it stops short. Santa walks 2 pixels a frame from
 // 65, and is near a thing within 25 of it: the radio is at 240, the huts at
 // 540 and 850, the sea lion at 970 and the battery at 1032.
 struct step {
