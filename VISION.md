@@ -191,14 +191,16 @@ After:
 
 ## The sea lion on the beach (BLUE)
 
-First visit, without the ball:
+First visit, without the ball. The present is on the snow behind him:
 
-    SEA LION: Arf! Don't distract me. Big trick.
-    SANTA: Is that my BLUE present on your nose?
-    SEA LION: Three days I've tried to balance it.
-    SEA LION: It keeps falling off. It's square.
+    SEA LION: Arf. Go away. I'm sulking.
+    SANTA: Is that my BLUE present behind you?
+    SEA LION: It fell out of the sky. I'm keeping it.
+    SEA LION: I lost my ball. That box is all I've got left.
+    SANTA: You can't play with a box.
+    SEA LION: I tried balancing it. It's square.
     SANTA: Can I have it back?
-    SEA LION: No. I lost my ball. This is all I've got.
+    SEA LION: Not until I've got something else to play with.
     [met_sealion]
 
 Again, without the ball:

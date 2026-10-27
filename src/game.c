@@ -289,26 +289,38 @@ struct dialog_t dlg_hut_fox_sleep[] = {
 };
 
 struct dialog_t dlg_sealion[] = {
-    { "sealion", "Waddya want!?" },
-    { "player", "Uh, is that my battery you have there?" },
-    { "sealion", "Don't know! Don't care!" },
-    { "player", "But you're not even using it!" },
-    { "sealion", "Sure I do! I lick it." },
-    { "player", "You *lick* it?" },
-    { "sealion", "Makes my tongue tingle." },
-    { "player", "But *I* need it for my radio. So I can call for help and get home." },
-    { "player", "What are you even doing here? Aren't you supposed to be on the south pole or something?" },
-    { "sealion", "Vacation." },
-    { "sealion", "It's about time I got back anyway." },
-    { "sealion", "Don't touch my battery while I'm gone!" },
+    { "sealion", "Arf. Go away. I'm sulking." },
+    { "player", "Is that my BLUE present behind you?" },
+    { "sealion", "It fell out of the sky. I'm keeping it." },
+    { "sealion", "I lost my ball. That box is all I've got left." },
+    { "player", "You can't play with a box." },
+    { "sealion", "I tried balancing it. It's square." },
+    { "player", "Can I have it back?" },
+    { "sealion", "Not until I've got something else to play with." },
+    { "#SetFlag", "met_sealion" },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_sealion_again[] = {
+    { "sealion", "There was a penguin here once. Licked batteries." },
+    { "sealion", "Weird guy." },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_sealion_ball[] = {
+    { "player", "Would you trade for a ball?" },
+    { "sealion", "MY BALL! Where was it?" },
+    { "player", "In a tree." },
+    { "sealion", "Classic ball." },
+    { "sealion", "Off to practise. The present's yours. Arf!" },
     { "#SetFlag", "sealion_running" },
-    { "player", "Yeah, right." },
+    { "player", "Ho ho. A nose for business." },
     { "#SetFlag", "sealion_gone" },
     { NULL, NULL }
 };
 
 struct dialog_t dlg_grab_blue[] = {
-    { "player", "I'm having this!" },
+    { "player", "Slightly fishy. Nobody will notice." },
     { NULL, NULL }
 };
 
@@ -602,6 +614,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int has_cylinder = 0;
 	int has_blue = 0;
 	int ball_fell = 0;
+	int met_sealion = 0;
 	int has_ball = 0;
   int shown_intro = 0;
   int boat_delay = 0;
@@ -662,7 +675,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					if( strcmp( flag, "looked_at_sack" ) == 0 ) {
 						looked_at_sack = 1;
 					}
+					if( strcmp( flag, "met_sealion" ) == 0 ) {
+						met_sealion = 1;
+					}
 					if( strcmp( flag, "sealion_running" ) == 0 ) {
+						// He leaves with the ball: SEALION_WALK has it on his nose.
                         sprite_pos( sealion, 970 + 62, sprite_y( sealion ) );
                         sprite_bitmap( sealion, SEALION_WALK );
 						delay( 30 );
@@ -755,7 +772,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( has_ball && is_near( tree, xpos ) ) set_interact( tree, "Tree (undecorated)", interact, 0 );
 			if( is_near( house_bear, xpos ) ) set_interact( house_bear, "Bear's den", interact, 0 );
 			if( is_near( house_fox, xpos ) ) set_interact( house_fox, "Fox's den", interact, 0 );
-			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion (busy)", interact, 60 );
+			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion (sulking)", interact, 60 );
 			if( !has_blue && sealion_gone && is_near( gift_blue, xpos ) ) set_interact( gift_blue, "Present", interact, 0 );
 				
 			if( keystate( KEY_LEFT ) )  {
@@ -840,7 +857,12 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 				if( !sealion_gone && is_near( sealion, xpos ) ) {
                     sprite_bitmap( sealion, SEALION );
-					startdialog( dlg_sealion );
+					if( !met_sealion )
+						startdialog( dlg_sealion );
+					else if( has_ball )
+						startdialog( dlg_sealion_ball );
+					else
+						startdialog( dlg_sealion_again );
 					label_text( interact, "" );
                     sprite_bitmap( santa, SANTA_IDLE );
 				}

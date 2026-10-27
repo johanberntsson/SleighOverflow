@@ -73,18 +73,22 @@ static const struct step script[] = {
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
     SPACE(),                        // 32-37: the fox, six lines
     {50, 60, IN_RIGHT},             // 38: to the sea lion, x 971
-    {10, 1, IN_SPACE},              // 39: talk to it
+    {10, 1, IN_SPACE},              // 39: "Arf. Go away. I'm sulking."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 40-51: twelve lines, then it waddles off
-    {200, 1, IN_SPACE},             // 52: "Yeah, right."
-    {50, 31, IN_RIGHT},             // 53: to the blue gift, x 1033
-    {10, 1, IN_SPACE},              // 54: take it
-    SPACE(),                        // 55: "I'm having this!"
-    {50, 397, IN_LEFT},             // 56: back to the sack, x 239
-    {10, 1, IN_SPACE},              // 57: the sack, complete
-    SPACE(), SPACE(),               // 58-59: MAYDAY
-    SPACE(),                        // 60: back out, and the boat comes
+    SPACE(),                        // 40-46: to "Not until..."
+    SPACE(),                        // 47: done, met_sealion
+    {60, 1, IN_SPACE},              // 48: "Would you trade for a ball?"
+    SPACE(), SPACE(), SPACE(),
+    SPACE(),                        // 49-52: to "Off to practise."
+    SPACE(),                        // 53: he waddles off with the ball
+    {200, 1, IN_SPACE},             // 54: "Ho ho. A nose for business."
+    {50, 31, IN_RIGHT},             // 55: to the blue gift, x 1033
+    {10, 1, IN_SPACE},              // 56: take it
+    SPACE(),                        // 57: "Slightly fishy."
+    {50, 397, IN_LEFT},             // 58: back to the sack, x 239
+    {10, 1, IN_SPACE},              // 59: the sack, complete
+    SPACE(), SPACE(),               // 60-61: MAYDAY
+    SPACE(),                        // 62: back out, and the boat comes
 };
 #define STEPS (sizeof script / sizeof script[0])
 
