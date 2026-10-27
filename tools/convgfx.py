@@ -100,7 +100,7 @@ BITMAPS = [
     ("HUT_TV", "hut_tv"),
     ("HUT_TV_NODISH", "hut_tv_nodish"),
     ("SEALION", "sealion"),
-    ("SEALION_BATTERY", "penguin_battery"),  # the placeholder's name
+    ("GIFT_BLUE", "gift_blue"),
     ("SEALION_WALK", "sealion_walk_%04d"),
     ("SACK_BATTERY", "sack_battery"),
     ("SACK_BATTERY_DISH", "sack_battery_dish"),
@@ -145,7 +145,7 @@ GROUPS = [
     ["WORLD"],
     ["TITLE", "FACE", "LOGO", "BOAT"],
     ["SANTA_CHAIR", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
-     "SEALION", "SEALION_BATTERY", "SEALION_WALK"],
+     "SEALION", "GIFT_BLUE", "SEALION_WALK"],
     ["HUT_BOOK", "HUT_BOOK_NOBULB"],
     ["HUT_TV", "HUT_TV_NODISH"],
     ["SACK_NONE", "SACK_BULB", "SACK_DISH", "SACK_BATTERY",

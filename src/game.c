@@ -537,7 +537,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	objects[ objects_count++ ] =  sprite( spr_index++, 180, -30 + o, TREE2 );
 	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, PALMTREE );
 	int chair = sprite( spr_index++, 65, 25 + o, CHAIR ); objects[ objects_count++ ] = chair;
-	int sealion_battery = sprite( spr_index++, 970 + 62, -10 + o, SEALION_BATTERY ); objects[ objects_count++ ] = sealion_battery;
+	int gift_blue = sprite( spr_index++, 970 + 62, -10 + o, GIFT_BLUE ); objects[ objects_count++ ] = gift_blue;
 	int sealion = sprite( spr_index++, 970, -10 + o, SEALION ); objects[ objects_count++ ] = sealion;
 
 	int xpos = 65;
@@ -706,7 +706,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( is_near( hut1, xpos ) ) set_interact( hut1, "Hut", interact, 0 );
 			if( is_near( hut2, xpos ) ) set_interact( hut2, "Hut", interact, 0 );
 			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion", interact, 60 );
-			if( !has_battery && sealion_gone && is_near( sealion_battery, xpos ) ) set_interact( sealion_battery, "Battery", interact, 0 );
+			if( !has_battery && sealion_gone && is_near( gift_blue, xpos ) ) set_interact( gift_blue, "Present", interact, 0 );
 				
 			if( keystate( KEY_LEFT ) )  {
 				xpos -= 2;
@@ -785,11 +785,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                     sprite_bitmap( santa, SANTA_IDLE );
 				}
 
-				if( !has_battery && sealion_gone && is_near( sealion_battery, xpos ) ) {
+				if( !has_battery && sealion_gone && is_near( gift_blue, xpos ) ) {
 					label_text( interact, "" );
 					sprite_hide( sealion );
 					startdialog( dlg_grab_battery );
-					sprite_hide( sealion_battery );
+					sprite_hide( gift_blue );
 					has_battery = 1;
 				}
 

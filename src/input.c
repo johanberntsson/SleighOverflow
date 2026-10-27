@@ -37,7 +37,7 @@ static uint8_t row(uint8_t select)
 // last line of a conversation waits 50, or its first frames go by inside
 // that delay and it stops short. Santa walks 2 pixels a frame from
 // 65, and is near a thing within 25 of it: the sack is at 240, the huts at
-// 540 and 850, the sea lion at 970 and the battery at 1032.
+// 540 and 850, the sea lion at 970 and the blue gift at 1032.
 struct step {
   uint16_t wait;
   uint16_t hold;
@@ -69,7 +69,7 @@ static const struct step script[] = {
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
     SPACE(),                        // 31-42: twelve lines, then it waddles off
     {200, 1, IN_SPACE},             // 43: "Yeah, right."
-    {50, 31, IN_RIGHT},             // 44: to the battery, x 1033
+    {50, 31, IN_RIGHT},             // 44: to the blue gift, x 1033
     {10, 1, IN_SPACE},              // 45: take it
     SPACE(),                        // 46: "I'm having this!"
     {50, 397, IN_LEFT},             // 47: back to the sack, x 239

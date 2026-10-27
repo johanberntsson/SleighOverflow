@@ -59,7 +59,7 @@ of it becomes one of this game's:
 | `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
 | `SACK_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
 | `HUT_TV`/`HUT_TV_NODISH`, `HUT_BOOK`/`HUT_BOOK_NOBULB` | the two house interiors, with and without their present |
-| `SEALION`, `SEALION_BATTERY`, `SEALION_WALK` | the sea lion with the third present, walking off |
+| `SEALION`, `GIFT_BLUE`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
 | `BOAT` easing in, the palette fade | the sleigh on its way (step 3) |
 
