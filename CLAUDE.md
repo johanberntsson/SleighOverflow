@@ -101,7 +101,7 @@ All default to 0, which is the disk to hand out.
 
 | | |
 |---|---|
-| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (62 is the whole walkthrough) |
+| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (86 is the whole walkthrough) |
 | `TIMING=1` | the border shows each frame's draw time: white while drawing, red if it ran past a frame |
 | `STATS=1` | F1 prints a histogram of every frame's draw time on the ROM's screen |
 | `BENCH=1` | before the game, time the DMA every way the blitter could use it and print a table |

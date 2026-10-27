@@ -255,36 +255,75 @@ struct dialog_t dlg_sack_all[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_bear[] = {
-    { "player_hut", "Hey, that's my antenna!" },
-    { "bear", "Huh, what? No, it's my antenna now. I found it." },
-    { "bear", "I need it for my TV. To watch my shows." },
-    { "player_hut", "But *I* need it for my radio. So I can call for help and get home." },
-    { "bear", "Uh... I *am* very tired, I need to sleep. But I can't stop watching." },
-    { "player_hut", "You can have the antenna back later, I only need it to make the transmission." },
-    { "bear", "Ok, go ahead then." },
-    { "#ClearFlag", "at_hut_bear" },
+struct dialog_t dlg_bear[] = {
+    { "bear", "Shh! I'm watching." },
+    { "player_hut", "Watching what?" },
+    { "bear", "The Yule Log channel." },
+    { "bear", "Same log since April '92." },
+    { "player_hut", "Have you tried another channel?" },
+    { "bear", "With *what*? My remote is gone." },
+    { "player_hut", "Is that my GREEN present by your chair?" },
+    { "bear", "Fell down the chimney. Best thing on all day." },
+    { "bear", "It stays until I can change the channel." },
+    { "player_hut", "Are those cookies?" },
+    { "bear", "Take them. I can't eat with the TV like this." },
+    { "bear", "Doctor's orders." },
+    { "player_hut", "These are for... someone else. Strictly." },
+    { "#SetFlag", "has_cookies" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_bear_sleep[] = {
-    { "player_hut", "Looks like he's sleeping. I better not disturb him." },
+struct dialog_t dlg_bear_again[] = {
+    { "bear", "Still the log. It crackled once. Big moment." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_fox[] = {
-    { "player_hut", "That's my bulb! For my radio." },
-    { "fox", "Oh, yes yes, quite. I need it so I can read my books." },
-    { "player_hut", "But *I* need it for my radio. So I can call for help and get home." },
-    { "fox", "I see, I see. Well I am really rather sleepy. But I can not put this book down. Quite the page-turner it is." },
-    { "player_hut", "You can have the bulb back later, I only need it to make the transmission." },
-    { "fox", "Ah, very well, very well." },
-    { "#ClearFlag", "at_hut_fox" },
+struct dialog_t dlg_bear_remote[] = {
+    { "player_hut", "One remote, slightly foxed." },
+    { "#SetFlag", "gave_remote" },
+    { "bear", "My remote! Channel two... channel three..." },
+    { "bear", "It's the Yule Log channel. From a different angle." },
+    { "bear", "Bliss. Take your present, I'm busy." },
+    { "#SetFlag", "has_green" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_hut_fox_sleep[] = {
-    { "player_hut", "Looks like he's sleeping. I better not disturb him." },
+struct dialog_t dlg_bear_after[] = {
+    { "bear", "Shh. The log is at the good part." },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_fox[] = {
+    { "fox", "Hello, stranger. Nothing to see here." },
+    { "player_hut", "That's the bear's remote." },
+    { "fox", "I *borrowed* it. It doesn't work." },
+    { "fox", "I point it at the window. Same snow every day." },
+    { "player_hut", "That's a window." },
+    { "fox", "Very low resolution." },
+    { "player_hut", "And that's my GOLD present." },
+    { "fox", "Finders keepers. Can't think when I'm this hungry." },
+    { "player_hut", "Let me check my list. Twice." },
+    { "player_hut", "Fox. Line 10: NAUGHTY. Line 20: GOTO 10." },
+    { "#SetFlag", "met_fox" },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_fox_again[] = {
+    { "fox", "My stomach is rumbling. Something sweet would help." },
+    { NULL, NULL }
+};
+
+// Leaving after this takes the remote and the present.
+struct dialog_t dlg_fox_cookies[] = {
+    { "player_hut", "Cookies, for a very naughty fox." },
+    { "fox", "Cookies! Take whatever you like. I won't notice." },
+    { "#SetFlag", "fox_eating" },
+    { "fox", "*munch* I didn't see a thing." },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_fox_after[] = {
+    { "fox", "*munch* Mmf. Go away. *munch*" },
     { NULL, NULL }
 };
 
@@ -586,9 +625,13 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 	int hut_bear_pic = sprite( spr_index++, 0, 0, HUT_BEAR );
     sprite_hide( hut_bear_pic );
+	int gift_green = sprite( spr_index++, 0, -10 + o, GIFT_GREEN );
+    sprite_hide( gift_green );
 
 	int hut_fox_pic = sprite( spr_index++, 0, 0, HUT_FOX );
     sprite_hide( hut_fox_pic );
+	int gift_cylinder = sprite( spr_index++, 0, -10 + o, GIFT_CYLINDER );
+    sprite_hide( gift_cylinder );
         	
     int santa_inside = sprite( spr_index++, 0, 0 + o, SANTA_IDLE );
     sprite_hide( santa_inside );
@@ -615,6 +658,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int has_blue = 0;
 	int ball_fell = 0;
 	int met_sealion = 0;
+	int has_cookies = 0;
+	int met_fox = 0;
+	int fox_eating = 0;
+	int has_remote = 0;
 	int has_ball = 0;
   int shown_intro = 0;
   int boat_delay = 0;
@@ -675,6 +722,23 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					if( strcmp( flag, "looked_at_sack" ) == 0 ) {
 						looked_at_sack = 1;
 					}
+					if( strcmp( flag, "has_cookies" ) == 0 ) {
+						has_cookies = 1;
+					}
+					if( strcmp( flag, "gave_remote" ) == 0 ) {
+						sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
+					}
+					if( strcmp( flag, "has_green" ) == 0 ) {
+						sprite_hide( gift_green );
+						has_green = 1;
+					}
+					if( strcmp( flag, "met_fox" ) == 0 ) {
+						met_fox = 1;
+					}
+					if( strcmp( flag, "fox_eating" ) == 0 ) {
+						sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
+						fox_eating = 1;
+					}
 					if( strcmp( flag, "met_sealion" ) == 0 ) {
 						met_sealion = 1;
 					}
@@ -724,23 +788,6 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					}
 					if( strcmp( flag, "rescued" ) == 0 ) {
 						rescued = 1;
-					}
-				}
-				if( strcmp( event, "#ClearFlag" ) == 0 ) {
-					char const* flag = dialogline();
-					if( strcmp( flag, "at_hut_bear" ) == 0 ) {
-						sprite_hide( hut_bear_pic );
-						sprite_hide( santa_inside );
-						sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
-						has_green = 1;
-						at_hut_bear = 0;
-					}
-					if( strcmp( flag, "at_hut_fox" ) == 0 ) {
-						sprite_hide( hut_fox_pic );
-						sprite_hide( santa_inside );
-						sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
-						has_cylinder = 1;
-						at_hut_fox = 0;
 					}
 				}
  				execdialog();
@@ -835,23 +882,33 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				
                 if( is_near( house_bear, xpos ) ) {
 					sprite_show( hut_bear_pic );
+					if( !has_green ) sprite_show( gift_green );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
-					if( !has_green )
-						startdialog( dlg_hut_bear );
+					if( !has_cookies )
+						startdialog( dlg_bear );
+					else if( has_green )
+						startdialog( dlg_bear_after );
+					else if( has_remote )
+						startdialog( dlg_bear_remote );
 					else
-						startdialog( dlg_hut_bear_sleep );
+						startdialog( dlg_bear_again );
 					at_hut_bear = 1;
 				}
 
 				if( is_near( house_fox, xpos ) ) {
 					sprite_show( hut_fox_pic );
+					if( !has_cylinder ) sprite_show( gift_cylinder );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
-					if( !has_cylinder )
-						startdialog( dlg_hut_fox );
+					if( !met_fox )
+						startdialog( dlg_fox );
+					else if( fox_eating )
+						startdialog( dlg_fox_after );
+					else if( has_cookies )
+						startdialog( dlg_fox_cookies );
 					else
-						startdialog( dlg_hut_fox_sleep );
+						startdialog( dlg_fox_again );
 					at_hut_fox = 1;
 				}
 
@@ -909,18 +966,21 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 		} else if( at_hut_bear ) {
 			if( *readkeys() == KEY_SPACE ) {
 			    sprite_hide( hut_bear_pic );
+			    sprite_hide( gift_green );
 			    sprite_hide( santa_inside );
-				sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
-				has_green = 1;
 				at_hut_bear = 0;
 			}
 		} else if( at_hut_fox ) {
 			if( *readkeys() == KEY_SPACE ) {
 				sprite_hide( hut_fox_pic );
+				sprite_hide( gift_cylinder );
 				sprite_hide( santa_inside );
-				sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
-				has_cylinder = 1;
 				at_hut_fox = 0;
+				// The fox is too busy with the cookies to notice.
+				if( fox_eating && !has_cylinder ) {
+					has_remote = 1;
+					has_cylinder = 1;
+				}
             }
         }
 

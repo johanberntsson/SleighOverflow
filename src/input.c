@@ -64,31 +64,48 @@ static const struct step script[] = {
     {10, 1, IN_SPACE},              // 16: look at it
     SPACE(), SPACE(), SPACE(),      // 17-19: three lines
     SPACE(),                        // 20: back out
-    {20, 150, IN_RIGHT},            // 21: to the first hut, x 541
-    {10, 1, IN_SPACE},              // 22: go in
+    {20, 150, IN_RIGHT},            // 21: to the bear's house, x 541
+    {10, 1, IN_SPACE},              // 22: go in, "Shh! I'm watching."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 23-29: the bear, seven lines
-    {50, 155, IN_RIGHT},            // 30: to the second hut, x 851
-    {10, 1, IN_SPACE},              // 31: go in
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 32-37: the fox, six lines
-    {50, 60, IN_RIGHT},             // 38: to the sea lion, x 971
-    {10, 1, IN_SPACE},              // 39: "Arf. Go away. I'm sulking."
+    SPACE(),                        // 23-34: to "These are for..."
+    SPACE(),                        // 35: done, has_cookies
+    SPACE(),                        // 36: come out
+    {50, 155, IN_RIGHT},            // 37: to the fox's house, x 851
+    {10, 1, IN_SPACE},              // 38: go in, "Hello, stranger."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 40-46: to "Not until..."
-    SPACE(),                        // 47: done, met_sealion
-    {60, 1, IN_SPACE},              // 48: "Would you trade for a ball?"
+    SPACE(), SPACE(),
+    SPACE(),                        // 39-47: to "Line 20: GOTO 10."
+    SPACE(),                        // 48: done, met_fox
+    SPACE(),                        // 49: come out
+    SPACE(),                        // 50: go in again, with the cookies
+    SPACE(),                        // 51: "Cookies! Take whatever you like."
+    SPACE(),                        // 52: he eats, "*munch*"
+    SPACE(),                        // 53: done
+    SPACE(),                        // 54: come out with the remote and the present
+    {50, 60, IN_RIGHT},             // 55: to the sea lion, x 971
+    {10, 1, IN_SPACE},              // 56: "Arf. Go away. I'm sulking."
+    SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
+    SPACE(),                        // 57-63: to "Not until..."
+    SPACE(),                        // 64: done, met_sealion
+    {60, 1, IN_SPACE},              // 65: "Would you trade for a ball?"
     SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 49-52: to "Off to practise."
-    SPACE(),                        // 53: he waddles off with the ball
-    {200, 1, IN_SPACE},             // 54: "Ho ho. A nose for business."
-    {50, 31, IN_RIGHT},             // 55: to the blue gift, x 1033
-    {10, 1, IN_SPACE},              // 56: take it
-    SPACE(),                        // 57: "Slightly fishy."
-    {50, 397, IN_LEFT},             // 58: back to the sack, x 239
-    {10, 1, IN_SPACE},              // 59: the sack, complete
-    SPACE(), SPACE(),               // 60-61: MAYDAY
-    SPACE(),                        // 62: back out, and the boat comes
+    SPACE(),                        // 66-69: to "Off to practise."
+    SPACE(),                        // 70: he waddles off with the ball
+    {200, 1, IN_SPACE},             // 71: "Ho ho. A nose for business."
+    {50, 31, IN_RIGHT},             // 72: to the blue gift, x 1033
+    {10, 1, IN_SPACE},              // 73: take it
+    SPACE(),                        // 74: "Slightly fishy."
+    {50, 246, IN_LEFT},             // 75: back to the bear's house, x 541
+    {10, 1, IN_SPACE},              // 76: go in, "One remote, slightly foxed."
+    SPACE(), SPACE(),
+    SPACE(),                        // 77-79: to "Bliss."
+    SPACE(),                        // 80: done, has_green
+    SPACE(),                        // 81: come out
+    {50, 151, IN_LEFT},             // 82: back to the sack, x 239
+    {10, 1, IN_SPACE},              // 83: the sack, complete
+    SPACE(), SPACE(),               // 84-85: MAYDAY
+    SPACE(),                        // 86: back out, and the boat comes
 };
 #define STEPS (sizeof script / sizeof script[0])
 
