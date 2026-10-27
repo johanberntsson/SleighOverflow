@@ -32,8 +32,8 @@ the working tree and say what changed.
 
 `assets/` holds this game's own art, font and tune, and only those. The
 Makefile's `PLACEHOLDERS` (default `../MegaStranded/assets`) is searched after
-it: `tools/convgfx.py` takes every GIF and `volter.fnt` from the first
-directory that has it, and the tune is `assets/tune.mid` when there is one
+it: `tools/convgfx.py` takes every picture (`name.png`, else `name.gif`) and
+`volter.fnt` from the first directory that has it, and the tune is `assets/tune.mid` when there is one
 and `stranded.mid` from there until then. So a new picture replaces a
 placeholder by having its name, and the game keeps building in between.
 
@@ -43,7 +43,9 @@ having Mattias' art in this game's history is why it is a new repository.
 missing; when that succeeds, the Makefile's placeholder lines can go.
 
 Mixing old and new art has one catch: **there is one 256-colour palette**,
-`assets/palette.gif`'s. Every GIF in `assets/` must be drawn in exactly it
+`assets/palette.gif`'s. New art is painted in Krita and exported as RGBA
+PNG: each colour goes to the palette's nearest, alpha below 128 is
+transparent. A GIF in `assets/` must be drawn in exactly the palette
 (`convgfx.py` refuses one with its own); a placeholder drawn in another is
 remapped to it by nearest colour and looks off until replaced. Without a
 `palette.gif`, Stranded's palette is the game's and nothing is remapped.

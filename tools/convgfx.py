@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The game's GIFs in, crunched resource files and a C manifest out.
+"""The game's pictures in, crunched resource files and a C manifest out.
 
     python3 tools/convgfx.py <build dir> <game.c> <assets dir>...
 
@@ -7,14 +7,18 @@ writes <build>/GFXn.BIN, one per group below, and <build>/gfx_table.c with
 the bitmap table, the file list, the label table and the palette. The labels
 are every string game.c draws, rendered offline: see tools/labels.py.
 
-**Each file is taken from the first assets directory that has it.** The
+**Each file is taken from the first assets directory that has it**, as
+name.png or, failing that, name.gif; a later directory's PNGs are ignored. The
 Makefile passes assets/ and then MegaStranded's, so Stranded's art stands in
 for whatever has not been drawn yet. A new picture replaces the old one by
 having its name.
 
 **There is one palette**, the VIC-IV's, and it is assets/palette.gif's: a
 palette image whose pixels do not matter. Every GIF in the first assets
-directory must be drawn in exactly that palette. A placeholder from any
+directory must be drawn in exactly that palette. A PNG is painted in RGB,
+in Krita say, and each of its colours becomes the palette's nearest; alpha
+below 128 is transparent, colour 255. So a PNG needs a palette.gif.
+A placeholder from any
 later directory that was drawn in another is remapped to it, each colour to
 the nearest, so the game keeps building while the art is replaced. Without
 a palette.gif, the first GIF read sets the palette and every other must
@@ -200,48 +204,86 @@ def game_palette(assets):
 def remap(px, pal, palette):
     """Pixels drawn in pal, in the nearest colours of palette. Transparent
     stays transparent, and nothing else becomes it."""
-    src = np.array(pal, int).reshape(256, 3)
-    dst = np.array(palette, int).reshape(256, 3)[:TRANSPARENT]
-    d = src[:, None, :] - dst[None, :, :]
-    # Squared distance weighted for the eye, which sees green best.
-    lut = (d * d * [2, 4, 3]).sum(axis=2).argmin(axis=1).astype(np.uint8)
+    lut = nearest(np.array(pal, np.int32).reshape(256, 3), palette)
     lut[TRANSPARENT] = TRANSPARENT
     return lut[px]
+
+
+def nearest(rgb, palette):
+    """The index in palette of each of rgb's colours, an (n, 3) array: its
+    own colour if the palette has it, else the nearest."""
+    dst = np.array(palette, np.int32).reshape(256, 3)[:TRANSPARENT]
+    out = np.empty(len(rgb), np.uint8)
+    # In slices: a painted picture can have tens of thousands of colours.
+    for i in range(0, len(rgb), 4096):
+        d = rgb[i:i + 4096, None, :].astype(np.int32) - dst[None, :, :]
+        # Squared distance weighted for the eye, which sees green best. The
+        # first of equals wins, so black is 0 and never 254, the outline.
+        out[i:i + 4096] = (d * d * [2, 4, 3]).sum(axis=2).argmin(axis=1)
+    return out
+
+
+def find_picture(assets, stem):
+    """stem.png or stem.gif in the first directory to have either; the PNG
+    if it has both. Only the game's own directory is searched for PNGs: the
+    placeholders' are dos-like's sources, opaque on a pink background."""
+    for d in assets:
+        for ext in (".png", ".gif") if d == assets[0] else (".gif",):
+            path = os.path.join(d, stem + ext)
+            if os.path.exists(path):
+                return path
+    return None
+
+
+def load_png(path, palette):
+    """A PNG's pixels in palette."""
+    if palette is None:
+        sys.exit(f"{os.path.basename(path)}: a PNG needs {PALETTE_GIF}")
+    rgba = np.array(Image.open(path).convert("RGBA"))
+    opaque = rgba[:, :, 3] >= 128
+    colours, inverse = np.unique(rgba[:, :, :3][opaque], axis=0,
+                                 return_inverse=True)
+    px = np.full(opaque.shape, TRANSPARENT, np.uint8)
+    px[opaque] = nearest(colours, palette)[inverse.reshape(-1)]
+    return px
 
 
 def load_cels(assets, stem, palette):
     """The decoded cels of one bitmap, in palette, and palette: the first
     cel's if palette is None. An animation's cels all come from one
-    directory, the first with cel 1."""
+    directory and one format, those of cel 1."""
     if "%04d" not in stem:
-        paths = [find(assets, stem + ".gif")]
+        paths = [find_picture(assets, stem)]
         if not paths[0]:
-            sys.exit(f"no {stem}.gif")
+            sys.exit(f"no {stem}.png or {stem}.gif")
     else:
-        first = find(assets, stem % 1 + ".gif")
+        first = find_picture(assets, stem % 1)
         if not first:
             sys.exit(f"no cels for {stem}")
-        d = os.path.dirname(first)
+        d, ext = os.path.dirname(first), os.path.splitext(first)[1]
         paths = []
         while os.path.exists(os.path.join(d, stem % (len(paths) + 1)
-                                          + ".gif")):
-            paths.append(os.path.join(d, stem % (len(paths) + 1) + ".gif"))
+                                          + ext)):
+            paths.append(os.path.join(d, stem % (len(paths) + 1) + ext))
     own = os.path.normpath(os.path.dirname(paths[0])) == \
         os.path.normpath(assets[0])
     cels, remapped = [], False
     for path in paths:
-        n = os.path.basename(path)[:-4]
+        n = os.path.basename(path)
+        if n.endswith(".png"):
+            cels.append(load_png(path, palette))
+            continue
         im = Image.open(path)
         if im.mode != "P":
-            sys.exit(f"{n}.gif is not a palette image")
+            sys.exit(f"{n} is not a palette image")
         pal = gif_palette(im)
         px = np.array(im)
         if palette is None:
             palette = pal
         elif pal != palette:
             if own:
-                sys.exit(f"{n}.gif has a palette of its own: draw it in "
-                         f"{PALETTE_GIF}'s")
+                sys.exit(f"{n} has a palette of its own: draw it in "
+                         f"{PALETTE_GIF}'s, or save it as PNG")
             px = remap(px, pal, palette)
             remapped = True
         cels.append(px)

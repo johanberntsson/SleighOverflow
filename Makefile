@@ -69,18 +69,11 @@ $(CONFIG_STAMP): Makefile | $(BUILD)
 	rm -f $(BUILD)/config-*.stamp
 	touch $@
 
-# A picture painted in Krita is assets/name.kra, and assets/name.gif is made
-# from it whenever it is newer: see tools/png2gif.py. Colours not in the
-# palette, such as those of a placeholder painted over, go to the nearest.
-KRA_GIFS = $(patsubst %.kra,%.gif,$(wildcard $(ASSETS)/*.kra))
-
-$(ASSETS)/%.gif: $(ASSETS)/%.kra tools/png2gif.py $(ASSETS)/palette.gif
-	python3 tools/png2gif.py $< $@ --nearest
-
 # The labels are read out of the game's source, so it is an input too.
+# A picture is name.png (painted in Krita and exported) or name.gif.
 $(GFX_RES) $(GFX_GEN) &: tools/convgfx.py tools/labels.py src/game.c \
-                         $(sort $(KRA_GIFS) \
-                           $(foreach d,$(ASSET_DIRS),$(wildcard $(d)/*.gif $(d)/*.fnt))) \
+                         $(wildcard $(ASSETS)/*.png) \
+                         $(foreach d,$(ASSET_DIRS),$(wildcard $(d)/*.gif $(d)/*.fnt)) \
                          | $(BUILD)
 	python3 tools/convgfx.py $(BUILD) src/game.c $(ASSET_DIRS)
 
