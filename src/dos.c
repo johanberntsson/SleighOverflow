@@ -18,9 +18,9 @@ static uint8_t back;  // the buffer being drawn into
 // the top of the frame -- until swapbuffers, so the band's height is the
 // time a frame took; red after it if that ran past a whole frame. Indices
 // into the game's palette: COLOR_WHITE, black, and its reddest.
-#define BAR_DRAW 203
+#define BAR_DRAW 15
 #define BAR_IDLE 0
-#define BAR_LATE 61
+#define BAR_LATE 85
 
 static uint32_t frame_ticks, frame_began, last_vbl;
 

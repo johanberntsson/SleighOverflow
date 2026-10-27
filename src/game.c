@@ -411,11 +411,11 @@ void set_interact( int spr, char const* str, int interact, int offset ) {
 	sprite_pos( interact, sprite_x( spr ) + 160 + offset, sprite_y( interact ) );
 }
 
-#define COLOR_WHITE 203
-#define COLOR_GREEN 77
-#define COLOR_YELLOW 174
-#define COLOR_CYAN 144
-#define COLOR_ORANGE 214
+#define COLOR_WHITE 15
+#define COLOR_GREEN 75
+#define COLOR_YELLOW 185
+#define COLOR_CYAN 202
+#define COLOR_ORANGE 167
 
 // PORT: at file scope rather than inside setup_speech, which Calypsi has been
 // seen to miscompile (../SearchAndRescue/CLAUDE.md).
