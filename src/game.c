@@ -461,7 +461,8 @@ void title_screen( void ) {
     // PORT: at 172 rather than 192. The original's credits are 6 rows above
     // the bottom of its 240; the MEGA65's screen ends at the original's 220,
     // so they keep their 6 rows from that edge instead.
-    int credits = label( spr_index++, -160, 172, "Code, art, music and design by Mattias Gustavsson", COLOR_WHITE );
+    int credits2 = label( spr_index++, -160, 168, "Written for the MEGA65 by Johan Berntsson", COLOR_WHITE );
+    int credits1 = label( spr_index++, -160, 180, "Based on dos-like by Mattias Gustavsson", COLOR_GREEN );
 
     int face_delay = 6;
     int face_move = 0;
@@ -498,7 +499,8 @@ void title_screen( void ) {
             --credits_delay;
         } else if( credits_move <= 60 ){
             int x = ease_credits_x[ credits_move ];  // PORT
-            sprite_pos( credits, x, sprite_y( credits ) );
+            sprite_pos( credits1, x, sprite_y( credits1 ) );
+            sprite_pos( credits2, x, sprite_y( credits2 ) );
             ++credits_move;
         }
         drawsprites();
