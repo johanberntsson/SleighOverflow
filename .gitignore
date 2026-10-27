@@ -3,3 +3,8 @@ build/
 out.png
 mem.bin
 __pycache__/
+# Krita's work files. A .kra keeps every layer, so one started from a
+# Stranded picture holds Mattias' art even when nothing of it shows; only the
+# GIFs made from them go in. Krita's backups too.
+*.kra
+*~

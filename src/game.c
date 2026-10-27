@@ -411,7 +411,7 @@ void set_interact( int spr, char const* str, int interact, int offset ) {
 	sprite_pos( interact, sprite_x( spr ) + 160 + offset, sprite_y( interact ) );
 }
 
-#define COLOR_WHITE 15
+#define COLOR_WHITE 31
 #define COLOR_GREEN 75
 #define COLOR_YELLOW 185
 #define COLOR_CYAN 202
