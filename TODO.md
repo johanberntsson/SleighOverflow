@@ -57,15 +57,15 @@ of it becomes one of this game's:
 | `SANTA_IDLE`, `SANTA_LEFT`, `SANTA_RIGHT` | Santa standing and walking |
 | `SANTA_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
 | `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
-| `RADIO_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
+| `SACK_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
 | `HUT_TV`/`HUT_TV_NODISH`, `HUT_BOOK`/`HUT_BOOK_NOBULB` | the two house interiors, with and without their present |
 | `SEALION`, `SEALION_BATTERY`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
 | `BOAT` easing in, the palette fade | the sleigh on its way (step 3) |
 
 The flags carry over one for one: `has_dish`, `has_bulb` and `has_battery`
-become one per present, `looked_at_radio` having looked in the sack,
-`rescued` all three delivered. `dlg_radio_*` become the sack's "still
+become one per present, `looked_at_sack` having looked in the sack,
+`rescued` all three delivered. `dlg_sack_*` become the sack's "still
 missing" lines.
 
 **The presents are three wrapped packages**, told apart by the colour of
@@ -127,7 +127,7 @@ The sequence in `VISION.md`, replacing Stranded's title and boat:
    of the palette, which step 2 should reserve.
 2. **Santa dropping the sack**: a full-screen picture, like `FACE` and
    `LOGO`, with or without easing, then a cut to the game.
-3. **The start**: Santa by the sack; looking in it is `dlg_radio_first`.
+3. **The start**: Santa by the sack; looking in it is `dlg_sack_first`.
 4. **The end**: back at the sack with all three, a last line, then the
    picture of Santa on his way and the palette fade, as `BOAT` is now.
 

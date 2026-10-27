@@ -28,7 +28,7 @@
 // measures distances from them, and draw nothing.
 #define BACKGROUND WORLD
 #define TREELINE   INVALID
-#define RADIO_SPR  INVALID
+#define SACK_SPR  INVALID
 #define HUT1       INVALID
 #define HUT2       INVALID
 #define TREE2      INVALID
@@ -206,52 +206,52 @@ struct dialog_t dlg_lets_go_home[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_first[] = {
-    { "player_radio", "Oh no! There are parts missing!" },
-    { "player_radio", "Someone have grabbed the ANTENNA, the BATTERY, and the BULB." },
-    { "player_radio", "I *have* to find them!" },
-    { "#SetFlag", "looked_at_radio" },
+struct dialog_t dlg_sack_first[] = {
+    { "player_sack", "Oh no! There are parts missing!" },
+    { "player_sack", "Someone have grabbed the ANTENNA, the BATTERY, and the BULB." },
+    { "player_sack", "I *have* to find them!" },
+    { "#SetFlag", "looked_at_sack" },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_none[] = {
-    { "player_radio", "It is missing the ANTENNA, the BATTERY, and the BULB." },
+struct dialog_t dlg_sack_none[] = {
+    { "player_sack", "It is missing the ANTENNA, the BATTERY, and the BULB." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_bulb[] = {
-    { "player_radio", "It is missing the ANTENNA and the BATTERY." },
+struct dialog_t dlg_sack_bulb[] = {
+    { "player_sack", "It is missing the ANTENNA and the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_dish[] = {
-    { "player_radio", "It is missing the BULB and the BATTERY." },
+struct dialog_t dlg_sack_dish[] = {
+    { "player_sack", "It is missing the BULB and the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_battery[] = {
-    { "player_radio", "It is missing the ANTENNA and the BULB." },
+struct dialog_t dlg_sack_battery[] = {
+    { "player_sack", "It is missing the ANTENNA and the BULB." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_bulb_dish[] = {
-    { "player_radio", "It is missing the BATTERY." },
+struct dialog_t dlg_sack_bulb_dish[] = {
+    { "player_sack", "It is missing the BATTERY." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_battery_dish[] = {
-    { "player_radio", "It is missing the BULB." },
+struct dialog_t dlg_sack_battery_dish[] = {
+    { "player_sack", "It is missing the BULB." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_bulb_battery[] = {
-    { "player_radio", "It is missing the ANTENNA." },
+struct dialog_t dlg_sack_bulb_battery[] = {
+    { "player_sack", "It is missing the ANTENNA." },
     { NULL, NULL }
 };
 
-struct dialog_t dlg_radio_all[] = {
-    { "player_radio", "The radio is complete! Now I can go home." },
-    { "player_radio", "MAYDAY! MAYDAY! I AM STRANDED ON AN ISLAND. SEND HELP!" },
+struct dialog_t dlg_sack_all[] = {
+    { "player_sack", "The radio is complete! Now I can go home." },
+    { "player_sack", "MAYDAY! MAYDAY! I AM STRANDED ON AN ISLAND. SEND HELP!" },
     { "#SetFlag", "rescued" },
     { NULL, NULL }
 };
@@ -429,7 +429,7 @@ static const struct {
     { "player_sitting", 50, 85, COLOR_GREEN, 220 },
     { "player", 20, 60, COLOR_GREEN, 220 }, 
     { "player_hut", 100, 60, COLOR_GREEN, 220 }, 
-    { "player_radio", 50, 20, COLOR_GREEN, 220 }, 
+    { "player_sack", 50, 20, COLOR_GREEN, 220 }, 
     { "tv_guy", 20, 20, COLOR_YELLOW, 220 }, 
     { "book_guy", 20, 20, COLOR_CYAN, 220 }, 
     { "sealion", 185, 75, COLOR_ORANGE, 120 }, 
@@ -531,7 +531,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     int o = 30;
     int background = sprite( spr_index++, -65, 0, BACKGROUND );
     int treeline = sprite( spr_index++, -65, 0, TREELINE );
-    int radio = sprite( spr_index++, 240, 10 + o, RADIO_SPR ); objects[ objects_count++ ] = radio;
+    int sack = sprite( spr_index++, 240, 10 + o, SACK_SPR ); objects[ objects_count++ ] = sack;
     int hut1 = sprite( spr_index++, 540, 10 + o, HUT1 ); objects[ objects_count++ ] = hut1;
 	int hut2 = sprite( spr_index++, 850, 20 + o, HUT2 ); objects[ objects_count++ ] = hut2;
 	objects[ objects_count++ ] =  sprite( spr_index++, 180, -30 + o, TREE2 );
@@ -545,11 +545,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     
 	int interact = label( spr_index++, 160, 70, "", COLOR_WHITE );
     
-    int radio_back = sprite( spr_index++, -250 + o, 0, BACKGROUND );
-    sprite_hide( radio_back );
+    int sack_back = sprite( spr_index++, -250 + o, 0, BACKGROUND );
+    sprite_hide( sack_back );
 
-    int radio_pic = sprite( spr_index++, 0, 0, RADIO_FULL );
-    sprite_hide( radio_pic );
+    int sack_pic = sprite( spr_index++, 0, 0, SACK_FULL );
+    sprite_hide( sack_pic );
 
 	int hut_tv_pic = sprite( spr_index++, 0, 0, HUT_TV );
     sprite_hide( hut_tv_pic );
@@ -571,10 +571,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
   int speech_visible = 1;
 	int rescued = 0;
 	int may_stand = 0;
-	int looked_at_radio = 0;
+	int looked_at_sack = 0;
 	int sitting = 1;
 	int sealion_gone = 0;
-	int at_radio = 0;
+	int at_sack = 0;
 	int at_hut_tv = 0;
 	int at_hut_bulb = 0;
 	int has_dish = 0;
@@ -636,8 +636,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					if( strcmp( flag, "may_stand" ) == 0 ) {
 						may_stand = 1;
 					}
-					if( strcmp( flag, "looked_at_radio" ) == 0 ) {
-						looked_at_radio = 1;
+					if( strcmp( flag, "looked_at_sack" ) == 0 ) {
+						looked_at_sack = 1;
 					}
 					if( strcmp( flag, "sealion_running" ) == 0 ) {
                         sprite_pos( sealion, 970 + 62, sprite_y( sealion ) );
@@ -701,8 +701,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 		}
 		   
         label_text( interact, "" ); 
-		if( !sitting && !at_radio && !at_hut_tv && !at_hut_bulb && !rescued ) {
-			if( is_near( radio, xpos ) ) set_interact( radio, "Radio", interact, 0 );
+		if( !sitting && !at_sack && !at_hut_tv && !at_hut_bulb && !rescued ) {
+			if( is_near( sack, xpos ) ) set_interact( sack, "Sack", interact, 0 );
 			if( is_near( hut1, xpos ) ) set_interact( hut1, "Hut", interact, 0 );
 			if( is_near( hut2, xpos ) ) set_interact( hut2, "Hut", interact, 0 );
 			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion", interact, 60 );
@@ -721,39 +721,39 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			}
 
 			if( *readkeys() == KEY_SPACE ) {
-				if( is_near( radio, xpos ) ) {
-					sprite_show( radio_pic );
+				if( is_near( sack, xpos ) ) {
+					sprite_show( sack_pic );
 					if( has_dish && has_bulb && has_battery ) {
-                        sprite_bitmap( radio_pic, RADIO_FULL );
-						startdialog( dlg_radio_all );
+                        sprite_bitmap( sack_pic, SACK_FULL );
+						startdialog( dlg_sack_all );
 					} else if( has_dish && has_bulb ) {
-                        sprite_bitmap( radio_pic, RADIO_BULB_DISH );
-						startdialog( dlg_radio_bulb_dish );
+                        sprite_bitmap( sack_pic, SACK_BULB_DISH );
+						startdialog( dlg_sack_bulb_dish );
 					} else if( has_battery && has_bulb ) {
-                        sprite_bitmap( radio_pic, RADIO_BULB_BATTERY );
-						startdialog( dlg_radio_bulb_battery );
+                        sprite_bitmap( sack_pic, SACK_BULB_BATTERY );
+						startdialog( dlg_sack_bulb_battery );
 					} else if( has_dish && has_battery ) {
-                        sprite_bitmap( radio_pic, RADIO_BATTERY_DISH );
-						startdialog( dlg_radio_battery_dish );
+                        sprite_bitmap( sack_pic, SACK_BATTERY_DISH );
+						startdialog( dlg_sack_battery_dish );
 					} else if( has_dish ) {
-                        sprite_bitmap( radio_pic, RADIO_DISH );
-						startdialog( dlg_radio_dish );
+                        sprite_bitmap( sack_pic, SACK_DISH );
+						startdialog( dlg_sack_dish );
 					} else if( has_battery ) {
-                        sprite_bitmap( radio_pic, RADIO_BATTERY );
-						startdialog( dlg_radio_battery );
+                        sprite_bitmap( sack_pic, SACK_BATTERY );
+						startdialog( dlg_sack_battery );
 					} else if( has_bulb ) {
-                        sprite_bitmap( radio_pic, RADIO_BULB );
-						startdialog( dlg_radio_bulb );
+                        sprite_bitmap( sack_pic, SACK_BULB );
+						startdialog( dlg_sack_bulb );
 					} else {
-                        sprite_bitmap( radio_pic, RADIO_NONE );
-						if( !looked_at_radio )
-							startdialog( dlg_radio_first );
+                        sprite_bitmap( sack_pic, SACK_NONE );
+						if( !looked_at_sack )
+							startdialog( dlg_sack_first );
 						else
-							startdialog( dlg_radio_none );
+							startdialog( dlg_sack_none );
 					}
 
-					sprite_show( radio_back );
-					at_radio = 1;
+					sprite_show( sack_back );
+					at_sack = 1;
 				}
 				
                 if( is_near( hut1, xpos ) ) {
@@ -808,11 +808,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				sitting = 0;
                 sprite( santa, 0, 30+o, SANTA_IDLE ); 
 			}
-		} else if( at_radio ) {
+		} else if( at_sack ) {
 			if( *readkeys() == KEY_SPACE ) {
-				sprite_hide( radio_pic );
-				sprite_hide( radio_back );
-				at_radio = 0;
+				sprite_hide( sack_pic );
+				sprite_hide( sack_back );
+				at_sack = 0;
 
                 if( rescued ) {
                     sprite_bitmap( santa, SANTA_JUMP );

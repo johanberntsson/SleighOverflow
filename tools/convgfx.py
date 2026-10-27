@@ -44,7 +44,7 @@ of pixels is one address stepping by 8 however many character rows it
 crosses -- so a sprite column is one DMA job, and a sprite is w of them.
 
 **A group is one exomizer stream**, decrunched to consecutive attic RAM.
-That matters most for the eight radio_* scenes: crunched one after another
+That matters most for the eight sack_* scenes: crunched one after another
 they reference the scene before, 64000 bytes back and inside the cruncher's
 65535 window, and take 75 KB instead of 292. The hut pairs do the same.
 """
@@ -102,14 +102,14 @@ BITMAPS = [
     ("SEALION", "sealion"),
     ("SEALION_BATTERY", "penguin_battery"),  # the placeholder's name
     ("SEALION_WALK", "sealion_walk_%04d"),
-    ("RADIO_BATTERY", "radio_battery"),
-    ("RADIO_BATTERY_DISH", "radio_battery_dish"),
-    ("RADIO_BULB", "radio_bulb"),
-    ("RADIO_BULB_BATTERY", "radio_bulb_battery"),
-    ("RADIO_BULB_DISH", "radio_bulb_dish"),
-    ("RADIO_DISH", "radio_dish"),
-    ("RADIO_FULL", "radio_full"),
-    ("RADIO_NONE", "radio_none"),
+    ("SACK_BATTERY", "sack_battery"),
+    ("SACK_BATTERY_DISH", "sack_battery_dish"),
+    ("SACK_BULB", "sack_bulb"),
+    ("SACK_BULB_BATTERY", "sack_bulb_battery"),
+    ("SACK_BULB_DISH", "sack_bulb_dish"),
+    ("SACK_DISH", "sack_dish"),
+    ("SACK_FULL", "sack_full"),
+    ("SACK_NONE", "sack_none"),
 ]
 
 # **The beach is one picture.** The original draws the background, the
@@ -132,7 +132,7 @@ BITMAPS = [
 # the layers in the order the sprite table draws them.
 SCENES = {
     "WORLD": (1480, [("background", 0, 0), ("treeline", 0, 0),
-                     ("radio_spr", 240, 40), ("hut1", 540, 40),
+                     ("sack_spr", 240, 40), ("hut1", 540, 40),
                      ("hut2", 850, 50), ("tree2", 180, 0),
                      ("palmtree", 120, 20), ("chair", 65, 55)]),
     "TITLE": (320, [("background", -1050, 0), ("treeline", -1050, 0)]),
@@ -148,9 +148,9 @@ GROUPS = [
      "SEALION", "SEALION_BATTERY", "SEALION_WALK"],
     ["HUT_BOOK", "HUT_BOOK_NOBULB"],
     ["HUT_TV", "HUT_TV_NODISH"],
-    ["RADIO_NONE", "RADIO_BULB", "RADIO_DISH", "RADIO_BATTERY",
-     "RADIO_BULB_DISH", "RADIO_BULB_BATTERY", "RADIO_BATTERY_DISH",
-     "RADIO_FULL"],
+    ["SACK_NONE", "SACK_BULB", "SACK_DISH", "SACK_BATTERY",
+     "SACK_BULB_DISH", "SACK_BULB_BATTERY", "SACK_BATTERY_DISH",
+     "SACK_FULL"],
 ]
 
 # Matches src/exo_asm.s, which is SearchAndRescue's port of the ozmoo-z6
