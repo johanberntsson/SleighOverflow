@@ -70,11 +70,13 @@ PALETTE_GIF = "palette.gif"
 # Animations whose PNG cels are drawn as dos-like's sources were: a small
 # frame, not the whole 320x200 screen, and this is where on the screen the
 # frame's top-left goes. Stranded's guy cels are 64x100 at (132, 60) of the
-# GIFs the game was built from. A cel already 320x200 is taken as it is.
+# GIFs the game was built from, the penguin's 64x100 at (132, 90). A cel
+# already 320x200 is taken as it is.
 CEL_ORIGIN = {
     "guy_jump_%04d": (132, 60),
     "guy_walk_left_%04d": (132, 60),
     "guy_walk_right_%04d": (132, 60),
+    "penguin_walk_%04d": (132, 90),
 }
 
 # The order of stranded.c's enum bitmap_t, and each one's file stem. A stem
