@@ -20,6 +20,9 @@ original's own formulas in 32-bit floats. The boat's counter is not stopped
 at 120 -- it runs until the fade to black ends, past the top of the curve,
 and the boat drifts back -- so its table is longer than the others, and the
 game holds the last entry if it ever gets there.
+
+Sleigh Overflow's own: the ball falling out of the tree, ease_out_bounce
+over 40 frames and BALL_DROP rows, in the same way.
 """
 
 import math
@@ -75,6 +78,7 @@ def trunc(v):
 
 
 BOAT_FRAMES = 256
+BALL_DROP = 98    # rows from the ball's branch to the snow
 
 TABLES = {
     "ease_face_y": [trunc(f(240) - f(155) * ease_out_elastic(f(m) / f(120))
@@ -86,6 +90,8 @@ TABLES = {
                        for m in range(61)],
     "ease_boat_x": [trunc(f(-320) + f(130) * ease_out_quad(f(m) / f(120)))
                     for m in range(BOAT_FRAMES)],
+    "ease_ball_y": [trunc(f(BALL_DROP) * ease_out_bounce(f(m) / f(40)))
+                    for m in range(41)],
 }
 
 

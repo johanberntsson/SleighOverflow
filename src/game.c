@@ -31,7 +31,6 @@
 #define SACK_SPR   INVALID
 #define HOUSE_BEAR INVALID
 #define HOUSE_FOX  INVALID
-#define TREE2      INVALID
 #define PALMTREE   INVALID
 #define CHAIR      INVALID
 
@@ -313,6 +312,21 @@ struct dialog_t dlg_grab_blue[] = {
     { NULL, NULL }
 };
 
+struct dialog_t dlg_tree[] = {
+    { "player_tree", "A ball, up in a tree. In winter." },
+    { "player_tree", "I can't reach it." },
+    { "player_tree", "If only this game had a jump button." },
+    { "player_tree", "Oh well. HO HO HO!" },
+    { "#SetFlag", "ball_fell" },
+    { "player_tree", "Works every time." },
+    { NULL, NULL }
+};
+
+struct dialog_t dlg_grab_ball[] = {
+    { "player", "A beach ball. Someone here has big summer plans." },
+    { NULL, NULL }
+};
+
 
 
 enum dlg_state_t {
@@ -430,6 +444,7 @@ static const struct {
     { "player", 20, 60, COLOR_GREEN, 220 }, 
     { "player_hut", 100, 60, COLOR_GREEN, 220 }, 
     { "player_sack", 50, 20, COLOR_GREEN, 220 }, 
+    { "player_tree", 20, 20, COLOR_GREEN, 220 },  // above the ball
     { "bear", 20, 20, COLOR_YELLOW, 220 }, 
     { "fox", 20, 20, COLOR_CYAN, 220 }, 
     { "sealion", 185, 75, COLOR_ORANGE, 120 }, 
@@ -534,7 +549,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     int sack = sprite( spr_index++, 240, 10 + o, SACK_SPR ); objects[ objects_count++ ] = sack;
     int house_bear = sprite( spr_index++, 540, 10 + o, HOUSE_BEAR ); objects[ objects_count++ ] = house_bear;
 	int house_fox = sprite( spr_index++, 850, 20 + o, HOUSE_FOX ); objects[ objects_count++ ] = house_fox;
-	objects[ objects_count++ ] =  sprite( spr_index++, 180, -30 + o, TREE2 );
+	// The ball's tree is part of WORLD too, and this sprite of it is shown
+	// only while it shakes.
+	int tree = sprite( spr_index++, 180, -30 + o, TREE2 ); objects[ objects_count++ ] = tree;
+	sprite_hide( tree );
 	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, PALMTREE );
 	int chair = sprite( spr_index++, 65, 25 + o, CHAIR ); objects[ objects_count++ ] = chair;
 	int gift_blue = sprite( spr_index++, 970 + 62, -10 + o, GIFT_BLUE ); objects[ objects_count++ ] = gift_blue;
@@ -542,7 +560,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 	int xpos = 65;
 	int santa = sprite( spr_index++, xpos, 25 + o, SANTA_CHAIR );
-    
+
+	// After Santa, so that it lands in front of his feet.
+	int ball = sprite( spr_index++, 180, -10 + o, BALL_IN_TREE ); objects[ objects_count++ ] = ball;
+
 	int interact = label( spr_index++, 160, 70, "", COLOR_WHITE );
     
     int sack_back = sprite( spr_index++, -250 + o, 0, BACKGROUND );
@@ -579,7 +600,9 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int at_hut_fox = 0;
 	int has_green = 0;
 	int has_cylinder = 0;
-	int has_blue = 0;	  
+	int has_blue = 0;
+	int ball_fell = 0;
+	int has_ball = 0;
   int shown_intro = 0;
   int boat_delay = 0;
   int boat_move = 0;
@@ -653,6 +676,31 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                         }
                         sprite_hide( sealion );
 					}
+					if( strcmp( flag, "ball_fell" ) == 0 ) {
+						// Santa's cheer shakes the tree, two pixels each way,
+						// and then the ball drops out of it and bounces.
+						sprite_bitmap( santa, SANTA_JUMP );
+						sprite_show( tree );
+						for( int i = 0; i < 36; ++i ) {
+							waitvbl();
+							sprite_cel( santa, i / 3 );
+							sprite_pos( tree, 180 + ( ( i & 4 ) ? 2 : -2 ), sprite_y( tree ) );
+							drawsprites();
+							swapbuffers();
+						}
+						sprite_pos( tree, 180, sprite_y( tree ) );
+						sprite_hide( tree );
+						sprite_bitmap( santa, SANTA_IDLE );
+						for( int i = 0; i < EASE_BALL_Y_LEN; ++i ) {
+							waitvbl();
+							sprite_pos( ball, 180, -10 + o + ease_ball_y[ i ] );
+							drawsprites();
+							swapbuffers();
+						}
+						sprite_bitmap( ball, BALL_ON_SNOW );
+						sprite_pos( ball, 180, -10 + o );
+						ball_fell = 1;
+					}
 					if( strcmp( flag, "sealion_gone" ) == 0 ) {
 						sealion_gone = 1;
 						execdialog();
@@ -703,6 +751,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
         label_text( interact, "" ); 
 		if( !sitting && !at_sack && !at_hut_bear && !at_hut_fox && !rescued ) {
 			if( is_near( sack, xpos ) ) set_interact( sack, "Sack (lighter than it should be)", interact, 0 );
+			if( !has_ball && is_near( tree, xpos ) ) set_interact( tree, "Ball", interact, 0 );
+			if( has_ball && is_near( tree, xpos ) ) set_interact( tree, "Tree (undecorated)", interact, 0 );
 			if( is_near( house_bear, xpos ) ) set_interact( house_bear, "Bear's den", interact, 0 );
 			if( is_near( house_fox, xpos ) ) set_interact( house_fox, "Fox's den", interact, 0 );
 			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion (busy)", interact, 60 );
@@ -754,6 +804,16 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 
 					sprite_show( sack_back );
 					at_sack = 1;
+				}
+
+				if( !ball_fell && is_near( tree, xpos ) ) {
+					label_text( interact, "" );
+					startdialog( dlg_tree );
+				} else if( !has_ball && is_near( tree, xpos ) ) {
+					label_text( interact, "" );
+					startdialog( dlg_grab_ball );
+					sprite_hide( ball );
+					has_ball = 1;
 				}
 				
                 if( is_near( house_bear, xpos ) ) {

@@ -67,24 +67,28 @@ YCROP = 20        # rows of the original's 240 above the MEGA65's screen
 ATTIC_GFX = 0x8000000
 PALETTE_GIF = "palette.gif"
 
-# Animations whose PNG cels are drawn as dos-like's sources were: a small
-# frame, not the whole 320x200 screen, and this is where on the screen the
-# frame's top-left goes. Santa's cels (Stranded's guy's) are 64x100 at
-# (132, 60) of the GIFs the game was built from, the sea lion's (Stranded's
-# penguin's) 64x100 at (132, 90). A cel already 320x200 is taken as it is.
+# PNGs drawn as dos-like's sources were: a small frame, not the whole 320x200
+# screen, and this is where on the screen the frame's top-left goes. Santa's
+# cels (Stranded's guy's) are 64x100 at (132, 60) of the GIFs the game was
+# built from, the sea lion's (Stranded's penguin's) 64x100 at (132, 90). The
+# ball's are placed as game.c's tree is, at x 180, so that it hangs in TREE2
+# and lands at Santa's feet. A picture already 320x200 is taken as it is.
 CEL_ORIGIN = {
     "santa_jump_%04d": (132, 60),
     "santa_walk_left_%04d": (132, 60),
     "santa_walk_right_%04d": (132, 60),
     "sealion_walk_%04d": (132, 90),
+    "ball_in_tree": (118, 70),
+    "ball_on_snow": (116, 172),
 }
 
 # The order of stranded.c's enum bitmap_t, and each one's file stem. A stem
 # with %04d is an animation; its cels run from 0001 until a file is missing.
 #
 # Not quite that enum: see SCENES for the bitmaps that were folded into WORLD
-# and TITLE. GIFT_CYLINDER, GIFT_GREEN and the balls are this game's own, not
-# yet drawn by game.c.
+# and TITLE. GIFT_CYLINDER, GIFT_GREEN and the balls are this game's own.
+# TREE2 is in WORLD and is a bitmap as well, drawn over its own place in the
+# backdrop only while it shakes.
 BITMAPS = [
     ("WORLD", None),
     ("TITLE", None),
@@ -106,6 +110,7 @@ BITMAPS = [
     ("GIFT_GREEN", "gift_green"),
     ("BALL_IN_TREE", "ball_in_tree"),
     ("BALL_ON_SNOW", "ball_on_snow"),
+    ("TREE2", "tree2"),
     ("SEALION_WALK", "sealion_walk_%04d"),
     ("SACK_BLUE", "sack_blue"),
     ("SACK_BLUE_GREEN", "sack_blue_green"),
@@ -151,7 +156,7 @@ GROUPS = [
     ["TITLE", "FACE", "LOGO", "BOAT"],
     ["SANTA_CHAIR", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
      "SEALION", "GIFT_BLUE", "SEALION_WALK", "GIFT_CYLINDER", "GIFT_GREEN",
-     "BALL_IN_TREE", "BALL_ON_SNOW"],
+     "BALL_IN_TREE", "BALL_ON_SNOW", "TREE2"],
     ["HUT_FOX", "HUT_FOX_NOCYLINDER"],
     ["HUT_BEAR", "HUT_BEAR_NOGREEN"],
     ["SACK_NONE", "SACK_CYLINDER", "SACK_GREEN", "SACK_BLUE",
