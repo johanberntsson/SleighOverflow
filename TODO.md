@@ -47,19 +47,19 @@ What the engine already does, all measured on the machine in MegaStranded
 ### 1. The game
 
 `VISION.md` is the game: Santa has dropped three presents from the sleigh
-and gets them back from the people in two houses and a penguin on the beach.
+and gets them back from the people in two houses and a sea lion on the beach.
 Stranded has the same shape, so its `game.c` is the skeleton and each part
 of it becomes one of this game's:
 
 | Stranded | Sleigh Overflow |
 |---|---|
-| `WORLD`: a 1480-wide beach, the radio, two huts, palms, the chair | a snowfield before a forest: the sack, two houses, the penguin on the beach at the far end |
+| `WORLD`: a 1480-wide beach, the radio, two huts, palms, the chair | a snowfield before a forest: the sack, two houses, the sea lion on the beach at the far end |
 | `GUY_IDLE`, `GUY_LEFT`, `GUY_RIGHT` | Santa standing and walking |
 | `GUY_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
 | `GUY_JUMP`, rescued | Santa's cheer when the third present is back |
 | `RADIO_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
 | `HUT_TV`/`HUT_TV_NODISH`, `HUT_BOOK`/`HUT_BOOK_NOBULB` | the two house interiors, with and without their present |
-| `PENGUIN`, `PENGUIN_BATTERY`, `PENGUIN_WALK` | the penguin with the third present, walking off |
+| `SEALION`, `SEALION_BATTERY`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
 | `BOAT` easing in, the palette fade | the sleigh on its way (step 3) |
 
@@ -70,13 +70,13 @@ missing" lines.
 
 **The presents are three wrapped packages**, told apart by the colour of
 the paper and by size. Being small and alike, they are cheap: three small
-bitmaps, drawn in the sack's close-up, in the houses, and with the penguin.
+bitmaps, drawn in the sack's close-up, in the houses, and with the sea lion.
 The dialogue names them by colour ("the RED one"), as Stranded's names its
 parts in capitals.
 
 **Still to decide: the puzzles.** `VISION.md` says "some mini problems".
 Stranded's are what the code already does: each hut's owner is talked round and the part is taken on leaving,
-and the penguin walks off and leaves it behind. Anything more, such as an
+and the sea lion walks off and leaves it behind. Anything more, such as an
 item from one house wanted in the other, is a little new logic in `game.c`
 and a new bitmap for every item shown held or given — the cost is in the
 drawing. Write the puzzles and the dialogue down here before the first

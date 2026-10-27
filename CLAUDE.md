@@ -14,7 +14,7 @@ a 64-entry sprite table, a dialogue interpreter driven by `#SetFlag` /
 setting, the story and the music are to be new.**
 
 **`VISION.md` is the owner's description of the game** (Santa, three
-dropped presents, two houses and a penguin, a BASIC-screen splash).
+dropped presents, two houses and a sea lion, a BASIC-screen splash).
 **`TODO.md` is the plan and the running log — read it first.**
 
 Where it is (27 Oct 2026): the engine was copied from MegaStranded v1.0

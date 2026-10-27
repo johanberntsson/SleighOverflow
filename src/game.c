@@ -289,22 +289,22 @@ struct dialog_t dlg_hut_book_sleep[] = {
     { NULL, NULL }
 };
 
-struct dialog_t dlg_penguin[] = {
-    { "penguin", "Waddya want!?" },
+struct dialog_t dlg_sealion[] = {
+    { "sealion", "Waddya want!?" },
     { "player", "Uh, is that my battery you have there?" },
-    { "penguin", "Don't know! Don't care!" },
+    { "sealion", "Don't know! Don't care!" },
     { "player", "But you're not even using it!" },
-    { "penguin", "Sure I do! I lick it." },
+    { "sealion", "Sure I do! I lick it." },
     { "player", "You *lick* it?" },
-    { "penguin", "Makes my tongue tingle." },
+    { "sealion", "Makes my tongue tingle." },
     { "player", "But *I* need it for my radio. So I can call for help and get home." },
     { "player", "What are you even doing here? Aren't you supposed to be on the south pole or something?" },
-    { "penguin", "Vacation." },
-    { "penguin", "It's about time I got back anyway." },
-    { "penguin", "Don't touch my battery while I'm gone!" },
-    { "#SetFlag", "penguin_running" },
+    { "sealion", "Vacation." },
+    { "sealion", "It's about time I got back anyway." },
+    { "sealion", "Don't touch my battery while I'm gone!" },
+    { "#SetFlag", "sealion_running" },
     { "player", "Yeah, right." },
-    { "#SetFlag", "penguin_gone" },
+    { "#SetFlag", "sealion_gone" },
     { NULL, NULL }
 };
 
@@ -432,7 +432,7 @@ static const struct {
     { "player_radio", 50, 20, COLOR_GREEN, 220 }, 
     { "tv_guy", 20, 20, COLOR_YELLOW, 220 }, 
     { "book_guy", 20, 20, COLOR_CYAN, 220 }, 
-    { "penguin", 185, 75, COLOR_ORANGE, 120 }, 
+    { "sealion", 185, 75, COLOR_ORANGE, 120 }, 
 };
 
 void setup_speech( int speech, char const* character )
@@ -537,8 +537,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	objects[ objects_count++ ] =  sprite( spr_index++, 180, -30 + o, TREE2 );
 	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, PALMTREE );
 	int chair = sprite( spr_index++, 65, 25 + o, CHAIR ); objects[ objects_count++ ] = chair;
-	int penguin_battery = sprite( spr_index++, 970 + 62, -10 + o, PENGUIN_BATTERY ); objects[ objects_count++ ] = penguin_battery;
-	int penguin = sprite( spr_index++, 970, -10 + o, PENGUIN ); objects[ objects_count++ ] = penguin;
+	int sealion_battery = sprite( spr_index++, 970 + 62, -10 + o, SEALION_BATTERY ); objects[ objects_count++ ] = sealion_battery;
+	int sealion = sprite( spr_index++, 970, -10 + o, SEALION ); objects[ objects_count++ ] = sealion;
 
 	int xpos = 65;
 	int guy = sprite( spr_index++, xpos, 25 + o, GUY_CHAIR );
@@ -573,7 +573,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int may_stand = 0;
 	int looked_at_radio = 0;
 	int sitting = 1;
-	int penguin_gone = 0;
+	int sealion_gone = 0;
 	int at_radio = 0;
 	int at_hut_tv = 0;
 	int at_hut_bulb = 0;
@@ -639,22 +639,22 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					if( strcmp( flag, "looked_at_radio" ) == 0 ) {
 						looked_at_radio = 1;
 					}
-					if( strcmp( flag, "penguin_running" ) == 0 ) {
-                        sprite_pos( penguin, 970 + 62, sprite_y( penguin ) );
-                        sprite_bitmap( penguin, PENGUIN_WALK );
+					if( strcmp( flag, "sealion_running" ) == 0 ) {
+                        sprite_pos( sealion, 970 + 62, sprite_y( sealion ) );
+                        sprite_bitmap( sealion, SEALION_WALK );
 						delay( 30 );
                         for( int i = 0; i < 90; ++i ) {
                             waitvbl();
                             // PORT: penganim += 25 / 60 a frame
-                            sprite_cel( penguin, ( i + 1 ) * 25 / 60 );
-                            sprite_pos( penguin, sprite_x( penguin ) + 3, sprite_y( penguin ) );
+                            sprite_cel( sealion, ( i + 1 ) * 25 / 60 );
+                            sprite_pos( sealion, sprite_x( sealion ) + 3, sprite_y( sealion ) );
                             drawsprites();
                             swapbuffers();
                         }
-                        sprite_hide( penguin );
+                        sprite_hide( sealion );
 					}
-					if( strcmp( flag, "penguin_gone" ) == 0 ) {
-						penguin_gone = 1;
+					if( strcmp( flag, "sealion_gone" ) == 0 ) {
+						sealion_gone = 1;
 						execdialog();
 					}
 					if( strcmp( flag, "rescued" ) == 0 ) {
@@ -705,8 +705,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( is_near( radio, xpos ) ) set_interact( radio, "Radio", interact, 0 );
 			if( is_near( hut1, xpos ) ) set_interact( hut1, "Hut", interact, 0 );
 			if( is_near( hut2, xpos ) ) set_interact( hut2, "Hut", interact, 0 );
-			if( !penguin_gone && is_near( penguin, xpos ) ) set_interact( penguin, "Penguin", interact, 60 );
-			if( !has_battery && penguin_gone && is_near( penguin_battery, xpos ) ) set_interact( penguin_battery, "Battery", interact, 0 );
+			if( !sealion_gone && is_near( sealion, xpos ) ) set_interact( sealion, "Sea lion", interact, 60 );
+			if( !has_battery && sealion_gone && is_near( sealion_battery, xpos ) ) set_interact( sealion_battery, "Battery", interact, 0 );
 				
 			if( keystate( KEY_LEFT ) )  {
 				xpos -= 2;
@@ -778,18 +778,18 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					at_hut_bulb = 1;
 				}
 
-				if( !penguin_gone && is_near( penguin, xpos ) ) {
-                    sprite_bitmap( penguin, PENGUIN );
-					startdialog( dlg_penguin );
+				if( !sealion_gone && is_near( sealion, xpos ) ) {
+                    sprite_bitmap( sealion, SEALION );
+					startdialog( dlg_sealion );
 					label_text( interact, "" );
                     sprite_bitmap( guy, GUY_IDLE );
 				}
 
-				if( !has_battery && penguin_gone && is_near( penguin_battery, xpos ) ) {
+				if( !has_battery && sealion_gone && is_near( sealion_battery, xpos ) ) {
 					label_text( interact, "" );
-					sprite_hide( penguin );
+					sprite_hide( sealion );
 					startdialog( dlg_grab_battery );
-					sprite_hide( penguin_battery );
+					sprite_hide( sealion_battery );
 					has_battery = 1;
 				}
 

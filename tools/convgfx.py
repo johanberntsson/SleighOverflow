@@ -70,13 +70,13 @@ PALETTE_GIF = "palette.gif"
 # Animations whose PNG cels are drawn as dos-like's sources were: a small
 # frame, not the whole 320x200 screen, and this is where on the screen the
 # frame's top-left goes. Stranded's guy cels are 64x100 at (132, 60) of the
-# GIFs the game was built from, the penguin's 64x100 at (132, 90). A cel
-# already 320x200 is taken as it is.
+# GIFs the game was built from, the sea lion's (Stranded's penguin's) 64x100
+# at (132, 90). A cel already 320x200 is taken as it is.
 CEL_ORIGIN = {
     "guy_jump_%04d": (132, 60),
     "guy_walk_left_%04d": (132, 60),
     "guy_walk_right_%04d": (132, 60),
-    "penguin_walk_%04d": (132, 90),
+    "sealion_walk_%04d": (132, 90),
 }
 
 # The order of stranded.c's enum bitmap_t, and each one's file stem. A stem
@@ -99,9 +99,9 @@ BITMAPS = [
     ("HUT_BOOK_NOBULB", "hut_book_nobulb"),
     ("HUT_TV", "hut_tv"),
     ("HUT_TV_NODISH", "hut_tv_nodish"),
-    ("PENGUIN", "penguin"),
-    ("PENGUIN_BATTERY", "penguin_battery"),
-    ("PENGUIN_WALK", "penguin_walk_%04d"),
+    ("SEALION", "sealion"),
+    ("SEALION_BATTERY", "penguin_battery"),  # the placeholder's name
+    ("SEALION_WALK", "sealion_walk_%04d"),
     ("RADIO_BATTERY", "radio_battery"),
     ("RADIO_BATTERY_DISH", "radio_battery_dish"),
     ("RADIO_BULB", "radio_bulb"),
@@ -116,7 +116,7 @@ BITMAPS = [
 # treeline, the radio, both huts, both trees and the deckchair as separate
 # sprites every frame, all of them scrolling with the camera and none of them
 # ever hidden, moved or drawn over by anything earlier in the sprite table
-# than the penguin. So they composite to the same pixels every frame, and
+# than the sea lion. So they composite to the same pixels every frame, and
 # here they are composited once: WORLD is that picture, 1480 wide and opaque.
 #
 # It is a speed decision before it is a disk one. DMA out of attic RAM costs
@@ -145,7 +145,7 @@ GROUPS = [
     ["WORLD"],
     ["TITLE", "FACE", "LOGO", "BOAT"],
     ["GUY_CHAIR", "GUY_IDLE", "GUY_JUMP", "GUY_LEFT", "GUY_RIGHT",
-     "PENGUIN", "PENGUIN_BATTERY", "PENGUIN_WALK"],
+     "SEALION", "SEALION_BATTERY", "SEALION_WALK"],
     ["HUT_BOOK", "HUT_BOOK_NOBULB"],
     ["HUT_TV", "HUT_TV_NODISH"],
     ["RADIO_NONE", "RADIO_BULB", "RADIO_DISH", "RADIO_BATTERY",
