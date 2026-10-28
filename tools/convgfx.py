@@ -86,7 +86,8 @@ CEL_ORIGIN = {
 # with %04d is an animation; its cels run from 0001 until a file is missing.
 #
 # Not quite that enum: see SCENES for the bitmaps that were folded into WORLD
-# and TITLE. GIFT_CYLINDER, GIFT_GREEN and the balls are this game's own.
+# and TITLE. GIFT_CYLINDER, GIFT_GREEN, MILK_COOKIES and the balls are
+# this game's own.
 # TREE2 is in WORLD and is a bitmap as well, drawn over its own place in the
 # backdrop only while it shakes.
 BITMAPS = [
@@ -94,8 +95,8 @@ BITMAPS = [
     ("TITLE", None),
     ("FACE", "face"),
     ("LOGO", "logo"),
-    ("BOAT", "boat"),
-    ("SANTA_CHAIR", "santachair"),
+    ("SLEIGH", "sleigh"),
+    ("SANTA_SNOW", "santa_snow"),
     ("SANTA_IDLE", "santa_idle"),
     ("SANTA_JUMP", "santa_jump_%04d"),
     ("SANTA_LEFT", "santa_walk_left_%04d"),
@@ -108,6 +109,7 @@ BITMAPS = [
     ("GIFT_BLUE", "gift_blue"),
     ("GIFT_CYLINDER", "gift_cylinder"),
     ("GIFT_GREEN", "gift_green"),
+    ("MILK_COOKIES", "milk_cookies"),
     ("BALL_IN_TREE", "ball_in_tree"),
     ("BALL_ON_SNOW", "ball_on_snow"),
     ("TREE2", "tree2"),
@@ -144,7 +146,7 @@ SCENES = {
     "WORLD": (1480, [("background", 0, 0), ("treeline", 0, 0),
                      ("sack_spr", 240, 40), ("house_bear", 540, 40),
                      ("house_fox", 850, 50), ("tree2", 180, 0),
-                     ("palmtree", 120, 20), ("chair", 65, 55)]),
+                     ("tree", 120, 20), ("snowdrift", 65, 55)]),
     "TITLE": (320, [("background", -1050, 0), ("treeline", -1050, 0)]),
 }
 
@@ -153,12 +155,12 @@ SCENES = {
 # the next; the rest are grouped by when the game wants them.
 GROUPS = [
     ["WORLD"],
-    ["TITLE", "FACE", "LOGO", "BOAT"],
-    ["SANTA_CHAIR", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
+    ["TITLE", "FACE", "LOGO", "SLEIGH"],
+    ["SANTA_SNOW", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
      "SEALION", "GIFT_BLUE", "SEALION_WALK", "GIFT_CYLINDER", "GIFT_GREEN",
      "BALL_IN_TREE", "BALL_ON_SNOW", "TREE2"],
     ["HUT_FOX", "HUT_FOX_NOCYLINDER"],
-    ["HUT_BEAR", "HUT_BEAR_NOGREEN"],
+    ["HUT_BEAR", "HUT_BEAR_NOGREEN", "MILK_COOKIES"],
     ["SACK_NONE", "SACK_CYLINDER", "SACK_GREEN", "SACK_BLUE",
      "SACK_CYLINDER_GREEN", "SACK_CYLINDER_BLUE", "SACK_BLUE_GREEN",
      "SACK_FULL"],

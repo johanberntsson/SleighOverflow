@@ -106,7 +106,7 @@ static const struct step script[] = {
     {50, 151, IN_LEFT},             // 84: back to the sack, x 239
     {10, 1, IN_SPACE},              // 85: the sack, complete
     SPACE(), SPACE(),               // 86-87: "READY."
-    SPACE(),                        // 88: back out, and the boat comes
+    SPACE(),                        // 88: back out, and the sleigh comes
 };
 #define STEPS (sizeof script / sizeof script[0])
 

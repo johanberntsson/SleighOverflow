@@ -31,8 +31,8 @@
 #define SACK_SPR   INVALID
 #define HOUSE_BEAR INVALID
 #define HOUSE_FOX  INVALID
-#define PALMTREE   INVALID
-#define CHAIR      INVALID
+#define TREE       INVALID
+#define SNOWDRIFT  INVALID
 
 
 struct {
@@ -587,13 +587,13 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	// only while it shakes.
 	int tree = sprite( spr_index++, 180, -30 + o, TREE2 ); objects[ objects_count++ ] = tree;
 	sprite_hide( tree );
-	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, PALMTREE );
-	int chair = sprite( spr_index++, 65, 25 + o, CHAIR ); objects[ objects_count++ ] = chair;
+	objects[ objects_count++ ] = sprite( spr_index++, 120, -10 + o, TREE );
+	int snowdrift = sprite( spr_index++, 65, 25 + o, SNOWDRIFT ); objects[ objects_count++ ] = snowdrift;
 	int gift_blue = sprite( spr_index++, 970 + 62, -10 + o, GIFT_BLUE ); objects[ objects_count++ ] = gift_blue;
 	int sealion = sprite( spr_index++, 970, -10 + o, SEALION ); objects[ objects_count++ ] = sealion;
 
 	int xpos = 65;
-	int santa = sprite( spr_index++, xpos, 25 + o, SANTA_CHAIR );
+	int santa = sprite( spr_index++, xpos, 25 + o, SANTA_SNOW );
 
 	// After Santa, so that it lands in front of his feet.
 	int ball = sprite( spr_index++, 180, -10 + o, BALL_IN_TREE ); objects[ objects_count++ ] = ball;
@@ -610,6 +610,9 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     sprite_hide( hut_bear_pic );
 	int gift_green = sprite( spr_index++, 0, -10 + o, GIFT_GREEN );
     sprite_hide( gift_green );
+	// Painted on the interior's 320x240 canvas, not a 320x200 frame like the gifts.
+	int milk_cookies = sprite( spr_index++, 0, 0, MILK_COOKIES );
+    sprite_hide( milk_cookies );
 
 	int hut_fox_pic = sprite( spr_index++, 0, 0, HUT_FOX );
     sprite_hide( hut_fox_pic );
@@ -619,7 +622,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
     int santa_inside = sprite( spr_index++, 0, 0 + o, SANTA_IDLE );
     sprite_hide( santa_inside );
 
-    int boat = sprite( spr_index++, -320, 30 + o, BOAT );
+    int sleigh = sprite( spr_index++, -320, 30 + o, SLEIGH );
 
 	int speech = label( spr_index++, 50, 70, "", COLOR_GREEN );
     label_wrap( speech, 220 );
@@ -647,8 +650,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 	int has_remote = 0;
 	int has_ball = 0;
   int shown_intro = 0;
-  int boat_delay = 0;
-  int boat_move = 0;
+  int sleigh_delay = 0;
+  int sleigh_move = 0;
 
     // PORT: anim += 20 / 60 a frame, counted in thirds.
     int anim3 = 0;
@@ -707,6 +710,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					}
 					if( strcmp( flag, "has_cookies" ) == 0 ) {
 						has_cookies = 1;
+						sprite_hide( milk_cookies );
 					}
 					if( strcmp( flag, "gave_remote" ) == 0 ) {
 						sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
@@ -775,7 +779,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				}
  				execdialog();
 			} else if( dialogstate() == DIALOG_STATE_DISPLAYING_SPEECH ) {
-                sprite_bitmap( santa, sitting ? SANTA_CHAIR : SANTA_IDLE );
+                sprite_bitmap( santa, sitting ? SANTA_SNOW : SANTA_IDLE );
 				setup_speech( speech, dialogactor() );
 				label_text( speech, dialogline() );
 				if( speech_visible && *readkeys() == KEY_SPACE )  {					
@@ -866,6 +870,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
                 if( is_near( house_bear, xpos ) ) {
 					sprite_show( hut_bear_pic );
 					if( !has_green ) sprite_show( gift_green );
+					if( !has_cookies ) sprite_show( milk_cookies );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
 					if( !has_cookies )
@@ -915,10 +920,10 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					has_blue = 1;
 				}
 
-                if( is_near( chair, xpos ) ) {
+                if( is_near( snowdrift, xpos ) ) {
 					sitting = 1;
 					xpos = 65;
-					sprite_bitmap( santa, SANTA_CHAIR );
+					sprite_bitmap( santa, SANTA_SNOW );
                     sprite_pos( santa, 0, 25+o );
 		            sprite_origin( santa, xpos, 0 );
 		            sprite_pos( santa, xpos, sprite_y( santa ) );
@@ -941,8 +946,8 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					xpos = 20;
 		            sprite_origin( santa, xpos, 0 );
 		            sprite_pos( santa, xpos, sprite_y( santa ) );
-                    boat_delay = 90;
-                    boat_move = 0;
+                    sleigh_delay = 90;
+                    sleigh_move = 0;
 					fadeout = 1; 
 				}
 			}
@@ -950,6 +955,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 			if( *readkeys() == KEY_SPACE ) {
 			    sprite_hide( hut_bear_pic );
 			    sprite_hide( gift_green );
+			    sprite_hide( milk_cookies );
 			    sprite_hide( santa_inside );
 				at_hut_bear = 0;
 			}
@@ -970,12 +976,12 @@ void game_main( void ) {  // PORT: was main; see src/main.c
         execdialog();
 
         if( rescued && fadeout ) {
-            if( boat_delay >= 0 ) {
-                --boat_delay;
+            if( sleigh_delay >= 0 ) {
+                --sleigh_delay;
             } else {
-                int x = ease_boat_x[ boat_move ];  // PORT
-                sprite_pos( boat, x, sprite_y( boat ) );
-                if( boat_move < EASE_BOAT_X_LEN - 1 ) ++boat_move;
+                int x = ease_sleigh_x[ sleigh_move ];  // PORT
+                sprite_pos( sleigh, x, sprite_y( sleigh ) );
+                if( sleigh_move < EASE_SLEIGH_X_LEN - 1 ) ++sleigh_move;
             }
         }
 

@@ -53,13 +53,10 @@ Also open:
   for 36 frames, worth a look with `TIMING=1`) and how it looks: it shows
   the backdrop's copy two pixels out at its edges, and is drawn over the
   edge of the smaller tree in front of it.
-- **The bear's cookies** stay on his floor after Santa has them, until the
-  remote comes back: there is no picture of the test-pattern TV without
-  them.
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
   "BLUE present" label (the game says "Present"), "(cable TV)" on the
   houses' labels.
-- **Santa starts sitting** (`SANTA_CHAIR`, Stranded's chair at 65, the
+- **Santa starts sitting** (`SANTA_SNOW`, Stranded's chair at 65, the
   `player_sitting` speech) and stands up on SPACE.
 
 What the engine already does, all measured on the machine in MegaStranded
@@ -88,13 +85,14 @@ of it becomes one of this game's:
 |---|---|
 | `WORLD`: a 1480-wide beach, the radio, two huts, palms, the chair | a snowfield before a forest: the sack, two houses, the sea lion on the beach at the far end |
 | `SANTA_IDLE`, `SANTA_LEFT`, `SANTA_RIGHT` | Santa standing and walking |
-| `SANTA_CHAIR`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
+| `SANTA_SNOW`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
 | `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
 | `SACK_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
 | `HUT_BEAR`/`HUT_BEAR_NOGREEN`, `HUT_FOX`/`HUT_FOX_NOCYLINDER` | the two house interiors, with and without their present |
+| `MILK_COOKIES` | the bear's cookies, drawn over his interior until Santa takes them |
 | `SEALION`, `GIFT_BLUE`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
-| `BOAT` easing in, the palette fade | the sleigh on its way (step 3) |
+| `SLEIGH` easing in, the palette fade | the sleigh on its way (step 3) |
 
 The flags carry over one for one: `has_green`, `has_cylinder` and
 `has_blue` (Stranded's dish, bulb and battery) are one per present,
@@ -163,7 +161,7 @@ The sequence in `VISION.md`, replacing Stranded's title and boat:
    `LOGO`, with or without easing, then a cut to the game.
 3. **The start**: Santa by the sack; looking in it is `dlg_sack_first`.
 4. **The end**: back at the sack with all three, a last line, then the
-   picture of Santa on his way and the palette fade, as `BOAT` is now.
+   picture of Santa on his way and the palette fade, as `SLEIGH` is now.
 
 `title_screen()` and the `rescued && fadeout` branch of `game_main()` are
 where this goes; the easing tables are `tools/convtables.py`'s.

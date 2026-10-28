@@ -77,7 +77,7 @@ def trunc(v):
     return int(math.trunc(float(v)))  # C's (int) of a float
 
 
-BOAT_FRAMES = 256
+SLEIGH_FRAMES = 256
 BALL_DROP = 98    # rows from the ball's branch to the snow
 
 TABLES = {
@@ -88,8 +88,8 @@ TABLES = {
                     for m in range(61)],
     "ease_credits_x": [trunc(f(-160) + f(320) * ease_out_quad(f(m) / f(60)))
                        for m in range(61)],
-    "ease_boat_x": [trunc(f(-320) + f(130) * ease_out_quad(f(m) / f(120)))
-                    for m in range(BOAT_FRAMES)],
+    "ease_sleigh_x": [trunc(f(-320) + f(130) * ease_out_quad(f(m) / f(120)))
+                    for m in range(SLEIGH_FRAMES)],
     "ease_ball_y": [trunc(f(BALL_DROP) * ease_out_bounce(f(m) / f(40)))
                     for m in range(41)],
 }
