@@ -1,0 +1,24 @@
+# We Wish You a Merry Christmas. An English carol, traditional; public
+# domain. Written out for this game in G major, as a waltz.
+
+speed  5
+beats  3
+pickup 1
+
+melody
+  D5:4 |
+  # We wish you a merry Christmas, we wish you a merry Christmas,
+  G5:4 G5:8 A5:8 G5:8 F#5:8 | E5:4 E5:4 E5:4 | A5:4 A5:8 B5:8 A5:8 G5:8 | F#5:4 D5:4 D5:4 |
+  # we wish you a merry Christmas and a happy new year.
+  B5:4 B5:8 C6:8 B5:8 A5:8 | G5:4 E5:4 D5:8 D5:8 | E5:4 A5:4 F#5:4 | G5:2 D5:4 |
+  # Good tidings we bring to you and your kin;
+  G5:4 G5:4 G5:4 | F#5:2 F#5:4 | G5:4 F#5:4 E5:4 | D5:2 A5:4 |
+  # good tidings for Christmas and a happy new year.
+  B5:4 A5:4 G5:4 | D6:4 D5:4 D5:8 D5:8 | E5:4 A5:4 F#5:4 | G5:2. |
+
+chords
+  r |
+  G | C | A | D |
+  B | Em | C . D | G |
+  G | D | A7 | D |
+  G | G | C . D | G |

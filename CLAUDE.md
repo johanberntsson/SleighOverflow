@@ -10,58 +10,60 @@ with hot paths in 45GS02 assembly. It is built on the engine of
 headline sample of his [dos-like](https://github.com/mattiasgustavsson/dos-like)
 framework). What carries over is the dos-like side: a point-and-walk game over
 a 64-entry sprite table, a dialogue interpreter driven by `#SetFlag` /
-`#ClearFlag`, labels rendered offline, a SID tune from a MIDI. **The art, the
+`#ClearFlag`, labels rendered offline, a SID tune player. **The art, the
 setting, the story and the music are to be new.**
 
 **`VISION.md` is the owner's description of the game** (Santa, three
 dropped presents, two houses and a sea lion, a BASIC-screen splash).
 **`TODO.md` is the plan and the running log — read it first.**
 
-Where it is (28 Oct 2026): the engine was copied from MegaStranded v1.0
-(`31edcd5`) without its history, and the game is now Sleigh Overflow's. All
-the art is the owner's, and `src/game.c` plays `VISION.md` start to finish:
+Where it is (28 Oct 2026, finished): the engine was copied from
+MegaStranded v1.0 (`31edcd5`) without its history, and the game is now
+Sleigh Overflow's. All the art is the owner's, and `src/game.c` plays `VISION.md` start to finish:
 the opening, the ball in the tree, the sack, the bear, the fox and the sea
 lion, and the sack's "READY." It opens with the BASIC splash
 (`src/splash.c`), typed on the ROM's own screen while the game loads.
 After the title, Santa drops the sack (`drop_sack_screen()`), four
 seconds or SPACE. The end returns to BASIC for real, through the `SYS`
 that started the game, where BASIC `LIST`s the two-liner it leaves there
-(`src/basic.c`). Still Stranded's: the title screen's sequence, the
-sleigh's (Stranded's boat's) easing, the font and the tune.
+(`src/basic.c`). The music is a medley of public-domain Christmas songs,
+written out by hand in `assets/songs/` (`tools/convsong.py`). All of it
+is played through and confirmed on the machine, and the build takes
+nothing from MegaStranded any more: the font, `volter.fnt`, is the one
+file the game shares with Stranded, kept by the owner's decision
+(Licensing below). Still Stranded's in the code: the title screen's
+sequence and the sleigh's (Stranded's boat's) easing.
 
 **The owner does all `git add` and `git commit` by hand.** Leave changes in
 the working tree and say what changed.
 
-## Placeholders: Stranded's assets, borrowed, never copied
+## Assets: this game's own, and Stranded's never
 
-`assets/` holds this game's own art, font and tune, and only those. The
-Makefile's `PLACEHOLDERS` (default `../MegaStranded/assets`) is searched after
-it: `tools/convgfx.py` takes every picture (`name.png`, else `name.gif`) and
-`volter.fnt` from the first directory that has it, and the tune is
-`assets/tune.mid` when there is one and `stranded.mid` from there until
-then. Every picture is now in `assets/`; the font and the tune are the two
-placeholders left, and `make PLACEHOLDERS=` stops at the tune.
+`assets/` holds everything the build reads: the owner's pictures, the
+songs (`songs/`), and `volter.fnt`, the font. Until 28 Oct the Makefile
+borrowed Stranded's art, font and tune from `../MegaStranded/assets` as
+placeholders; every one of them has been replaced or (the font) taken in,
+and the Makefile no longer looks there.
 
 **Never copy a file from `../MegaStranded/assets` into this repository.** Not
 having Mattias' art in this game's history is why it is a new repository.
-`make PLACEHOLDERS=` builds without them, which is how to see what is still
-missing; when that succeeds, the Makefile's placeholder lines can go.
+`volter.fnt` is the one exception, copied from dos-like itself
+(`~/dos-like/files/stranded/`) on the owner's decision; see Licensing.
 
-Mixing old and new art has one catch: **there is one 256-colour palette**,
-`assets/palette.gif`'s. New art is painted in Krita and exported as RGBA
-PNG: each colour goes to the palette's nearest, alpha below 128 is
-transparent. A GIF in `assets/` must be drawn in exactly the palette
-(`convgfx.py` refuses one with its own); a placeholder drawn in another is
-remapped to it by nearest colour and looks off until replaced. Without a
-`palette.gif`, Stranded's palette is the game's and nothing is remapped.
+**There is one 256-colour palette**, `assets/palette.gif`'s. New art is
+painted in Krita and exported as RGBA PNG: each colour goes to the
+palette's nearest, alpha below 128 is transparent. A GIF in `assets/` must
+be drawn in exactly the palette (`convgfx.py` refuses one with its own).
+`convgfx.py` can still take extra directories after `assets/`, and remaps
+a picture from one drawn in another palette; nothing uses that now.
 
 ## Layout
 
 | | |
 |---|---|
-| `assets/` | this game's own GIFs, font and `tune.mid` (see above) |
+| `assets/` | this game's own pictures and font (see above), and `songs/`, the music |
 | `src/game.c` | the game: Stranded's `stranded.c` and MegaStranded's `PORT` changes, with Sleigh Overflow's scenes and dialogue |
-| `src/main.c` | loads everything, runs the game until it is won (ESC starts it again), then the end |
+| `src/main.c` | loads everything, runs the game until it is won, then the end |
 | `src/splash.*`, `src/splash_asm.s` | the BASIC splash, typed on the ROM's own screen around the load |
 | `src/basic.*`, `src/basic_asm.s` | the end: BASIC's memory kept at startup and put back, with `10 PRINT "MERRY CHRISTMAS"` in it |
 | `src/dos.*` | the sixteen dos-like calls the game makes, by their dos-like names |
@@ -76,7 +78,7 @@ remapped to it by nearest colour and looks off until replaced. Without a
 | `tools/convgfx.py` | GIFs and labels to crunched GFXn.BIN, plus `build/gfx_table.c` and `build/gfx_ids.h` |
 | `tools/labels.py` | every string `game.c` draws, rendered offline in `volter.fnt` as bitmaps |
 | `tools/convtables.py` | the easing curves as integer tables, `build/tables.c` |
-| `tools/convmidi.py` | the MIDI arranged for twelve SID voices: `build/music.bin`, `build/music_table.c` |
+| `tools/convsong.py` | the songs arranged for twelve SID voices: `build/music.bin`, `build/music_table.c` |
 | `tools/diskutil.rb` | D81 builder, from SearchAndRescue |
 
 The `PORT:` comments in `game.c` and the word "Stranded" in the engine's
@@ -112,7 +114,6 @@ All default to 0, which is the disk to hand out.
 | `TIMING=1` | the border shows each frame's draw time: white while drawing, red if it ran past a frame |
 | `STATS=1` | F1 prints a histogram of every frame's draw time on the ROM's screen |
 | `BENCH=1` | before the game, time the DMA every way the blitter could use it and print a table |
-| `PLACEHOLDERS=dir` | where missing assets come from; empty for none |
 
 `TIMING`, `STATS` and `BENCH` exist for the real machine, which has no memory
 dump; the owner tests there and reports back with a photo of the screen.
@@ -160,7 +161,7 @@ every frame belongs in chip RAM, and chip RAM is full:
 | `$20000-$3FFFF` | C65 ROM |
 | `$40000`, `$50000` | framebuffers A and B, 64000 bytes each |
 | `$8000000-` | every bitmap, decrunched (`gfx_table.c` has the addresses) |
-| `$8500000` | the tune's twelve streams, about 29 KB |
+| `$8500000` | the tune's twelve streams, about 10 KB |
 | `$8600000` | staging for the crunched stream being loaded |
 | `$8700000` | BASIC's bank 1, then its `$0002-$1FFF`, kept at startup for the return (`src/basic_asm.s`) |
 
@@ -231,13 +232,22 @@ variables with it.
 
 ## Changing the music
 
-`tools/convmidi.py` is the arrangement: `INSTRUMENTS` (waveform, ADSR, pulse
-width, pitch slide per frame) and `PARTS` (which voices, how many notes at
-once, priority) are the two tables to tune, and it prints how many notes
-each part loses. Both are keyed to Stranded's MIDI and will need redoing for
-a new tune. The stream format and the reasons for the voice layout are at
-the top of the file. The player, `src/music.c`, does only what the streams
-say; it should not need to change for an arrangement.
+**A song is a text file in `assets/songs/`**: a melody in notes (`E5:4`,
+C4 middle C, `:4` a quarter, `.` dotted, `r` a rest) and a line of chords
+(`C | F C | G7 |`), in bars, which `tools/convsong.py` checks add up. The
+format is at the top of that file. `SONGS` in the Makefile is the medley,
+in order; it loops. The songs must be public domain, and the arrangement
+the game's own: a MIDI file or a modern songbook is someone's arrangement,
+and can be copyright where the tune is not.
+
+`convsong.py` is also the arrangement, the same for every song: the melody
+and an oom-pah bass, each doubled on a left and a right SID, the chord as
+off-beat stabs, sleigh bells where a song asks (`bells`). `INSTRUMENTS`
+(waveform, ADSR, pulse width) and `VOLUME` (each SID's, which is how the
+chords, on two SIDs of their own, are turned down) are the tables to tune
+by ear, on the machine:
+xemu has no recording. The player, `src/music.c`, does only what the
+streams say: note on, note off, wait, loop.
 
 ## Toolchain
 
@@ -259,6 +269,17 @@ listing before suspecting the hardware.
 
 This game is MIT (`LICENSE`). The engine is the author's own work from
 MegaStranded, also MIT; `game.c` started as Mattias Gustavsson's
-`stranded.c`, MIT / Unlicense, whose notice it keeps. The placeholder assets
-come with dos-like, and the permission Mattias gave (dos-like issue #49) was
-for the port: **a released disk must contain none of them.**
+`stranded.c`, MIT / Unlicense, whose notice it keeps. Stranded's art and
+tune come with dos-like, and the permission Mattias gave (dos-like issue
+#49) was for the port: **a released disk must contain none of them**, and
+none is in this repository.
+
+**The font is kept knowingly** (28 Oct 2026). `volter.fnt` is "Volter
+(Goldfish)", a pixel font credited to cocoFabien. DaFont lists it as
+"100% Free", but it comes with no licence text, sites disagree about its
+terms, and its origin (the author's site was habbohotel.fr; Habbo Hotel
+used a font called Volter) is unclear. The owner's decision: keep it.
+The game is free, its distribution very limited, the disk holds only
+labels rendered from the font and not the font file, and should anyone
+object, the game is withdrawn. Replacing it would only change
+`tools/labels.py`'s input; every label is rendered at build time.

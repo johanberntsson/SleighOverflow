@@ -92,6 +92,6 @@ int load_resources(void (*report)(uint8_t done))
     if (report)
       report((uint8_t)(i + 1));
   }
-  // The tune, last: tools/convmidi.py, src/music.c.
+  // The tune, last: tools/convsong.py, src/music.c.
   return load_crunched("MUSIC.BIN", ATTIC_MUSIC);
 }

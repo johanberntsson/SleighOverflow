@@ -8,10 +8,9 @@ the bitmap table, the file list, the label table and the palette. The labels
 are every string game.c draws, rendered offline: see tools/labels.py.
 
 **Each file is taken from the first assets directory that has it**, as
-name.png or, failing that, name.gif; a later directory's PNGs are ignored. The
-Makefile passes assets/ and then MegaStranded's, so Stranded's art stands in
-for whatever has not been drawn yet. A new picture replaces the old one by
-having its name.
+name.png or, failing that, name.gif; a later directory's PNGs are ignored.
+The Makefile passes assets/ alone. A later directory was how Stranded's art
+stood in while this game's was drawn, and could be again.
 
 **There is one palette**, the VIC-IV's, and it is assets/palette.gif's: a
 palette image whose pixels do not matter. Every GIF in the first assets

@@ -29,7 +29,8 @@ int main(void)
   // The Kernal's interrupt would scan the keyboard under input_scan and blink
   // a cursor into colour RAM; nothing after this needs it.
   __disable_interrupts();
-  // ESC starts it again; the end goes back to BASIC.
+  // game_main returns when the game is won (ESC, which would also end it,
+  // is never pressed: see keystate), and the end goes back to BASIC.
   while (!game_main())
     ;
   basic_ending();

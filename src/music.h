@@ -1,20 +1,22 @@
-// The tune: stranded.mid, arranged for four SIDs by tools/convmidi.py.
+// The tune: Christmas songs, arranged for four SIDs by tools/convsong.py.
 #ifndef MUSIC_H
 #define MUSIC_H
 
 #include <stdint.h>
 
-// One instrument: the SID's waveform bits, its envelope, a pulse width, and a
-// frequency slide added every frame the note sounds (the congas' fall).
+// One instrument: the SID's waveform bits, its envelope and a pulse width.
 struct music_instrument {
   uint8_t ctrl;
   uint8_t ad;
   uint8_t sr;
   uint16_t pw;
-  int16_t slide;
 };
 
 extern const struct music_instrument music_instruments[];
+
+// Each SID's master volume, 0-15: the chords have SIDs of their own, and
+// this is how loud they are against the rest.
+extern const uint8_t music_volume[4];
 
 // Start the tune from the top, once MUSIC.BIN is in attic RAM. Does nothing
 // if it is already playing: the game calls it each time it starts.

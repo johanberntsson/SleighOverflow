@@ -582,7 +582,8 @@ void title_screen( void ) {
 }
 
 
-// 1 when Santa is on his way and the screen has faded; 0 on ESC.
+// 1 when Santa is on his way and the screen has faded; 0 on ESC, which
+// keystate never reports.
 int game_main( void ) {  // PORT: was main; see src/main.c
     // PORT: setvideomode, setdoublebuffer, loadbitmaps, the palette, the font
     // and the music are dos_init, src/main.c's loading, tools/labels.py and

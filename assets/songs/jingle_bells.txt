@@ -1,0 +1,31 @@
+# Jingle Bells. James Lord Pierpont, 1857; public domain. Written out for
+# this game in C major, the verse and then the chorus. See tools/convsong.py.
+
+speed  5
+beats  4
+bells  8
+
+melody
+  # Dashing through the snow, in a one-horse open sleigh,
+  G4:4 E5:4 D5:4 C5:4 | G4:2. G4:8 G4:8 | G4:4 E5:4 D5:4 C5:4 | A4:1 |
+  # o'er the fields we go, laughing all the way;
+  A4:4 F5:4 E5:4 D5:4 | B4:1 | G5:4 G5:4 F5:4 D5:4 | E5:1 |
+  # bells on bobtail ring, making spirits bright,
+  G4:4 E5:4 D5:4 C5:4 | G4:1 | G4:4 E5:4 D5:4 C5:4 | A4:2. A4:4 |
+  # what fun it is to ride and sing a sleighing song tonight!
+  A4:4 F5:4 E5:4 D5:4 | G5:4 G5:4 G5:4 G5:4 | A5:4 G5:4 F5:4 D5:4 | C5:2 r:2 |
+
+  # Jingle bells, jingle bells, jingle all the way;
+  E5:4 E5:4 E5:2 | E5:4 E5:4 E5:2 | E5:4 G5:4 C5:4. D5:8 | E5:1 |
+  # oh what fun it is to ride in a one-horse open sleigh, hey!
+  F5:4 F5:4 F5:4. F5:8 | F5:4 E5:4 E5:4 E5:8 E5:8 | E5:4 D5:4 D5:4 E5:4 | D5:2 G5:2 |
+  # Jingle bells, jingle bells, jingle all the way;
+  E5:4 E5:4 E5:2 | E5:4 E5:4 E5:2 | E5:4 G5:4 C5:4. D5:8 | E5:1 |
+  # oh what fun it is to ride in a one-horse open sleigh!
+  F5:4 F5:4 F5:4. F5:8 | F5:4 E5:4 E5:4 E5:8 E5:8 | G5:4 G5:4 F5:4 D5:4 | C5:1 |
+
+chords
+  C | C | C | F | F | G | G7 | C |
+  C | C | C | F | F | G | G7 | C |
+  C | C | C | C | F | C | D7 | G7 |
+  C | C | C | C | F | C | G7 | C |

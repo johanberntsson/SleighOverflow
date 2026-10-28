@@ -20,11 +20,6 @@ CSTACK   = 1024
 
 BUILD    = build
 ASSETS   = assets
-# Stranded's art, font and tune stand in for anything assets/ does not have
-# yet: tools/convgfx.py takes each file from the first directory that has it.
-# They are never copied in here; this repository holds only its own art.
-PLACEHOLDERS ?= ../MegaStranded/assets
-ASSET_DIRS = $(ASSETS) $(wildcard $(PLACEHOLDERS))
 
 SRCS     = $(wildcard src/*.c)
 ASRCS    = $(wildcard src/*.s)
@@ -44,10 +39,10 @@ DISK_NAME = SLEIGH OVERFLOW
 GFX_RES  = $(foreach n,0 1 2 3 4 5 6,$(BUILD)/gfx$(n).bin)
 GFX_GEN  = $(BUILD)/gfx_table.c $(BUILD)/gfx_ids.h
 TABLES   = $(BUILD)/tables.c $(BUILD)/tables.h
-# The tune, arranged for the SIDs: see tools/convmidi.py. assets/tune.mid
-# when there is one, Stranded's until then.
-TUNE     = $(firstword $(wildcard $(ASSETS)/tune.mid) \
-                       $(PLACEHOLDERS)/stranded.mid)
+# The tune: these songs one after another, arranged for the SIDs by
+# tools/convsong.py, and the medley loops.
+SONGS    = $(foreach s,jingle_bells deck_the_halls we_wish_you,\
+                       $(ASSETS)/songs/$(s).txt)
 MUSIC_RES = $(BUILD)/music.bin
 MUSIC_GEN = $(BUILD)/music_table.c
 RES      = $(GFX_RES) $(MUSIC_RES)
@@ -73,9 +68,9 @@ $(CONFIG_STAMP): Makefile | $(BUILD)
 # A picture is name.png (painted in Krita and exported) or name.gif.
 $(GFX_RES) $(GFX_GEN) &: tools/convgfx.py tools/labels.py src/game.c \
                          $(wildcard $(ASSETS)/*.png) \
-                         $(foreach d,$(ASSET_DIRS),$(wildcard $(d)/*.gif $(d)/*.fnt)) \
+                         $(wildcard $(ASSETS)/*.gif $(ASSETS)/*.fnt) \
                          | $(BUILD)
-	python3 tools/convgfx.py $(BUILD) src/game.c $(ASSET_DIRS)
+	python3 tools/convgfx.py $(BUILD) src/game.c $(ASSETS)
 
 # Every object depends on every header, generated ones included. Crude, but
 # a stale object built against a changed memory map fails in ways that look
@@ -95,9 +90,9 @@ $(TABLES) &: tools/convtables.py | $(BUILD)
 $(BUILD)/tables.o: $(BUILD)/tables.c $(HEADERS) $(CONFIG_STAMP)
 	cc6502 $(CFLAGS) -c -o $@ $<
 
-$(MUSIC_RES) $(MUSIC_GEN) &: tools/convmidi.py tools/convgfx.py \
-                             $(TUNE) | $(BUILD)
-	python3 tools/convmidi.py $(TUNE) $(BUILD)
+$(MUSIC_RES) $(MUSIC_GEN) &: tools/convsong.py tools/convgfx.py \
+                             $(SONGS) | $(BUILD)
+	python3 tools/convsong.py $(BUILD) $(SONGS)
 
 $(BUILD)/music_table.o: $(BUILD)/music_table.c $(HEADERS) $(CONFIG_STAMP)
 	cc6502 $(CFLAGS) -c -o $@ $<

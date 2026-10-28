@@ -73,9 +73,9 @@ int keystate(enum keycode_t key)
 {
   switch (key) {
   case KEY_ESCAPE:
-    // Quitting is not ported: the original exits to the desktop, and a
-    // MEGA65 game going back to BASIC has to put back everything it took
-    // (../SearchAndRescue's quit_to_basic). Until then ESC does nothing.
+    // Quitting is not ported: the original exits to the desktop. ESC does
+    // nothing; only winning goes back to BASIC (src/basic.c), and an ESC
+    // that did the same would call basic_ending without the program.
     return 0;
   case KEY_SPACE:
     return (input_held & IN_SPACE) != 0;

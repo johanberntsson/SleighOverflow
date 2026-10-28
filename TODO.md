@@ -69,7 +69,7 @@ and the fade, the screen fades up to BASIC's blue, and BASIC itself
 `LIST`s `10 PRINT "MERRY CHRISTMAS"` / `20 GOTO 10`, a real program that
 `RUN` runs (`src/basic.c`, `src/basic_asm.s`; step 3.4). Checked in xemu
 with the whole walkthrough, and that `RUN` and `DIR` work after it; not yet
-on the machine. A sack bug on the way: a bitmap read across a megabyte
+on the machine, then confirmed there. A sack bug on the way: a bitmap read across a megabyte
 boundary in attic RAM wraps (CLAUDE.md, Memory), fixed in `convgfx.py`.
 The 768-byte copy of the palette in `dos.c` is gone (the registers are
 read back instead), which is what made room: the program has 746 bytes
@@ -80,8 +80,29 @@ registers back (if it never finishes, that is why), and BASIC after it.
 `DIR` shows a garbled disk name in xemu, with or without the game: the
 header `tools/diskutil.rb` writes, or xemu's.
 
-**Next**: the font and the tune, the last two placeholders (steps 5 and 6).
-Also open:
+**28 Oct 2026, night: the music is this game's.** Stranded's MIDI and
+`convmidi.py` are gone. The tune is a medley of three public-domain songs,
+Jingle Bells, Deck the Halls and We Wish You a Merry Christmas, written
+out as text in `assets/songs/` and arranged by `tools/convsong.py` (step
+6). The player lost the pitch bends and slides it had for Stranded's bass
+and congas. Checked in xemu that all twelve voices step through the new
+streams together; heard and tuned on the machine since (below).
+
+**28 Oct 2026, late: finished.** On the machine the
+owner played it through: the sack's close-up whole again, the fox's
+present taken in front of him, the end back in BASIC, and the music, at
+`speed 5` (20% faster than first written), with a triangle lead (the
+pulse was harsh) and the chords on SIDs of their own at volume 11 of 15.
+
+**The font is kept, and the build is the game's own.** `volter.fnt`
+("Volter (Goldfish)", cocoFabien) has no licence text; DaFont calls it
+"100% Free". The owner decided to keep it: the game is free, its
+distribution very limited, and it is withdrawn if anyone objects
+(CLAUDE.md, Licensing, has the reasoning). It is now `assets/volter.fnt`,
+copied from dos-like, and the Makefile's `PLACEHOLDERS` is gone: the
+build reads only `assets/`. The disk came out byte for byte the same.
+
+Also open, none of it needed:
 
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
   "BLUE present" label (the game says "Present"), "(cable TV)" on the
@@ -98,7 +119,7 @@ What the engine already does, all measured on the machine in MegaStranded
 - art cropped and exomizer-crunched in related groups: Stranded's 77 GIFs
   were 423 KB on the disk, 22 s to load on the machine
 - every string rendered offline with its outline, as a bitmap
-- a MIDI arranged offline for four SIDs, twelve voices
+- a SID player for twelve voices on four SIDs, a step a frame
 - `BENCH`, `STATS`, `TIMING` and `AUTOPLAY` for testing on the machine and
   headless
 
@@ -223,16 +244,22 @@ frames. Static props go into the backdrop.
 
 ### 5. Text and font
 
-The dialogue and prompts in `game.c` are `VISION.md`'s (28 Oct). Left:
-the title credits; `volter.fnt` replaced or kept (it is a free font, but it came with
-dos-like — check its licence before keeping it). `tools/labels.py` reads the
-strings from `game.c` by pattern, so keep to the patterns it knows.
+The dialogue and prompts in `game.c` are `VISION.md`'s (28 Oct).
+**`volter.fnt` kept, 28 Oct**, by the owner's decision, as
+`assets/volter.fnt` (CLAUDE.md, Licensing). Left, if wanted: the title
+credits. `tools/labels.py` reads the strings from `game.c` by pattern, so
+keep to the patterns it knows.
 
 ### 6. Music
 
-A new `assets/tune.mid`, and `INSTRUMENTS` and `PARTS` in
-`tools/convmidi.py` redone for it. Tune on the machine: xemu has no audio
-recording. Check that the MEGA65's SIDs are at the clock `SID_CLOCK` says.
+**Done, 28 Oct**: the songs in `assets/songs/`, one text file each, and
+`tools/convsong.py`, which checks every bar, arranges them the same way
+(melody, oom-pah bass, off-beat chords, sleigh bells) and writes the
+player's streams. A new song is a new file and a name in `SONGS`.
+
+Still to do on the machine, by ear: the instruments' envelopes and the
+balance between the parts (`INSTRUMENTS`), the tempo (`speed`), and that
+the MEGA65's SIDs are at the clock `SID_CLOCK` says.
 
 ### 7. The walkthrough
 
@@ -242,15 +269,17 @@ screenshotted headless.
 
 ### 8. Cut the cord
 
-`make PLACEHOLDERS=` succeeds; then drop `PLACEHOLDERS` from the Makefile,
-the inherited `PORT:` comments that no longer describe anything, and
-Mattias' notice from `game.c` if none of his code remains.
+**`PLACEHOLDERS` dropped from the Makefile, 28 Oct**: the build reads only
+`assets/`. Left, none of it urgent: the inherited `PORT:` comments that no
+longer describe anything, and Mattias' notice from `game.c` if none of his
+code remains (it still does).
 
 ## Open, inherited from MegaStranded
 
-- **Quitting.** ESC restarts the game; only the end goes back to BASIC
-  (`basic_ending`, from SearchAndRescue's `quit_to_basic`). ESC could do
-  the same without the program. The RAM under BASIC at `$A000` that the
+- **Quitting.** ESC does nothing (`keystate` in `dos.c` never reports
+  it); only winning goes back to BASIC (`basic_ending`, from
+  SearchAndRescue's `quit_to_basic`). ESC could do the same without the
+  program. The RAM under BASIC at `$A000` that the
   engine uses is bank 0's program space to BASIC, past the end of the
   program, so it needs nothing back.
 - **50 frames a second.** Stranded counted frames at 60 Hz and ran at 5/6
