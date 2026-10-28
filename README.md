@@ -12,3 +12,5 @@
     RUN
 
     ERROR 65 IN 2026: SLEIGH OVERFLOW
+
+![Cover](screenshots/cover.png)
