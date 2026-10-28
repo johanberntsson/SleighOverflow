@@ -52,6 +52,14 @@ all: $(D81)
 run: $(D81)
 	xemu-xmega65 -besure -8 $(D81)
 
+# The disk to hand out, in release/. Only ever with every build flag at 0: a
+# disk built with AUTOPLAY plays itself.
+release: $(D81)
+	@if [ "$(BENCH)$(STATS)$(TIMING)$(AUTOPLAY)" != "0000" ]; then \
+	    echo "release: build flags must all be 0"; exit 1; fi
+	mkdir -p release
+	cp $(D81) release/
+
 $(BUILD):
 	mkdir -p $(BUILD)
 
@@ -121,4 +129,4 @@ $(D81): $(PRG) $(RES)
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all run clean
+.PHONY: all run release clean
