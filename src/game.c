@@ -1,8 +1,7 @@
-// Sleigh Overflow. This started as Stranded, by Mattias Gustavsson
-// (src/stranded.c, ported to the MEGA65 in ../MegaStranded), and keeps its
-// sprite table, dialogue interpreter and main loop; the scenes, the flags and
-// the dialogue are this game's. The changes the port needed are marked PORT.
-// The framework is src/dos.c. What the port changed, in short:
+// Sleigh Overflow. This started as Stranded in dos-like, by Mattias Gustavsson
+// and keeps its sprite table, dialogue interpreter and main loop; the scenes,
+// the flags and the dialogue are this game's. The changes the port needed are
+//  marked PORT. The framework is src/dos.c. What the port changed, in short:
 //
 //   - the bitmaps are in attic RAM before this starts (src/gfx.h), and the
 //     beach's background, treeline and props are one picture, WORLD, so their
@@ -12,9 +11,6 @@
 //   - the easing functions are tables (tools/convtables.py), and the two
 //     animation counters are integers;
 //   - it runs at 50 frames a second, PAL, where the original ran at 60.
-//
-// See end of file for license for this code
-//    /Mattias Gustavsson
 
 #include <stdlib.h>
 #include <string.h>
@@ -1016,59 +1012,3 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 	}
     return rescued && !keystate( KEY_ESCAPE );
 }
-
-/*
-------------------------------------------------------------------------------
-
-This software is available under 2 licenses - you may choose the one you like.
-
-------------------------------------------------------------------------------
-
-ALTERNATIVE A - MIT License
-
-Copyright (c) 2021 Mattias Gustavsson
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of 
-this software and associated documentation files (the "Software"), to deal in 
-the Software without restriction, including without limitation the rights to 
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
-of the Software, and to permit persons to whom the Software is furnished to do 
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all 
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
-SOFTWARE.
-
-------------------------------------------------------------------------------
-
-ALTERNATIVE B - Public Domain (www.unlicense.org)
-
-This is free and unencumbered software released into the public domain.
-
-Anyone is free to copy, modify, publish, use, compile, sell, or distribute this 
-software, either in source code form or as a compiled binary, for any purpose, 
-commercial or non-commercial, and by any means.
-
-In jurisdictions that recognize copyright laws, the author or authors of this 
-software dedicate any and all copyright interest in the software to the public 
-domain. We make this dedication for the benefit of the public at large and to 
-the detriment of our heirs and successors. We intend this dedication to be an 
-overt act of relinquishment in perpetuity of all present and future rights to 
-this software under copyright law.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-------------------------------------------------------------------------------
-*/
