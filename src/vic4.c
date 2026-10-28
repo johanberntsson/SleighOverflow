@@ -58,6 +58,11 @@ static void save_rom(void)
   unlock();
   for (i = 0; i < ROM_REGS; i++)
     rom_values[i] = *(volatile uint8_t *)(0xD000u + rom_regs[i]);
+  // **$D011's top bit reads as the raster's bit 8 and writes as the raster
+  // compare's.** Read with the raster past line 255 and written back, it moved BASIC's
+  // raster interrupt to a line that never comes: no IRQ after the return,
+  // so no cursor. The ROM keeps its compare below 256.
+  rom_values[0] &= 0x7F;
   for (i = 0; i < 16; i++) {
     rom_palette[0][i] = PALETTE.red[i];
     rom_palette[1][i] = PALETTE.green[i];

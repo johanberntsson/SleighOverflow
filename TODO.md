@@ -102,6 +102,20 @@ distribution very limited, and it is withdrawn if anyone objects
 copied from dos-like, and the Makefile's `PLACEHOLDERS` is gone: the
 build reads only `assets/`. The disk came out byte for byte the same.
 
+**28 Oct 2026, later still: the cursor after the end.** On the machine,
+BASIC after the end had no cursor, though typing and `RUN` worked. BASIC's
+raster interrupt never fired: `$D011`'s top bit reads as the raster's bit
+8 and writes as the raster compare's, and `save_rom` (`src/vic4.c`) had
+read it with the raster past line 255 (`$9B`), so `vic4_leave` moved the
+compare to a line that never comes. Only some runs, by where the raster
+was. Seen in xemu as `-dumpmem`s at different moments coming out
+identical; the cursor blinks there now, not yet tried on the machine. The
+same fix went into SearchAndRescue and MegaStranded.
+
+**`BENCH=1` and `STATS=1` no longer link**: "Failed to place 1 section
+fragment(s)", the program is full (the same in MegaStranded). Either needs
+room made before it can be used again.
+
 Also open, none of it needed:
 
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the

@@ -117,6 +117,7 @@ All default to 0, which is the disk to hand out.
 
 `TIMING`, `STATS` and `BENCH` exist for the real machine, which has no memory
 dump; the owner tests there and reports back with a photo of the screen.
+**`STATS=1` and `BENCH=1` do not link now**: the program is full (TODO.md).
 
 ## Running it headless
 
