@@ -1,25 +1,24 @@
 // Load everything, then play. The game itself is src/game.c.
 #include <calypsi/intrinsics6502.h>
 #include <mega65.h>
+#include <stddef.h>
 
 #include "bench.h"
 #include "loader.h"
+#include "splash.h"
 
 void game_main(void);
 
-// The loading screen is the ROM's own, so progress is the border colour.
-static void loading(uint8_t done)
-{
-  VICIV.bordercol = done;
-}
-
+// The loading screen is the ROM's own, and the splash: see src/splash.c.
 int main(void)
 {
-  if (load_resources(loading)) {
+  splash_before_load();
+  if (load_resources(NULL)) {
     VICIV.bordercol = 2;  // red: see loader_error() in a memory dump
     for (;;)
       ;
   }
+  splash_after_load();
 
 #if BENCH
   bench_run();

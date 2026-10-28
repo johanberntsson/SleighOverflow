@@ -21,8 +21,12 @@ Where it is (28 Oct 2026): the engine was copied from MegaStranded v1.0
 (`31edcd5`) without its history, and the game is now Sleigh Overflow's. All
 the art is the owner's, and `src/game.c` plays `VISION.md` start to finish:
 the opening, the ball in the tree, the sack, the bear, the fox and the sea
-lion, and the sack's "READY." Still Stranded's: the title screen, the boat
-and the fade at the end (`TODO.md` step 3), the font and the tune.
+lion, and the sack's "READY." It opens with the BASIC splash
+(`src/splash.c`), typed on the ROM's own screen while the game loads.
+Still Stranded's: the title screen's sequence, the sleigh (Stranded's
+boat) and the fade at the end (`TODO.md` step 3), the font and the tune.
+Next is the picture of Santa dropping the sack, which waits on the
+owner's art.
 
 **The owner does all `git add` and `git commit` by hand.** Leave changes in
 the working tree and say what changed.
@@ -57,6 +61,7 @@ remapped to it by nearest colour and looks off until replaced. Without a
 | `assets/` | this game's own GIFs, font and `tune.mid` (see above) |
 | `src/game.c` | the game: Stranded's `stranded.c` and MegaStranded's `PORT` changes, with Sleigh Overflow's scenes and dialogue |
 | `src/main.c` | loads everything, then runs the game for ever |
+| `src/splash.*`, `src/splash_asm.s` | the BASIC splash, typed on the ROM's own screen around the load |
 | `src/dos.*` | the sixteen dos-like calls the game makes, by their dos-like names |
 | `src/input.*` | keyboard and joystick port 2, and `AUTOPLAY`'s scripted walkthrough |
 | `src/vic4.*` | 320x200 full-colour display, double buffered |
@@ -118,7 +123,8 @@ xemu-xmega65 -skipconfigfile -besure -headless -sleepless \
 P=$!; sleep 40; kill -TERM $P; while kill -0 $P 2>/dev/null; do sleep 1; done
 ```
 
-Loading takes about 30 seconds of that. SIGTERM, not SIGINT, and kill by
+Loading takes about 30 seconds of that, the splash included (a few
+seconds of typing and a pause either side of the load). SIGTERM, not SIGINT, and kill by
 PID: `pkill -f xemu-xmega65` matches the shell that is running it. The dump
 is chip RAM only; the framebuffers are at `$40000` and `$50000` in
 column-strip layout (`src/vic4.h`), and de-swizzling one and comparing it

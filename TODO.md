@@ -45,14 +45,25 @@ puzzles from the opening to the sack's "READY.":
 The `AUTOPLAY` walkthrough is this game's, 88 steps from the title to the
 end, and was checked headless at every scene.
 
-**Next**: step 3, the splash, Santa dropping the sack, and the ending;
-then the font and the tune, the last two placeholders (steps 5 and 6).
+**28 Oct 2026, later: on the machine.** The owner played it through on a
+real MEGA65: everything works, at no speed difference from xemu that shows,
+the tree's shake included (13.6 KB a frame from attic RAM for 36 frames; not
+measured with `TIMING=1`). The bear's milk and cookies are now their own
+sprite (`MILK_COOKIES`), gone from his floor once Santa has them.
+
+**28 Oct 2026, evening: the splash.** Step 3.1 is in (below): the BASIC
+session typed on the ROM's screen around the load, checked in xemu, not
+yet on the machine. Worth a look there: the typing speed, the cursor, and
+the cut to the title (xemu once caught one garbled frame there, maybe
+older than the splash). It adds about 8 s before the title, so `AUTOPLAY`
+screenshots need that much longer. The program is 97% of its space
+(`$2001-$9FFF`); `printf` no longer fits outside `BENCH` and `STATS`.
+
+**Next**: step 3.2, Santa dropping the sack, once the owner has painted
+it (a full-screen picture, like `face.png`); then the ending, and the font
+and the tune, the last two placeholders (steps 5 and 6).
 Also open:
 
-- **On the machine**: the tree's shake (13.6 KB a frame from attic RAM
-  for 36 frames, worth a look with `TIMING=1`) and how it looks: it shows
-  the backdrop's copy two pixels out at its edges, and is drawn over the
-  edge of the smaller tree in front of it.
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
   "BLUE present" label (the game says "Present"), "(cable TV)" on the
   houses' labels.
@@ -147,16 +158,20 @@ one season.
 
 The sequence in `VISION.md`, replacing Stranded's title and boat:
 
-1. **The BASIC splash**: the boot banner, `LOAD "SANTA",8,1`, `SEARCHING
-   FOR SANTA`, `RUN`, `ERROR 65: SLEIGH OVERFLOW IN 2026`, typed out. This
-   is new engine work. Text is only ever offline bitmaps in `volter.fnt`,
-   so it needs a font in the MEGA65's own style for `tools/labels.py` (a
-   second font, or the splash's lines drawn as one picture), and a way to
-   show a line appearing a character at a time: a bitmap per line drawn
-   clipped to a growing width is the least code, if the blitter can clip
-   on the right; a fixed-width glyph blitter is the general one. A
-   flashing cursor is one more small sprite. Black-on-blue is two colours
-   of the palette, which step 2 should reserve.
+1. **The BASIC splash: done, 28 Oct.** It is the ROM's own screen, not a
+   picture: the MEGA65 boots to its banner (with the real date) and
+   autoboots the game under it, so `src/splash.c` carries the session on
+   through the Kernal. It types `DLOAD "SANTA"` and prints `SEARCHING FOR
+   SANTA` and `LOADING`, the resources really load (22 s on the machine),
+   then `READY.`, `RUN` typed, and `ERROR 65 IN 2026: SLEIGH OVERFLOW` for
+   three seconds. The ROM's font and colours, so no second font and nothing
+   reserved in the palette. The typing cursor is a reversed space written
+   into screen RAM at the Kernal's cursor (`PLOT`, `src/splash_asm.s`):
+   printed through the editor it shows as control codes inside the quotes.
+   The border no longer counts the files loaded; it still goes red on a
+   load error. `printf` would not fit in the program, so it prints with
+   `_Stub_write`. The ending's `LIST` screen can be done the same way, after
+   `vic4_leave`.
 2. **Santa dropping the sack**: a full-screen picture, like `FACE` and
    `LOGO`, with or without easing, then a cut to the game.
 3. **The start**: Santa by the sack; looking in it is `dlg_sack_first`.
