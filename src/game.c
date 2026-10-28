@@ -321,8 +321,8 @@ struct dialog_t dlg_sealion[] = {
 };
 
 struct dialog_t dlg_sealion_again[] = {
-    { "sealion", "There was a penguin here once. Licked batteries." },
-    { "sealion", "Weird guy." },
+    { "sealion", "I tried balancing a crab." },
+    { "sealion", "Once." },
     { NULL, NULL }
 };
 

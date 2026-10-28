@@ -206,8 +206,8 @@ First visit, without the ball. The present is on the snow behind him:
 
 Again, without the ball:
 
-    SEA LION: There was a penguin here once. Licked batteries.
-    SEA LION: Weird guy.
+    SEA LION: I tried balancing a crab.
+    SEA LION: Once.
 
 With the ball:
 

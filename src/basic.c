@@ -30,7 +30,13 @@ void basic_ending(void)
   uint32_t screen;
   uint8_t i;
 
-  dma_fill(0xD400, 0, 0x80);  // all four SIDs
+  // All four SIDs silent, by the CPU: a DMA to $D400 writes the RAM under
+  // the I/O, and left the tune's last note sounding. Every gate down first,
+  // then every register, volumes included, to 0.
+  for (i = 0; i < 12; i++)
+    *(volatile uint8_t *)(0xD404u + (i / 3) * 0x20u + (i % 3) * 7u) = 0;
+  for (i = 0; i < 0x80; i++)
+    *(volatile uint8_t *)(0xD400u + i) = 0;
   CIA2.cra = (uint8_t)(cia2_cra & ~0x10);  // without the force-load bit
   CIA2.crb = (uint8_t)(cia2_crb & ~0x10);
 
