@@ -65,6 +65,7 @@ TRANSPARENT = 255
 SCREEN_H = 200
 YCROP = 20        # rows of the original's 240 above the MEGA65's screen
 ATTIC_GFX = 0x8000000
+MEGABYTE = 0x100000
 PALETTE_GIF = "palette.gif"
 
 # PNGs drawn as dos-like's sources were: a small frame, not the whole 320x200
@@ -95,6 +96,7 @@ BITMAPS = [
     ("TITLE", None),
     ("FACE", "face"),
     ("LOGO", "logo"),
+    ("SANTA_DROPS_SACK", "santa_drops_sack"),
     ("SLEIGH", "sleigh"),
     ("SANTA_SNOW", "santa_snow"),
     ("SANTA_IDLE", "santa_idle"),
@@ -155,7 +157,7 @@ SCENES = {
 # the next; the rest are grouped by when the game wants them.
 GROUPS = [
     ["WORLD"],
-    ["TITLE", "FACE", "LOGO", "SLEIGH"],
+    ["TITLE", "FACE", "LOGO", "SANTA_DROPS_SACK", "SLEIGH"],
     ["SANTA_SNOW", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
      "SEALION", "GIFT_BLUE", "SEALION_WALK", "GIFT_CYLINDER", "GIFT_GREEN",
      "BALL_IN_TREE", "BALL_ON_SNOW", "TREE2"],
@@ -383,6 +385,18 @@ def main():
     if sorted(grouped) != sorted(ids):
         sys.exit("GROUPS and BITMAPS disagree")
 
+    # A DMA job's source address wraps within its megabyte (src/dma.c: the
+    # megabyte is a byte of its own, the bank four bits), so a bitmap read
+    # across $8100000 reads the rest from $8000000. No bitmap may straddle
+    # one: the stream is padded with zeros up to the boundary first.
+    def fit(blob, size):
+        at = addr + len(blob)
+        if size > MEGABYTE:
+            sys.exit(f"a bitmap of {size} bytes is over a megabyte")
+        if at // MEGABYTE != (at + size - 1) // MEGABYTE:
+            blob += bytes(MEGABYTE - at % MEGABYTE)
+        return addr + len(blob)
+
     table, files = {}, []
     palette = game_palette(assets)
     addr = ATTIC_GFX
@@ -394,7 +408,7 @@ def main():
             if ident in rendered:
                 px, x, y = rendered[ident]
                 h, w = px.shape
-                table[ident] = (addr + len(blob), w, h, x, y, 1, 0)
+                table[ident] = (fit(blob, w * h), w, h, x, y, 1, 0)
                 blob += np.ascontiguousarray(px.T).tobytes()
                 continue
             if ident in SCENES:
@@ -409,7 +423,8 @@ def main():
             # Opaque: nothing behind it shows, so if it also covers the
             # screen, drawsprites need not draw anything under it.
             opaque = int(all((c != TRANSPARENT).all() for c in cels))
-            table[ident] = (addr + len(blob), w, h, x, y, len(cels), opaque)
+            at = fit(blob, w * h * len(cels))
+            table[ident] = (at, w, h, x, y, len(cels), opaque)
             for c in cels:
                 blob += np.ascontiguousarray(c.T).tobytes()
         crunched = crunch(exomizer, bytes(blob))

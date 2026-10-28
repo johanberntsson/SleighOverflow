@@ -49,7 +49,7 @@ struct step {
 
 static const struct step script[] = {
     {150, 1, IN_SPACE},             // 1: the title
-    {100, 1, IN_SPACE},             // 2-6: "Ho ho... ho?"
+    {300, 1, IN_SPACE},             // 2-6: Santa drops the sack (200), "Ho ho... ho?"
     SPACE(), SPACE(), SPACE(),
     SPACE(),
     SPACE(),                        // 7: stand up

@@ -23,10 +23,10 @@ the art is the owner's, and `src/game.c` plays `VISION.md` start to finish:
 the opening, the ball in the tree, the sack, the bear, the fox and the sea
 lion, and the sack's "READY." It opens with the BASIC splash
 (`src/splash.c`), typed on the ROM's own screen while the game loads.
-Still Stranded's: the title screen's sequence, the sleigh (Stranded's
-boat) and the fade at the end (`TODO.md` step 3), the font and the tune.
-Next is the picture of Santa dropping the sack, which waits on the
-owner's art.
+After the title, Santa drops the sack (`drop_sack_screen()`), four
+seconds or SPACE. Still Stranded's: the title screen's sequence, the
+sleigh (Stranded's boat) and the fade at the end (`TODO.md` step 3), the
+font and the tune.
 
 **The owner does all `git add` and `git commit` by hand.** Leave changes in
 the working tree and say what changed.
@@ -160,6 +160,11 @@ every frame belongs in chip RAM, and chip RAM is full:
 | `$8000000-` | every bitmap, decrunched (`gfx_table.c` has the addresses) |
 | `$8500000` | the tune's twelve streams, about 29 KB |
 | `$8600000` | staging for the crunched stream being loaded |
+
+**A DMA source wraps within its megabyte** (`src/dma.c` gives the
+megabyte its own byte), so `convgfx.py` pads the streams so that no bitmap
+straddles `$8100000`. A picture read across one gets the rest from
+`$8000000`, which is `WORLD`.
 
 ## How a frame fits
 

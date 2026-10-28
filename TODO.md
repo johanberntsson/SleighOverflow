@@ -59,9 +59,13 @@ older than the splash). It adds about 8 s before the title, so `AUTOPLAY`
 screenshots need that much longer. The program is 97% of its space
 (`$2001-$9FFF`); `printf` no longer fits outside `BENCH` and `STATS`.
 
-**Next**: step 3.2, Santa dropping the sack, once the owner has painted
-it (a full-screen picture, like `face.png`); then the ending, and the font
-and the tune, the last two placeholders (steps 5 and 6).
+**28 Oct 2026, night: Santa drops the sack.** Step 3.2 is in: SPACE on
+the title shows `santa_drops_sack.png` for four seconds, or until SPACE
+again, then cuts to the game (`drop_sack_screen()` in `game.c`). Checked
+in xemu; `AUTOPLAY`'s step 2 waits 200 frames longer for it.
+
+**Next**: the ending, and the font and the tune, the last two placeholders
+(steps 5 and 6).
 Also open:
 
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
@@ -172,8 +176,9 @@ The sequence in `VISION.md`, replacing Stranded's title and boat:
    load error. `printf` would not fit in the program, so it prints with
    `_Stub_write`. The ending's `LIST` screen can be done the same way, after
    `vic4_leave`.
-2. **Santa dropping the sack**: a full-screen picture, like `FACE` and
-   `LOGO`, with or without easing, then a cut to the game.
+2. **Santa dropping the sack: done, 28 Oct.** `SANTA_DROPS_SACK`, a
+   full-screen picture after the title, four seconds or SPACE, then a cut
+   to the game. No easing.
 3. **The start**: Santa by the sack; looking in it is `dlg_sack_first`.
 4. **The end**: back at the sack with all three, a last line, then the
    picture of Santa on his way and the palette fade, as `SLEIGH` is now.

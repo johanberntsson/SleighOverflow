@@ -501,6 +501,24 @@ void setup_speech( int speech, char const* character )
 // are tables of the positions they produce: see tools/convtables.py.
 
 
+// Santa dropping the sack, between the title and the game: four seconds,
+// or until SPACE is pressed again.
+void drop_sack_screen( void ) {
+    memset( sprites, 0, sizeof( sprites ) );
+    spr_index = 0;
+    sprite( spr_index++, 0, 0, SANTA_DROPS_SACK );
+    // The title's SPACE may still be down.
+    int released = 0;
+    for( int i = 0; i < 200 && !shuttingdown(); ++i ) {
+        waitvbl();
+        if( !keystate( KEY_SPACE ) ) released = 1;
+        else if( released ) break;
+        drawsprites();
+        swapbuffers();
+    }
+}
+
+
 void title_screen( void ) {
     spr_index = 0;
     // PORT: the background and the treeline at -1050, as one picture.
@@ -523,7 +541,10 @@ void title_screen( void ) {
 	while( !shuttingdown() ) {
         waitvbl();
 		if( keystate( KEY_ESCAPE ) ) break; 
-		if( keystate( KEY_SPACE ) ) return;
+		if( keystate( KEY_SPACE ) ) {
+            drop_sack_screen();
+            return;
+        }
 
         if( face_delay >= 0 ) {
             --face_delay;
