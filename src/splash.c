@@ -66,12 +66,19 @@ void splash_before_load(void)
   type("DLOAD \"SANTA\"");
   print("\nSEARCHING FOR SANTA\n");
   frames(25);
-  print("LOADING\n");
+  print("LOADING");
+}
+
+// Not what BASIC prints, but without it the screen sits still for longer
+// than looks alive.
+void splash_loading(void)
+{
+  put('.');
 }
 
 void splash_after_load(void)
 {
-  print("READY.\n");
+  print("\nREADY.\n");
   type("RUN");
   frames(25);
   print("\nERROR 65 IN 2026: SLEIGH OVERFLOW\n");

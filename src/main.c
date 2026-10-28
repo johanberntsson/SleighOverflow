@@ -1,7 +1,6 @@
 // Load everything, then play. The game itself is src/game.c.
 #include <calypsi/intrinsics6502.h>
 #include <mega65.h>
-#include <stddef.h>
 
 #include "basic.h"
 #include "bench.h"
@@ -15,7 +14,7 @@ int main(void)
 {
   basic_save();
   splash_before_load();
-  if (load_resources(NULL)) {
+  if (load_resources(splash_loading)) {
     VICIV.bordercol = 2;  // red: see loader_error() in a memory dump
     for (;;)
       ;

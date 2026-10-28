@@ -14,10 +14,10 @@
 
 // Load every GFXn.BIN to where gfx_files says. Returns 0 on success, or -1
 // with loader_error() and loader_error_file() saying why. `report`, if not
-// null, is called after each file with how many are done.
+// null, is called every 16 KB read, between two Kernal reads.
 //
 // **Before vic4_init**, which leaves the Kernal unable to open a file.
-int load_resources(void (*report)(uint8_t done));
+int load_resources(void (*report)(void));
 
 const char *loader_error(void);
 const char *loader_error_file(void);

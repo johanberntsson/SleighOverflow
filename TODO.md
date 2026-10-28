@@ -216,8 +216,10 @@ The sequence in `VISION.md`, replacing Stranded's title and boat:
    picture: the MEGA65 boots to its banner (with the real date) and
    autoboots the game under it, so `src/splash.c` carries the session on
    through the Kernal. It types `DLOAD "SANTA"` and prints `SEARCHING FOR
-   SANTA` and `LOADING`, the resources really load (22 s on the machine),
-   then `READY.`, `RUN` typed, and `ERROR 65 IN 2026: SLEIGH OVERFLOW` for
+   SANTA` and `LOADING`, the resources really load (22 s on the machine,
+   a dot after `LOADING` every 16 KB read so the screen is seen to be
+   alive: not BASIC's, but close enough), then `READY.`, `RUN` typed, and
+  `ERROR 65 IN 2026: SLEIGH OVERFLOW` for
    three seconds. The ROM's font and colours, so no second font and nothing
    reserved in the palette. The typing cursor is a reversed space written
    into screen RAM at the Kernal's cursor (`PLOT`, `src/splash_asm.s`):

@@ -15,6 +15,11 @@
 #define CHUNK 512
 static uint8_t staging[CHUNK];
 
+// Called every PROGRESS_CHUNKS chunks read, across all the files.
+#define PROGRESS_CHUNKS 32  // 16 KB
+static void (*progress)(void);
+static uint8_t chunks;
+
 static const char *failure;
 static const char *failed_file;
 
@@ -76,22 +81,24 @@ static int load_crunched(const char *name, uint32_t dest)
     dma_copy((uint32_t)(uint16_t)staging, at, want);
     at += want;
     length -= want;
+    if (progress && ++chunks == PROGRESS_CHUNKS) {
+      chunks = 0;
+      progress();
+    }
   }
   _Stub_close(fd);
   exo_decrunch(ATTIC_STAGE, dest);
   return 0;
 }
 
-int load_resources(void (*report)(uint8_t done))
+int load_resources(void (*report)(void))
 {
   uint8_t i;
 
-  for (i = 0; i < GFX_FILES; i++) {
+  progress = report;
+  for (i = 0; i < GFX_FILES; i++)
     if (load_crunched(gfx_files[i].name, gfx_files[i].addr))
       return -1;
-    if (report)
-      report((uint8_t)(i + 1));
-  }
   // The tune, last: tools/convsong.py, src/music.c.
   return load_crunched("MUSIC.BIN", ATTIC_MUSIC);
 }
