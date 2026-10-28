@@ -24,9 +24,10 @@ the opening, the ball in the tree, the sack, the bear, the fox and the sea
 lion, and the sack's "READY." It opens with the BASIC splash
 (`src/splash.c`), typed on the ROM's own screen while the game loads.
 After the title, Santa drops the sack (`drop_sack_screen()`), four
-seconds or SPACE. Still Stranded's: the title screen's sequence, the
-sleigh (Stranded's boat) and the fade at the end (`TODO.md` step 3), the
-font and the tune.
+seconds or SPACE. The end returns to BASIC for real, through the `SYS`
+that started the game, where BASIC `LIST`s the two-liner it leaves there
+(`src/basic.c`). Still Stranded's: the title screen's sequence, the
+sleigh's (Stranded's boat's) easing, the font and the tune.
 
 **The owner does all `git add` and `git commit` by hand.** Leave changes in
 the working tree and say what changed.
@@ -60,8 +61,9 @@ remapped to it by nearest colour and looks off until replaced. Without a
 |---|---|
 | `assets/` | this game's own GIFs, font and `tune.mid` (see above) |
 | `src/game.c` | the game: Stranded's `stranded.c` and MegaStranded's `PORT` changes, with Sleigh Overflow's scenes and dialogue |
-| `src/main.c` | loads everything, then runs the game for ever |
+| `src/main.c` | loads everything, runs the game until it is won (ESC starts it again), then the end |
 | `src/splash.*`, `src/splash_asm.s` | the BASIC splash, typed on the ROM's own screen around the load |
+| `src/basic.*`, `src/basic_asm.s` | the end: BASIC's memory kept at startup and put back, with `10 PRINT "MERRY CHRISTMAS"` in it |
 | `src/dos.*` | the sixteen dos-like calls the game makes, by their dos-like names |
 | `src/input.*` | keyboard and joystick port 2, and `AUTOPLAY`'s scripted walkthrough |
 | `src/vic4.*` | 320x200 full-colour display, double buffered |
@@ -93,8 +95,8 @@ there while any of his code remains in the file.
 - `../SearchAndRescue`: a finished MEGA65 game by the same author, same
   toolchain. **Its `CLAUDE.md` is 94 KB of hard-won MEGA65 detail — consult
   it before deriving anything about the VIC-IV, the DMA controller, attic
-  RAM, or the C65 ROM's interrupt dispatcher.** It also has `quit_to_basic`,
-  which this game does not yet.
+  RAM, or the C65 ROM's interrupt dispatcher.** Its `quit_to_basic` is
+  where this game's return to BASIC (`src/basic*`) comes from.
 
 A fix to the engine here may be worth carrying back to MegaStranded by hand;
 the two do not share code.
@@ -106,7 +108,7 @@ All default to 0, which is the disk to hand out.
 
 | | |
 |---|---|
-| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (88 is the whole walkthrough) |
+| `AUTOPLAY=n` | play the first n steps of a scripted walkthrough, then sit there (89 is the whole walkthrough) |
 | `TIMING=1` | the border shows each frame's draw time: white while drawing, red if it ran past a frame |
 | `STATS=1` | F1 prints a histogram of every frame's draw time on the ROM's screen |
 | `BENCH=1` | before the game, time the DMA every way the blitter could use it and print a table |
@@ -160,6 +162,7 @@ every frame belongs in chip RAM, and chip RAM is full:
 | `$8000000-` | every bitmap, decrunched (`gfx_table.c` has the addresses) |
 | `$8500000` | the tune's twelve streams, about 29 KB |
 | `$8600000` | staging for the crunched stream being loaded |
+| `$8700000` | BASIC's bank 1, then its `$0002-$1FFF`, kept at startup for the return (`src/basic_asm.s`) |
 
 **A DMA source wraps within its megabyte** (`src/dma.c` gives the
 megabyte its own byte), so `convgfx.py` pads the streams so that no bitmap

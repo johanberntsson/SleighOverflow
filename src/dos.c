@@ -8,10 +8,6 @@
 #include "timer.h"
 #include "vic4.h"
 
-// The palette as dos-like keeps it, 6 bits a channel, because the ending's
-// fade reads it back a step at a time through getpal.
-static uint8_t palette[768];
-
 static uint8_t back;  // the buffer being drawn into
 
 // The border as a timing display, `make TIMING=1`: white from waitvbl --
@@ -26,12 +22,8 @@ static uint32_t frame_ticks, frame_began, last_vbl;
 
 void dos_init(void)
 {
-  uint16_t i;
-
   vic4_init();
-  for (i = 0; i < 768; i++)
-    palette[i] = gfx_palette6[i];
-  vic4_set_palette6(palette);
+  vic4_set_palette6(gfx_palette6);
   timer_init();
   frame_ticks = timer_frame();
   back = 1;
@@ -42,17 +34,14 @@ void dos_init(void)
   music_start();
 }
 
+// The palette is the registers' (vic4_get_entry6), not a copy: the ending's
+// fade reads it back a step at a time through getpal.
 void setpal(int index, int r, int g, int b)
 {
-  uint8_t *p;
-
   if (index < 0 || index >= 256)
     return;
-  p = &palette[index * 3];
-  p[0] = (uint8_t)(r & 63);
-  p[1] = (uint8_t)(g & 63);
-  p[2] = (uint8_t)(b & 63);
-  vic4_set_entry6((uint8_t)index, p[0], p[1], p[2]);
+  vic4_set_entry6((uint8_t)index, (uint8_t)(r & 63), (uint8_t)(g & 63),
+                  (uint8_t)(b & 63));
 }
 
 // **Blue comes back through a mask of 0xf, not 0xff**, as it does in
@@ -62,11 +51,11 @@ void setpal(int index, int r, int g, int b)
 // original looks, so it is how this looks.
 void getpal(int index, int *r, int *g, int *b)
 {
-  const uint8_t *p;
+  uint8_t p[3];
 
   if (index < 0 || index >= 256)
     return;
-  p = &palette[index * 3];
+  vic4_get_entry6((uint8_t)index, p);
   if (r)
     *r = p[0];
   if (g)
@@ -142,7 +131,7 @@ void waitvbl(void)
   if (input_pressed & IN_F1) {
     input_pressed &= (uint8_t)~IN_F1;
     stats_report(frame_ticks);
-    vic4_set_palette6(palette);
+    vic4_set_palette6(gfx_palette6);
     gfx_target(vic4_base(back));
     vic4_wait_vbl();
   }

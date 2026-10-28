@@ -47,9 +47,15 @@ void vic4_init(void);
 // the ROM's text screen. vic4_init again takes the game's back.
 void vic4_leave(void);
 
+// BASIC's sixteen colours at level/16 of their brightness, 0 to 16.
+void vic4_rom_palette(uint8_t level);
+
 // One entry from dos-like's 6-bit channels, shown the way dos-like shows
 // them: each channel times four. The registers take 8 bits nybble-swapped.
 void vic4_set_entry6(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
+
+// And back: an entry's three 6-bit channels, read out of the registers.
+void vic4_get_entry6(uint8_t index, uint8_t *rgb);
 
 // All 256 from an interleaved 6-bit table such as gfx_palette6.
 void vic4_set_palette6(const uint8_t *rgb);

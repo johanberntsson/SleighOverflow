@@ -3,15 +3,17 @@
 #include <mega65.h>
 #include <stddef.h>
 
+#include "basic.h"
 #include "bench.h"
 #include "loader.h"
 #include "splash.h"
 
-void game_main(void);
+int game_main(void);
 
 // The loading screen is the ROM's own, and the splash: see src/splash.c.
 int main(void)
 {
+  basic_save();
   splash_before_load();
   if (load_resources(NULL)) {
     VICIV.bordercol = 2;  // red: see loader_error() in a memory dump
@@ -27,7 +29,9 @@ int main(void)
   // The Kernal's interrupt would scan the keyboard under input_scan and blink
   // a cursor into colour RAM; nothing after this needs it.
   __disable_interrupts();
-  // The original ends after the boat comes; this starts it again.
-  for (;;)
-    game_main();
+  // ESC starts it again; the end goes back to BASIC.
+  while (!game_main())
+    ;
+  basic_ending();
+  return 0;  // never: basic_ending returns through BASIC's SYS
 }

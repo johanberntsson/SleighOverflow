@@ -64,8 +64,23 @@ the title shows `santa_drops_sack.png` for four seconds, or until SPACE
 again, then cuts to the game (`drop_sack_screen()` in `game.c`). Checked
 in xemu; `AUTOPLAY`'s step 2 waits 200 frames longer for it.
 
-**Next**: the ending, and the font and the tune, the last two placeholders
-(steps 5 and 6).
+**28 Oct 2026, night: the end goes back to BASIC.** After the sleigh
+and the fade, the screen fades up to BASIC's blue, and BASIC itself
+`LIST`s `10 PRINT "MERRY CHRISTMAS"` / `20 GOTO 10`, a real program that
+`RUN` runs (`src/basic.c`, `src/basic_asm.s`; step 3.4). Checked in xemu
+with the whole walkthrough, and that `RUN` and `DIR` work after it; not yet
+on the machine. A sack bug on the way: a bitmap read across a megabyte
+boundary in attic RAM wraps (CLAUDE.md, Memory), fixed in `convgfx.py`.
+The 768-byte copy of the palette in `dos.c` is gone (the registers are
+read back instead), which is what made room: the program has 746 bytes
+free.
+
+Worth a look on the machine: the end's fade, which now reads the palette
+registers back (if it never finishes, that is why), and BASIC after it.
+`DIR` shows a garbled disk name in xemu, with or without the game: the
+header `tools/diskutil.rb` writes, or xemu's.
+
+**Next**: the font and the tune, the last two placeholders (steps 5 and 6).
 Also open:
 
 - **`VISION.md`'s extras**: Santa's idle lines, the presents' tags, the
@@ -174,14 +189,24 @@ The sequence in `VISION.md`, replacing Stranded's title and boat:
    printed through the editor it shows as control codes inside the quotes.
    The border no longer counts the files loaded; it still goes red on a
    load error. `printf` would not fit in the program, so it prints with
-   `_Stub_write`. The ending's `LIST` screen can be done the same way, after
-   `vic4_leave`.
+   `_Stub_write`.
 2. **Santa dropping the sack: done, 28 Oct.** `SANTA_DROPS_SACK`, a
    full-screen picture after the title, four seconds or SPACE, then a cut
    to the game. No easing.
 3. **The start**: Santa by the sack; looking in it is `dlg_sack_first`.
-4. **The end**: back at the sack with all three, a last line, then the
-   picture of Santa on his way and the palette fade, as `SLEIGH` is now.
+4. **The end: done, 28 Oct.** Back at the sack with all three, a last
+   line, the sleigh and the palette fade (Stranded's sequence, the owner's
+   `sleigh.png`), then **a real return to BASIC**, as SearchAndRescue
+   quits: `__low_level_init` keeps BASIC's `$0002-$1FFF` and bank 1 in
+   attic RAM before the game touches them, and `basic_return` puts them
+   back and returns through the `SYS`. On the way it writes the two-line
+   program over the `SYS` line at `$2001`, sets BASIC's end of program
+   (`$82`) and its text pointer (`$3B`, to the program's last zero, so the
+   interpreter finds the end and prints `READY.`), and puts CLR `LIST`
+   RETURN in the keyboard queue (`$02B0`, count `$D0`). The two BASIC
+   addresses were found in xemu by loading test programs with `-prg` and
+   reading `-dumpmem`. BASIC's screen is emptied, in the copy too, and
+   fades up from black.
 
 `title_screen()` and the `rescued && fadeout` branch of `game_main()` are
 where this goes; the easing tables are `tools/convtables.py`'s.
@@ -211,7 +236,7 @@ recording. Check that the MEGA65's SIDs are at the clock `SID_CLOCK` says.
 
 ### 7. The walkthrough
 
-**Done, 28 Oct**: `AUTOPLAY`'s script in `src/input.c` is this game's, 88
+**Done, 28 Oct**: `AUTOPLAY`'s script in `src/input.c` is this game's, 89
 steps. Keep it in step with the game, so that every scene can be
 screenshotted headless.
 
@@ -223,9 +248,11 @@ Mattias' notice from `game.c` if none of his code remains.
 
 ## Open, inherited from MegaStranded
 
-- **Quitting.** ESC does nothing. SearchAndRescue's `quit_to_basic` puts
-  back zero page, bank 1, the display and the SIDs; this engine has taken
-  bank 1 and the RAM under BASIC at `$A000` as well.
+- **Quitting.** ESC restarts the game; only the end goes back to BASIC
+  (`basic_ending`, from SearchAndRescue's `quit_to_basic`). ESC could do
+  the same without the program. The RAM under BASIC at `$A000` that the
+  engine uses is bank 0's program space to BASIC, past the end of the
+  program, so it needs nothing back.
 - **50 frames a second.** Stranded counted frames at 60 Hz and ran at 5/6
   speed on PAL. A new game can simply be timed for 50.
 - **`YCROP`.** Stranded's art was 320x240 with the picture in rows 20..219.

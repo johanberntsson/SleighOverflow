@@ -82,31 +82,32 @@ static const struct step script[] = {
     SPACE(),                        // 52: go in again, with the cookies
     SPACE(),                        // 53: "Cookies! Take whatever you like."
     SPACE(),                        // 54: he eats, "*munch*"
-    SPACE(),                        // 55: done
-    SPACE(),                        // 56: come out with the remote and the present
-    {50, 60, IN_RIGHT},             // 57: to the sea lion, x 971
-    {10, 1, IN_SPACE},              // 58: "Arf. Go away. I'm sulking."
+    SPACE(),                        // 55: "One GOLD present..."
+    SPACE(),                        // 56: done, has_cylinder
+    SPACE(),                        // 57: come out
+    {50, 60, IN_RIGHT},             // 58: to the sea lion, x 971
+    {10, 1, IN_SPACE},              // 59: "Arf. Go away. I'm sulking."
     SPACE(), SPACE(), SPACE(), SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 59-65: to "Not until..."
-    SPACE(),                        // 66: done, met_sealion
-    {60, 1, IN_SPACE},              // 67: "Would you trade for a ball?"
+    SPACE(),                        // 60-66: to "Not until..."
+    SPACE(),                        // 67: done, met_sealion
+    {60, 1, IN_SPACE},              // 68: "Would you trade for a ball?"
     SPACE(), SPACE(), SPACE(),
-    SPACE(),                        // 68-71: to "Off to practise."
-    SPACE(),                        // 72: he waddles off with the ball
-    {200, 1, IN_SPACE},             // 73: "Ho ho. A nose for business."
-    {50, 31, IN_RIGHT},             // 74: to the blue gift, x 1033
-    {10, 1, IN_SPACE},              // 75: take it
-    SPACE(),                        // 76: "Slightly fishy."
-    {50, 246, IN_LEFT},             // 77: back to the bear's house, x 541
-    {10, 1, IN_SPACE},              // 78: go in, "One remote, slightly foxed."
+    SPACE(),                        // 69-72: to "Off to practise."
+    SPACE(),                        // 73: he waddles off with the ball
+    {200, 1, IN_SPACE},             // 74: "Ho ho. A nose for business."
+    {50, 31, IN_RIGHT},             // 75: to the blue gift, x 1033
+    {10, 1, IN_SPACE},              // 76: take it
+    SPACE(),                        // 77: "Slightly fishy."
+    {50, 246, IN_LEFT},             // 78: back to the bear's house, x 541
+    {10, 1, IN_SPACE},              // 79: go in, "One remote, slightly foxed."
     SPACE(), SPACE(),
-    SPACE(),                        // 79-81: to "Bliss."
-    SPACE(),                        // 82: done, has_green
-    SPACE(),                        // 83: come out
-    {50, 151, IN_LEFT},             // 84: back to the sack, x 239
-    {10, 1, IN_SPACE},              // 85: the sack, complete
-    SPACE(), SPACE(),               // 86-87: "READY."
-    SPACE(),                        // 88: back out, and the sleigh comes
+    SPACE(),                        // 80-82: to "Bliss."
+    SPACE(),                        // 83: done, has_green
+    SPACE(),                        // 84: come out
+    {50, 151, IN_LEFT},             // 85: back to the sack, x 239
+    {10, 1, IN_SPACE},              // 86: the sack, complete
+    SPACE(), SPACE(),               // 87-88: "READY."
+    SPACE(),                        // 89: back out, and the sleigh comes
 };
 #define STEPS (sizeof script / sizeof script[0])
 

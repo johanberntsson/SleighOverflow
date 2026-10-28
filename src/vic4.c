@@ -65,16 +65,31 @@ static void save_rom(void)
   }
 }
 
+// The registers hold each colour nybble-swapped.
+static uint8_t scale(uint8_t v, uint8_t level)
+{
+  v = (uint8_t)(v << 4 | v >> 4);
+  v = (uint8_t)(((uint16_t)v * level) >> 4);
+  return (uint8_t)(v << 4 | v >> 4);
+}
+
+void vic4_rom_palette(uint8_t level)
+{
+  uint8_t i;
+
+  for (i = 0; i < 16; i++) {
+    PALETTE.red[i] = scale(rom_palette[0][i], level);
+    PALETTE.green[i] = scale(rom_palette[1][i], level);
+    PALETTE.blue[i] = scale(rom_palette[2][i], level);
+  }
+}
+
 void vic4_leave(void)
 {
   uint8_t i;
 
   unlock();
-  for (i = 0; i < 16; i++) {
-    PALETTE.red[i] = rom_palette[0][i];
-    PALETTE.green[i] = rom_palette[1][i];
-    PALETTE.blue[i] = rom_palette[2][i];
-  }
+  vic4_rom_palette(16);
   VICIV.sdbdrwd_msb |= VIC4_HOTREG_MASK;
   for (i = 0; i < ROM_REGS; i++) {
     if (i == ROM_REGS_LEGACY)
@@ -139,6 +154,18 @@ void vic4_set_entry6(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
   PALETTE.red[index] = swap6(r);
   PALETTE.green[index] = swap6(g);
   PALETTE.blue[index] = swap6(b);
+}
+
+static uint8_t unswap6(uint8_t v)
+{
+  return (uint8_t)((uint8_t)(v << 4 | v >> 4) >> 2);
+}
+
+void vic4_get_entry6(uint8_t index, uint8_t *rgb)
+{
+  rgb[0] = unswap6(PALETTE.red[index]);
+  rgb[1] = unswap6(PALETTE.green[index]);
+  rgb[2] = unswap6(PALETTE.blue[index]);
 }
 
 void vic4_set_palette6(const uint8_t *rgb)

@@ -296,12 +296,13 @@ struct dialog_t dlg_fox_again[] = {
     { NULL, NULL }
 };
 
-// Leaving after this takes the remote and the present.
 struct dialog_t dlg_fox_cookies[] = {
     { "player_hut", "Cookies, for a very naughty fox." },
     { "fox", "Cookies! Take whatever you like. I won't notice." },
     { "#SetFlag", "fox_eating" },
     { "fox", "*munch* I didn't see a thing." },
+    { "player_hut", "One GOLD present, and one remote to return." },
+    { "#SetFlag", "has_cylinder" },
     { NULL, NULL }
 };
 
@@ -581,7 +582,8 @@ void title_screen( void ) {
 }
 
 
-void game_main( void ) {  // PORT: was main; see src/main.c
+// 1 when Santa is on his way and the screen has faded; 0 on ESC.
+int game_main( void ) {  // PORT: was main; see src/main.c
     // PORT: setvideomode, setdoublebuffer, loadbitmaps, the palette, the font
     // and the music are dos_init, src/main.c's loading, tools/labels.py and
     // -- for the music -- nothing yet.
@@ -746,6 +748,11 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 					if( strcmp( flag, "fox_eating" ) == 0 ) {
 						sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
 						fox_eating = 1;
+					}
+					if( strcmp( flag, "has_cylinder" ) == 0 ) {
+						sprite_hide( gift_cylinder );
+						has_cylinder = 1;
+						has_remote = 1;
 					}
 					if( strcmp( flag, "met_sealion" ) == 0 ) {
 						met_sealion = 1;
@@ -986,11 +993,6 @@ void game_main( void ) {  // PORT: was main; see src/main.c
 				sprite_hide( gift_cylinder );
 				sprite_hide( santa_inside );
 				at_hut_fox = 0;
-				// The fox is too busy with the cookies to notice.
-				if( fox_eating && !has_cylinder ) {
-					has_remote = 1;
-					has_cylinder = 1;
-				}
             }
         }
 
@@ -1011,7 +1013,7 @@ void game_main( void ) {  // PORT: was main; see src/main.c
         drawsprites();
         swapbuffers();
 	}
-
+    return rescued && !keystate( KEY_ESCAPE );
 }
 
 /*
