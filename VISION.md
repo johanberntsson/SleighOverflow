@@ -239,8 +239,7 @@ and the fade back to the blue BASIC screen of the splash:
     _
 
 with the cursor blinking. The splash's font and colours make this nearly
-free. The credits could be more `PRINT` lines, including a thank-you to
-Mattias Gustavsson for Stranded.
+free. 
 
 # Extras, all cheap
 
