@@ -148,8 +148,8 @@ BITMAPS = [
 # the layers in the order the sprite table draws them.
 SCENES = {
     "WORLD": (1480, [("background", 0, 0), ("treeline", 0, 0),
-                     ("sack_spr", 240, 40), ("house_bear", 540, 40),
-                     ("house_fox", 850, 50), ("tree2", 180, 0),
+                     ("sack_spr", 240, 40), ("house_bear", 540, 50),
+                     ("house_fox", 850, 55), ("tree2", 180, 0),
                      ("tree", 120, 20), ("snowdrift", 65, 55)]),
     "TITLE": (320, [("background", -1050, 0), ("treeline", -1050, 0)]),
 }

@@ -601,8 +601,8 @@ int game_main( void ) {  // PORT: was main; see src/main.c
     int background = sprite( spr_index++, -65, 0, BACKGROUND );
     int treeline = sprite( spr_index++, -65, 0, TREELINE );
     int sack = sprite( spr_index++, 240, 10 + o, SACK_SPR ); objects[ objects_count++ ] = sack;
-    int house_bear = sprite( spr_index++, 540, 10 + o, HOUSE_BEAR ); objects[ objects_count++ ] = house_bear;
-	int house_fox = sprite( spr_index++, 850, 20 + o, HOUSE_FOX ); objects[ objects_count++ ] = house_fox;
+    int house_bear = sprite( spr_index++, 540, 20 + o, HOUSE_BEAR ); objects[ objects_count++ ] = house_bear;
+	int house_fox = sprite( spr_index++, 850, 25 + o, HOUSE_FOX ); objects[ objects_count++ ] = house_fox;
 	// The ball's tree is part of WORLD too, and this sprite of it is shown
 	// only while it shakes.
 	int tree = sprite( spr_index++, 180, -30 + o, TREE2 ); objects[ objects_count++ ] = tree;
