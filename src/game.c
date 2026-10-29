@@ -628,6 +628,9 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 
 	int hut_bear_pic = sprite( spr_index++, 0, 0, HUT_BEAR );
     sprite_hide( hut_bear_pic );
+	// The animals are drawn over their empty interiors, on the same canvas.
+	int bear = sprite( spr_index++, 0, 0, HUT_BEAR_BORED );
+    sprite_hide( bear );
 	int gift_green = sprite( spr_index++, 0, -10 + o, GIFT_GREEN );
     sprite_hide( gift_green );
 	// Painted on the interior's 320x240 canvas, not a 320x200 frame like the gifts.
@@ -636,6 +639,8 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 
 	int hut_fox_pic = sprite( spr_index++, 0, 0, HUT_FOX );
     sprite_hide( hut_fox_pic );
+	int fox = sprite( spr_index++, 0, 0, HUT_FOX_HUNGRY );
+    sprite_hide( fox );
 	int gift_cylinder = sprite( spr_index++, 0, -10 + o, GIFT_CYLINDER );
     sprite_hide( gift_cylinder );
         	
@@ -733,7 +738,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 						sprite_hide( milk_cookies );
 					}
 					if( strcmp( flag, "gave_remote" ) == 0 ) {
-						sprite_bitmap( hut_bear_pic, HUT_BEAR_NOGREEN );
+						sprite_bitmap( bear, HUT_BEAR_HAPPY );
 					}
 					if( strcmp( flag, "has_green" ) == 0 ) {
 						sprite_hide( gift_green );
@@ -743,7 +748,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 						met_fox = 1;
 					}
 					if( strcmp( flag, "fox_eating" ) == 0 ) {
-						sprite_bitmap( hut_fox_pic, HUT_FOX_NOCYLINDER );
+						sprite_bitmap( fox, HUT_FOX_EATING );
 						fox_eating = 1;
 					}
 					if( strcmp( flag, "has_cylinder" ) == 0 ) {
@@ -894,6 +899,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 				
                 if( is_near( house_bear, xpos ) ) {
 					sprite_show( hut_bear_pic );
+					sprite_show( bear );
 					if( !has_green ) sprite_show( gift_green );
 					if( !has_cookies ) sprite_show( milk_cookies );
 					sprite_show( santa_inside );
@@ -911,6 +917,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 
 				if( is_near( house_fox, xpos ) ) {
 					sprite_show( hut_fox_pic );
+					sprite_show( fox );
 					if( !has_cylinder ) sprite_show( gift_cylinder );
 					sprite_show( santa_inside );
                     sprite_pos( santa_inside, 100, 60 );
@@ -979,6 +986,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 		} else if( at_hut_bear ) {
 			if( *readkeys() == KEY_SPACE ) {
 			    sprite_hide( hut_bear_pic );
+			    sprite_hide( bear );
 			    sprite_hide( gift_green );
 			    sprite_hide( milk_cookies );
 			    sprite_hide( santa_inside );
@@ -987,6 +995,7 @@ int game_main( void ) {  // PORT: was main; see src/main.c
 		} else if( at_hut_fox ) {
 			if( *readkeys() == KEY_SPACE ) {
 				sprite_hide( hut_fox_pic );
+				sprite_hide( fox );
 				sprite_hide( gift_cylinder );
 				sprite_hide( santa_inside );
 				at_hut_fox = 0;

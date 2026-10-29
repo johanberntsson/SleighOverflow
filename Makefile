@@ -72,6 +72,13 @@ $(CONFIG_STAMP): Makefile | $(BUILD)
 	rm -f $(BUILD)/config-*.stamp
 	touch $@
 
+# The palette is fitted to the pictures (tools/mkpalette.py), so it is
+# made again whenever one of them changes. convgfx.py lists the pictures.
+$(ASSETS)/palette.gif $(ASSETS)/palette.gpl &: tools/mkpalette.py \
+                                              tools/convgfx.py \
+                                              $(wildcard $(ASSETS)/*.png)
+	python3 tools/mkpalette.py
+
 # The labels are read out of the game's source, so it is an input too.
 # A picture is name.png (painted in Krita and exported) or name.gif.
 $(GFX_RES) $(GFX_GEN) &: tools/convgfx.py tools/labels.py src/game.c \

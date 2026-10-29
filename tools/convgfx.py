@@ -45,7 +45,8 @@ crosses -- so a sprite column is one DMA job, and a sprite is w of them.
 **A group is one exomizer stream**, decrunched to consecutive attic RAM.
 That matters most for the eight sack_* scenes: crunched one after another
 they reference the scene before, 64000 bytes back and inside the cruncher's
-65535 window, and take 75 KB instead of 292. The hut pairs do the same.
+65535 window, and take 75 KB instead of 292. A hut's two animals, each
+drawn over the hut's empty interior, go in its file for the same reason.
 """
 
 import os
@@ -102,10 +103,12 @@ BITMAPS = [
     ("SANTA_JUMP", "santa_jump_%04d"),
     ("SANTA_LEFT", "santa_walk_left_%04d"),
     ("SANTA_RIGHT", "santa_walk_right_%04d"),
-    ("HUT_FOX", "hut_fox"),
-    ("HUT_FOX_NOCYLINDER", "hut_fox_nocylinder"),
-    ("HUT_BEAR", "hut_bear"),
-    ("HUT_BEAR_NOGREEN", "hut_bear_nogreen"),
+    ("HUT_FOX", "hut_fox_background"),
+    ("HUT_FOX_HUNGRY", "hut_fox_hungry"),
+    ("HUT_FOX_EATING", "hut_fox_eating"),
+    ("HUT_BEAR", "hut_bear_background"),
+    ("HUT_BEAR_BORED", "hut_bear_bored"),
+    ("HUT_BEAR_HAPPY", "hut_bear_happy"),
     ("SEALION", "sealion"),
     ("GIFT_BLUE", "gift_blue"),
     ("GIFT_CYLINDER", "gift_cylinder"),
@@ -160,8 +163,8 @@ GROUPS = [
     ["SANTA_SNOW", "SANTA_IDLE", "SANTA_JUMP", "SANTA_LEFT", "SANTA_RIGHT",
      "SEALION", "GIFT_BLUE", "SEALION_WALK", "GIFT_CYLINDER", "GIFT_GREEN",
      "BALL_IN_TREE", "BALL_ON_SNOW", "TREE2"],
-    ["HUT_FOX", "HUT_FOX_NOCYLINDER"],
-    ["HUT_BEAR", "HUT_BEAR_NOGREEN", "MILK_COOKIES"],
+    ["HUT_FOX", "HUT_FOX_HUNGRY", "HUT_FOX_EATING"],
+    ["HUT_BEAR", "HUT_BEAR_BORED", "HUT_BEAR_HAPPY", "MILK_COOKIES"],
     ["SACK_NONE", "SACK_CYLINDER", "SACK_GREEN", "SACK_BLUE",
      "SACK_CYLINDER_GREEN", "SACK_CYLINDER_BLUE", "SACK_BLUE_GREEN",
      "SACK_FULL"],

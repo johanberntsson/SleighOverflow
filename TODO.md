@@ -153,7 +153,7 @@ of it becomes one of this game's:
 | `SANTA_SNOW`, the game's start, sitting | Santa by the sack (or start standing and drop it) |
 | `SANTA_JUMP`, rescued | Santa's cheer when the third present is back |
 | `SACK_*`: the close-up, all 8 combinations of 3 parts | the sack's close-up with 0..3 presents back |
-| `HUT_BEAR`/`HUT_BEAR_NOGREEN`, `HUT_FOX`/`HUT_FOX_NOCYLINDER` | the two house interiors, with and without their present |
+| `HUT_BEAR` + `HUT_BEAR_BORED`/`HUT_BEAR_HAPPY`, `HUT_FOX` + `HUT_FOX_HUNGRY`/`HUT_FOX_EATING` | the two house interiors, empty, and each animal before and after, drawn over its interior |
 | `MILK_COOKIES` | the bear's cookies, drawn over his interior until Santa takes them |
 | `SEALION`, `GIFT_BLUE`, `SEALION_WALK` | the sea lion with the third present, walking off |
 | `TITLE`, `FACE`, `LOGO`, the credits | the BASIC splash and Santa dropping the sack (step 3) |
@@ -207,6 +207,16 @@ transparent and 254 the labels' outline, reserve the splash's two colours
 
 Per-scene palettes stay unnecessary: the whole game is one outdoor scene in
 one season.
+
+**29 Oct: the palette is fitted to the art** (`tools/mkpalette.py`, run by
+`make` when a PNG changes). The sixteen hand-made ramps left gaps the
+paintings fell into: the bear's crimson couch came out brown, the fox's
+cream chest grey. k-means over every picture, each weighted half by its
+pixels and half as one picture among all, took the mean error (weighted
+RGB distance) from 8.2 to 3.1 and the worst picture's from 12.6 to 5.5.
+Separate palettes for inside and outside were considered and not needed;
+they would need a switch at every scene change, and Santa and the labels
+in both.
 
 ### 3. Splash, intro and ending
 

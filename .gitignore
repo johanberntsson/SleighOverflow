@@ -1,4 +1,5 @@
 build/
+krita/
 # xemu leaves these behind after a headless run.
 out.png
 mem.bin

@@ -50,10 +50,15 @@ having Mattias' art in this game's history is why it is a new repository.
 `volter.fnt` is the one exception, copied from dos-like itself
 (`~/dos-like/files/stranded/`) on the owner's decision; see Licensing.
 
-**There is one 256-colour palette**, `assets/palette.gif`'s. New art is
-painted in Krita and exported as RGBA PNG: each colour goes to the
-palette's nearest, alpha below 128 is transparent. A GIF in `assets/` must
-be drawn in exactly the palette (`convgfx.py` refuses one with its own).
+**There is one 256-colour palette**, `assets/palette.gif`'s, **fitted to
+the art** by `tools/mkpalette.py` (k-means over every picture the game
+uses), which `make` runs again whenever a PNG changes. New art is painted
+in Krita in any colours and exported as RGBA PNG: each colour goes to the
+palette's nearest, alpha below 128 is transparent. The label colours
+(`COLOR_*`), the splash's two, black, 254 and 255 are `FIXED` in
+`mkpalette.py`; every other index can change with the art, so no picture
+may store indices: a picture is a PNG. (`convgfx.py` still reads a GIF
+drawn in exactly the palette, and refuses one with its own.)
 `convgfx.py` can still take extra directories after `assets/`, and remaps
 a picture from one drawn in another palette; nothing uses that now.
 
@@ -75,6 +80,7 @@ a picture from one drawn in another palette; nothing uses that now.
 | `src/dma.*` | plain DMA copy and fill |
 | `src/timer.*` | CIA2's timers as a 32-bit clock, for the measurements |
 | `src/stats.c`, `src/bench.c` | `STATS` and `BENCH`: frame times and DMA timings, printed on the machine |
+| `tools/mkpalette.py` | the palette, fitted to the pictures: `assets/palette.gif` and `.gpl` |
 | `tools/convgfx.py` | GIFs and labels to crunched GFXn.BIN, plus `build/gfx_table.c` and `build/gfx_ids.h` |
 | `tools/labels.py` | every string `game.c` draws, rendered offline in `volter.fnt` as bitmaps |
 | `tools/convtables.py` | the easing curves as integer tables, `build/tables.c` |
