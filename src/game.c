@@ -525,7 +525,7 @@ void title_screen( void ) {
     // PORT: at 172 rather than 192. The original's credits are 6 rows above
     // the bottom of its 240; the MEGA65's screen ends at the original's 220,
     // so they keep their 6 rows from that edge instead.
-    int credits2 = label( spr_index++, -160, 168, "Written for the MEGA65 by Johan Berntsson", COLOR_WHITE );
+    int credits2 = label( spr_index++, -160, 168, "Made for the MEGA65 by Johan Berntsson", COLOR_WHITE );
     int credits1 = label( spr_index++, -160, 180, "Based on dos-like by Mattias Gustavsson", COLOR_GREEN );
 
     int face_delay = 6;
